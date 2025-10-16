@@ -142,10 +142,10 @@ const renderTags = (q) => {
   });
 };
 
-// 年度タグ：4桁の年 or 'original' を年度扱いにする
+// 年度タグ：4桁の年 or '' を年度扱いにする
 const isYearTag = (t) => {
   const s = String(t).trim().toLowerCase();
-  return /^\d{4}$/.test(s) || s === 'original';
+  return /^\d{4}$/.test(s) || s === '';
 };
 const asCorrectArray = (ans) => Array.isArray(ans) ? ans.slice().map(Number) : [Number(ans)];
 
@@ -314,8 +314,8 @@ const populateFilters = () => {
     [...tagSet].sort().map(t => `<option value="${t}">${t}</option>`).join('');
   if ([...tagSet].includes(curTag)) els.tagFilter.value = curTag;
 
-  // 年度（数値年度→昇順、その後に original）
-  const yearLabel = (y) => (String(y).toLowerCase() === 'original' ? 'original（自作）' : y);
+  // 年度（数値年度→昇順、その後に ）
+  const yearLabel = (y) => (String(y).toLowerCase() === 'original' ? 'original' : y);
   const years = [...yearSet].sort((a, b) => {
     const an = /^\d{4}$/.test(a) ? parseInt(a, 10) : Infinity;
     const bn = /^\d{4}$/.test(b) ? parseInt(b, 10) : Infinity;
