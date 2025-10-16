@@ -63,6 +63,13 @@ function scheduleCountdownRefresh() {
     setInterval(updateCountdown, 24*60*60*1000);
   }, wait);
 }
+// 空・ハイフン・"なし" などを画像なし扱いに
+const isNoImage = (s) => {
+  if (!s) return true;
+  const t = String(s).trim();
+  if (!t) return true;
+  return /^(-|なし|null|na)$/i.test(t);
+};
 
 const shuffle = (arr) => {
   const a = arr.slice();
@@ -177,15 +184,26 @@ const renderQuestion = () => {
   els.qid.textContent = q.id || `Q${order[index]+1}`;
   els.questionText.textContent = q.question;
 
-  if (q.image) {
-    els.qImage.src = q.image;
-    els.qImage.alt = q.imageAlt || '';
-    els.qImage.classList.remove('hidden');
-  } else {
+ // 本文画像（壊れ画像を自動で非表示）
+if (q.image && !isNoImage(q.image)) {
+  els.qImage.classList.remove('hidden');
+  els.qImage.alt = q.imageAlt || '';
+  // 読み込み失敗時は即座に隠す
+  els.qImage.onerror = () => {
     els.qImage.classList.add('hidden');
     els.qImage.removeAttribute('src');
     els.qImage.removeAttribute('alt');
-  }
+  };
+  els.qImage.onload = () => {
+    // 正常に読めたらそのまま表示
+  };
+  els.qImage.src = q.image;
+} else {
+  els.qImage.classList.add('hidden');
+  els.qImage.removeAttribute('src');
+  els.qImage.removeAttribute('alt');
+}
+
 
   renderTags(q);
   els.explain.classList.add('hidden');
@@ -203,17 +221,24 @@ const renderQuestion = () => {
     const btn = document.createElement('button');
     btn.className = 'choice';
     const val = q.choices[i];
-    if (typeof val === 'string' && /\.(jpg|jpeg|png|webp|gif)$/i.test(val)) {
-      btn.textContent = '';
-      const img = document.createElement('img');
-      img.src = val;
-      img.alt = `choice${i+1}`;
-      img.style.maxWidth = '100%';
-      img.style.height = 'auto';
-      btn.appendChild(img);
-    } else {
-      btn.textContent = val;
-    }
+    if (typeof val === 'string' && /\.(jpg|jpeg|png|webp|gif)$/i.test(val) && !isNoImage(val)) {
+  btn.textContent = '';
+  const img = document.createElement('img');
+  img.alt = `choice${i+1}`;
+  img.style.maxWidth = '100%';
+  img.style.height = 'auto';
+  img.onerror = () => {
+    // 壊れたら画像を外してテキストに置換
+    img.remove();
+    btn.textContent = '[画像なし]';
+  };
+  img.onload = () => { /* そのまま表示 */ };
+  img.src = val;
+  btn.appendChild(img);
+} else {
+  btn.textContent = val;
+}
+
     btn.dataset.index = i;
     btn.addEventListener('click', () => {
       if (answered) return;
