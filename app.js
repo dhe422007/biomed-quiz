@@ -1,4 +1,4 @@
-// app.js for Biomedical Engineering quiz (same features, robust image handling)
+// app.js (臨床検査技師クイズ共通仕様 / 年度=4桁 or 'original' / 画像の壊れ防止)
 const STATE_KEY = 'quiz_state_v3';
 const BOOKMARK_KEY = 'quiz_bookmarks_v1';
 const WRONG_KEY = 'quiz_wrongs_v1';
@@ -42,7 +42,7 @@ const els = {
   resumeInfo: document.getElementById('resumeInfo'),
 };
 
-// ===== Countdown to exam (JST) =====
+// ===== 試験日カウントダウン（JST固定） =====
 function updateCountdown() {
   const now = new Date();
   const exam = new Date('2026-02-18T00:00:00+09:00');
@@ -65,29 +65,25 @@ function scheduleCountdownRefresh() {
   }, wait);
 }
 
-// ===== Image helpers (to avoid "?" broken icon) =====
-// Treat empty, hyphen, "なし", "null", "na" as no image
+// ===== 画像ヘルパー（「？」壊れ画像の防止） =====
 const isNoImage = (s) => {
   if (!s) return true;
   const t = String(s).trim();
   if (!t) return true;
   return /^(-|なし|null|na)$/i.test(t);
 };
-
-// Only allow sane image path (reject ".jpg" only etc.)
+// 健全な画像パスのみ通す（".jpg" 単体などを弾く）
 const normalizeImagePath = (s) => {
   if (!s) return null;
   const t = String(s).trim();
   if (!t) return null;
   if (/^(-|なし|null|na)$/i.test(t)) return null;
-  // Reject extension-only (".jpg") or leading dot without name
-  if (/^\.[a-zA-Z0-9]+$/.test(t)) return null;
-  // Must end with a known image extension
+  if (/^\.[a-zA-Z0-9]+$/.test(t)) return null; // ".jpg" など拡張子だけ
   if (!/\.(jpg|jpeg|png|webp|gif)$/i.test(t)) return null;
   return t;
 };
 
-// ===== Utils =====
+// ===== 汎用 =====
 const shuffle = (arr) => {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
@@ -102,7 +98,7 @@ const loadJSON = async (path) => {
   return await res.json();
 };
 
-// ===== Persistence =====
+// ===== 永続化 =====
 let stats = { totalAnswered: 0, totalCorrect: 0, streak: 0 };
 
 const saveState = () => {
@@ -127,7 +123,7 @@ const setWrongs = (set) => localStorage.setItem(WRONG_KEY, JSON.stringify([...se
 const getStatsByTag = () => JSON.parse(localStorage.getItem(STATS_BY_TAG_KEY) || '{}');
 const setStatsByTag = (obj) => localStorage.setItem(STATS_BY_TAG_KEY, JSON.stringify(obj));
 
-// ===== UI updates =====
+// ===== UI =====
 const updateStatsUI = () => {
   els.progressNum.textContent = `${Math.min(index+1, Math.max(order.length,1))}/${order.length}`;
   const acc = stats.totalAnswered ? Math.round((stats.totalCorrect / stats.totalAnswered) * 100) : 0;
@@ -145,12 +141,12 @@ const renderTags = (q) => {
     els.tagsWrap.appendChild(span);
   });
 };
-// 4桁の年 もしくは 'original' を「年度タグ」として扱う
+
+// 年度タグ：4桁の年 or 'original' を年度扱いにする
 const isYearTag = (t) => {
   const s = String(t).trim().toLowerCase();
   return /^\d{4}$/.test(s) || s === 'original';
 };
-
 const asCorrectArray = (ans) => Array.isArray(ans) ? ans.slice().map(Number) : [Number(ans)];
 
 const showView = (name) => {
@@ -162,7 +158,7 @@ const showView = (name) => {
   if (name==='end') els.viewEnd.classList.add('active');
 };
 
-// ===== Grading =====
+// ===== 採点 =====
 const gradeCurrent = () => {
   const q = questions[order[index]];
   const correctArray = asCorrectArray(q.answerIndex).sort((a,b)=>a-b);
@@ -190,7 +186,6 @@ const gradeCurrent = () => {
   els.explain.classList.remove('hidden');
   updateStatsUI();
 
-  // per-tag cumulative stats & last answered timestamp
   const sbt = getStatsByTag();
   (q.tags || []).forEach(t => {
     if (!sbt[t]) sbt[t] = { answered: 0, correct: 0 };
@@ -205,13 +200,13 @@ const gradeCurrent = () => {
   saveState();
 };
 
-// ===== Render question =====
+// ===== 出題レンダリング =====
 const renderQuestion = () => {
   const q = questions[order[index]];
   els.qid.textContent = q.id || `Q${order[index]+1}`;
   els.questionText.textContent = q.question;
 
-  // Main image (show only with sane path; hide on error)
+  // 本文画像（健全なパスのみ表示、失敗時は隠す）
   const imgSrc = normalizeImagePath(q.image);
   if (imgSrc) {
     els.qImage.classList.remove('hidden');
@@ -281,7 +276,7 @@ const renderQuestion = () => {
   saveState();
 };
 
-// ===== Filter =====
+// ===== フィルタ =====
 const applyFilter = () => {
   const tagSel  = els.tagFilter.value;
   const yearSel = els.yearFilter.value;
@@ -306,33 +301,35 @@ const applyFilter = () => {
   order = base;
   index = 0;
 };
+
 const populateFilters = () => {
   const yearSet = new Set();
   const tagSet = new Set();
   questions.forEach(q => (q.tags||[]).forEach(t => (isYearTag(t)?yearSet:tagSet).add(String(t))));
+
+  // 分野
   const curTag = els.tagFilter.value;
-  els.tagFilter.innerHTML = '<option value="">全分野</option>' + [...tagSet].sort().map(t=>`<option value="${t}">${t}</option>`).join('');
+  els.tagFilter.innerHTML =
+    '<option value="">全分野</option>' +
+    [...tagSet].sort().map(t => `<option value="${t}">${t}</option>`).join('');
   if ([...tagSet].includes(curTag)) els.tagFilter.value = curTag;
-// 既存：const curYear = els.yearFilter.value;
-const curYear = els.yearFilter.value;
 
-// 並べ替え：数値の年度（昇順）→ その他（例: original）
-const years = [...yearSet].sort((a, b) => {
-  const an = /^\d{4}$/.test(a) ? parseInt(a, 10) : Infinity;
-  const bn = /^\d{4}$/.test(b) ? parseInt(b, 10) : Infinity;
-  return an - bn || String(a).localeCompare(String(b));
-});
+  // 年度（数値年度→昇順、その後に original）
+  const yearLabel = (y) => (String(y).toLowerCase() === 'original' ? 'original（自作）' : y);
+  const years = [...yearSet].sort((a, b) => {
+    const an = /^\d{4}$/.test(a) ? parseInt(a, 10) : Infinity;
+    const bn = /^\d{4}$/.test(b) ? parseInt(b, 10) : Infinity;
+    return an - bn || String(a).localeCompare(String(b));
+  });
 
-// 表示名を yearLabel() で置換
-els.yearFilter.innerHTML =
-  '<option value="">全年度</option>' +
-  years.map(y => `<option value="${y}">${yearLabel(y)}</option>`).join('');
-
-if ([...yearSet].includes(curYear)) els.yearFilter.value = curYear;
-
+  const curYear = els.yearFilter.value;
+  els.yearFilter.innerHTML =
+    '<option value="">全年度</option>' +
+    years.map(y => `<option value="${y}">${yearLabel(y)}</option>`).join('');
+  if ([...yearSet].includes(curYear)) els.yearFilter.value = curYear;
 };
 
-// ===== Navigation =====
+// ===== 進む・戻る =====
 const next = () => {
   if (!answered) { gradeCurrent(); return; }
   if (index < order.length - 1) {
@@ -349,7 +346,7 @@ const next = () => {
 };
 const prev = () => { if (index > 0) { index -= 1; renderQuestion(); } };
 
-// ===== Events =====
+// ===== イベント =====
 els.startBtn.addEventListener('click', () => {
   mode = els.modeSelect.value;
   applyFilter();
@@ -366,20 +363,35 @@ els.shuffleBtn.addEventListener('click', () => {
 });
 els.prevBtn.addEventListener('click', prev);
 els.nextBtn.addEventListener('click', next);
-els.modeSelect.addEventListener('change', (e) => { mode = e.target.value; if (els.viewQuiz.classList.contains('active')) { applyFilter(); renderQuestion(); }});
-els.tagFilter.addEventListener('change', () => { if (els.viewQuiz.classList.contains('active')) { applyFilter(); renderQuestion(); }});
-els.yearFilter.addEventListener('change', () => { if (els.viewQuiz.classList.contains('active')) { applyFilter(); renderQuestion(); }});
-els.bookmarkBtn.addEventListener('click', () => { const q = questions[order[index]]; const b = getBookmarks(); if (b.has(q.id)) b.delete(q.id); else b.add(q.id); setBookmarks(b); renderQuestion(); });
+els.modeSelect.addEventListener('change', (e) => {
+  mode = e.target.value;
+  if (els.viewQuiz.classList.contains('active')) { applyFilter(); renderQuestion(); }
+});
+els.tagFilter.addEventListener('change', () => {
+  if (els.viewQuiz.classList.contains('active')) { applyFilter(); renderQuestion(); }
+});
+els.yearFilter.addEventListener('change', () => {
+  if (els.viewQuiz.classList.contains('active')) { applyFilter(); renderQuestion(); }
+});
+els.bookmarkBtn.addEventListener('click', () => {
+  const q = questions[order[index]];
+  const b = getBookmarks();
+  if (b.has(q.id)) b.delete(q.id); else b.add(q.id);
+  setBookmarks(b);
+  renderQuestion();
+});
 els.backHomeBtn.addEventListener('click', () => { showView('top'); });
 
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
 
-// ===== Init =====
+// ===== 初期化 =====
 (async function init(){
   try {
-    questions = await loadJSON('./questions.json?v=2'); // bump v to bypass SW cache
+    // v= を上げるとSWキャッシュを回避して最新を取りに行きやすい
+    questions = await loadJSON('./questions.json?v=3');
     populateFilters();
 
+    // トップの「前回の続きから」情報
     const st0 = loadState();
     const canResume = st0 && Array.isArray(st0.order) && st0.order.length > 0;
     if (canResume && els.resumeBtn && els.resumeInfo) {
@@ -412,3 +424,4 @@ window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); defe
     alert('questions.json を読み込めませんでした。');
   }
 })();
+
