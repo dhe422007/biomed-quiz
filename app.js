@@ -1,4 +1,4 @@
-// app.js for Biomedical Engineering quiz (same features)
+// app.js for Biomedical Engineering quiz (same features, robust image handling)
 const STATE_KEY = 'quiz_state_v3';
 const BOOKMARK_KEY = 'quiz_bookmarks_v1';
 const WRONG_KEY = 'quiz_wrongs_v1';
@@ -42,6 +42,7 @@ const els = {
   resumeInfo: document.getElementById('resumeInfo'),
 };
 
+// ===== Countdown to exam (JST) =====
 function updateCountdown() {
   const now = new Date();
   const exam = new Date('2026-02-18T00:00:00+09:00');
@@ -63,7 +64,9 @@ function scheduleCountdownRefresh() {
     setInterval(updateCountdown, 24*60*60*1000);
   }, wait);
 }
-// 空・ハイフン・"なし" などを画像なし扱いに
+
+// ===== Image helpers (to avoid "?" broken icon) =====
+// Treat empty, hyphen, "なし", "null", "na" as no image
 const isNoImage = (s) => {
   if (!s) return true;
   const t = String(s).trim();
@@ -71,6 +74,20 @@ const isNoImage = (s) => {
   return /^(-|なし|null|na)$/i.test(t);
 };
 
+// Only allow sane image path (reject ".jpg" only etc.)
+const normalizeImagePath = (s) => {
+  if (!s) return null;
+  const t = String(s).trim();
+  if (!t) return null;
+  if (/^(-|なし|null|na)$/i.test(t)) return null;
+  // Reject extension-only (".jpg") or leading dot without name
+  if (/^\.[a-zA-Z0-9]+$/.test(t)) return null;
+  // Must end with a known image extension
+  if (!/\.(jpg|jpeg|png|webp|gif)$/i.test(t)) return null;
+  return t;
+};
+
+// ===== Utils =====
 const shuffle = (arr) => {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
@@ -85,6 +102,7 @@ const loadJSON = async (path) => {
   return await res.json();
 };
 
+// ===== Persistence =====
 let stats = { totalAnswered: 0, totalCorrect: 0, streak: 0 };
 
 const saveState = () => {
@@ -109,6 +127,7 @@ const setWrongs = (set) => localStorage.setItem(WRONG_KEY, JSON.stringify([...se
 const getStatsByTag = () => JSON.parse(localStorage.getItem(STATS_BY_TAG_KEY) || '{}');
 const setStatsByTag = (obj) => localStorage.setItem(STATS_BY_TAG_KEY, JSON.stringify(obj));
 
+// ===== UI updates =====
 const updateStatsUI = () => {
   els.progressNum.textContent = `${Math.min(index+1, Math.max(order.length,1))}/${order.length}`;
   const acc = stats.totalAnswered ? Math.round((stats.totalCorrect / stats.totalAnswered) * 100) : 0;
@@ -138,6 +157,7 @@ const showView = (name) => {
   if (name==='end') els.viewEnd.classList.add('active');
 };
 
+// ===== Grading =====
 const gradeCurrent = () => {
   const q = questions[order[index]];
   const correctArray = asCorrectArray(q.answerIndex).sort((a,b)=>a-b);
@@ -165,6 +185,7 @@ const gradeCurrent = () => {
   els.explain.classList.remove('hidden');
   updateStatsUI();
 
+  // per-tag cumulative stats & last answered timestamp
   const sbt = getStatsByTag();
   (q.tags || []).forEach(t => {
     if (!sbt[t]) sbt[t] = { answered: 0, correct: 0 };
@@ -179,31 +200,29 @@ const gradeCurrent = () => {
   saveState();
 };
 
+// ===== Render question =====
 const renderQuestion = () => {
   const q = questions[order[index]];
   els.qid.textContent = q.id || `Q${order[index]+1}`;
   els.questionText.textContent = q.question;
 
- // 本文画像（壊れ画像を自動で非表示）
-if (q.image && !isNoImage(q.image)) {
-  els.qImage.classList.remove('hidden');
-  els.qImage.alt = q.imageAlt || '';
-  // 読み込み失敗時は即座に隠す
-  els.qImage.onerror = () => {
+  // Main image (show only with sane path; hide on error)
+  const imgSrc = normalizeImagePath(q.image);
+  if (imgSrc) {
+    els.qImage.classList.remove('hidden');
+    els.qImage.alt = q.imageAlt || '';
+    els.qImage.onerror = () => {
+      els.qImage.classList.add('hidden');
+      els.qImage.removeAttribute('src');
+      els.qImage.removeAttribute('alt');
+    };
+    els.qImage.onload = () => {};
+    els.qImage.src = imgSrc;
+  } else {
     els.qImage.classList.add('hidden');
     els.qImage.removeAttribute('src');
     els.qImage.removeAttribute('alt');
-  };
-  els.qImage.onload = () => {
-    // 正常に読めたらそのまま表示
-  };
-  els.qImage.src = q.image;
-} else {
-  els.qImage.classList.add('hidden');
-  els.qImage.removeAttribute('src');
-  els.qImage.removeAttribute('alt');
-}
-
+  }
 
   renderTags(q);
   els.explain.classList.add('hidden');
@@ -221,23 +240,24 @@ if (q.image && !isNoImage(q.image)) {
     const btn = document.createElement('button');
     btn.className = 'choice';
     const val = q.choices[i];
-    if (typeof val === 'string' && /\.(jpg|jpeg|png|webp|gif)$/i.test(val) && !isNoImage(val)) {
-  btn.textContent = '';
-  const img = document.createElement('img');
-  img.alt = `choice${i+1}`;
-  img.style.maxWidth = '100%';
-  img.style.height = 'auto';
-  img.onerror = () => {
-    // 壊れたら画像を外してテキストに置換
-    img.remove();
-    btn.textContent = '[画像なし]';
-  };
-  img.onload = () => { /* そのまま表示 */ };
-  img.src = val;
-  btn.appendChild(img);
-} else {
-  btn.textContent = val;
-}
+    const choiceImg = (typeof val === 'string') ? normalizeImagePath(val) : null;
+
+    if (choiceImg) {
+      btn.textContent = '';
+      const img = document.createElement('img');
+      img.alt = `choice${i+1}`;
+      img.style.maxWidth = '100%';
+      img.style.height = 'auto';
+      img.onerror = () => {
+        img.remove();
+        btn.textContent = '[画像なし]';
+      };
+      img.onload = () => {};
+      img.src = choiceImg;
+      btn.appendChild(img);
+    } else {
+      btn.textContent = val;
+    }
 
     btn.dataset.index = i;
     btn.addEventListener('click', () => {
@@ -256,6 +276,7 @@ if (q.image && !isNoImage(q.image)) {
   saveState();
 };
 
+// ===== Filter =====
 const applyFilter = () => {
   const tagSel  = els.tagFilter.value;
   const yearSel = els.yearFilter.value;
@@ -292,6 +313,7 @@ const populateFilters = () => {
   if ([...yearSet].includes(curYear)) els.yearFilter.value = curYear;
 };
 
+// ===== Navigation =====
 const next = () => {
   if (!answered) { gradeCurrent(); return; }
   if (index < order.length - 1) {
@@ -308,6 +330,7 @@ const next = () => {
 };
 const prev = () => { if (index > 0) { index -= 1; renderQuestion(); } };
 
+// ===== Events =====
 els.startBtn.addEventListener('click', () => {
   mode = els.modeSelect.value;
   applyFilter();
@@ -332,9 +355,10 @@ els.backHomeBtn.addEventListener('click', () => { showView('top'); });
 
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
 
+// ===== Init =====
 (async function init(){
   try {
-    questions = await loadJSON('./questions.json?v=1');
+    questions = await loadJSON('./questions.json?v=2'); // bump v to bypass SW cache
     populateFilters();
 
     const st0 = loadState();
