@@ -145,7 +145,12 @@ const renderTags = (q) => {
     els.tagsWrap.appendChild(span);
   });
 };
-const isYearTag = (t) => /^\d{4}$/.test(String(t).trim());
+// 4桁の年 もしくは 'original' を「年度タグ」として扱う
+const isYearTag = (t) => {
+  const s = String(t).trim().toLowerCase();
+  return /^\d{4}$/.test(s) || s === 'original';
+};
+
 const asCorrectArray = (ans) => Array.isArray(ans) ? ans.slice().map(Number) : [Number(ans)];
 
 const showView = (name) => {
@@ -308,9 +313,23 @@ const populateFilters = () => {
   const curTag = els.tagFilter.value;
   els.tagFilter.innerHTML = '<option value="">全分野</option>' + [...tagSet].sort().map(t=>`<option value="${t}">${t}</option>`).join('');
   if ([...tagSet].includes(curTag)) els.tagFilter.value = curTag;
-  const curYear = els.yearFilter.value;
-  els.yearFilter.innerHTML = '<option value="">全年度</option>' + [...yearSet].sort().map(y=>`<option value="${y}">${y}</option>`).join('');
-  if ([...yearSet].includes(curYear)) els.yearFilter.value = curYear;
+// 既存：const curYear = els.yearFilter.value;
+const curYear = els.yearFilter.value;
+
+// 並べ替え：数値の年度（昇順）→ その他（例: original）
+const years = [...yearSet].sort((a, b) => {
+  const an = /^\d{4}$/.test(a) ? parseInt(a, 10) : Infinity;
+  const bn = /^\d{4}$/.test(b) ? parseInt(b, 10) : Infinity;
+  return an - bn || String(a).localeCompare(String(b));
+});
+
+// 表示名を yearLabel() で置換
+els.yearFilter.innerHTML =
+  '<option value="">全年度</option>' +
+  years.map(y => `<option value="${y}">${yearLabel(y)}</option>`).join('');
+
+if ([...yearSet].includes(curYear)) els.yearFilter.value = curYear;
+
 };
 
 // ===== Navigation =====
