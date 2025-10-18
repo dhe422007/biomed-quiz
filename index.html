@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ja">
 <head>
@@ -42,7 +41,6 @@
     th, td { padding:8px 6px; border-bottom:1px solid rgba(15,23,42,.08); text-align:left; }
     th { background: #f8fafc; }
     .tag { display:inline-block; padding:2px 8px; border:1px solid rgba(15,23,42,.12); border-radius:999px; margin-right:6px; margin-bottom:6px; font-size:12px; color:var(--muted); }
-    /* Home */
     .grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
     .tile { border:1px solid rgba(15,23,42,.12); border-radius:14px; padding:14px; background:#fff; cursor:pointer; transition:.15s; }
     .tile:hover { border-color: var(--accent); box-shadow: 0 2px 14px rgba(37, 99, 235, .08); transform: translateY(-1px); }
@@ -65,7 +63,6 @@
   </header>
 
   <main>
-    <!-- トップページ -->
     <section id="homeScreen" class="card">
       <div class="section-title">出題範囲を選択して「解答スタート」を押してください</div>
       <div class="selbar" style="margin-bottom:14px;">
@@ -98,7 +95,6 @@
       <div class="muted" style="margin-top:12px;">※ 成績は端末ローカルにのみ保存されます。</div>
     </section>
 
-    <!-- 問題画面 -->
     <section id="quizScreen" class="card hidden">
       <div class="row" style="gap:8px; margin-bottom:10px;">
         <label class="muted">分野</label>
@@ -119,7 +115,6 @@
       <div id="explain" class="explain hidden"></div>
     </section>
 
-    <!-- 結果画面 -->
     <section id="resultScreen" class="card hidden">
       <div class="section-title">結果</div>
       <div id="resultSummary" class="qtext"></div>
@@ -172,7 +167,7 @@
     </div>
   </dialog>
 
-  <script src="app.js?v=13"></script>
+  <script src="app.js?v=14"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').catch(()=>{});

@@ -1,428 +1,497 @@
-// app.js (臨床検査技師クイズ共通仕様 / 年度=4桁 or 'original' / 画像の壊れ防止)
-const STATE_KEY = 'quiz_state_v3';
-const BOOKMARK_KEY = 'quiz_bookmarks_v1';
-const WRONG_KEY = 'quiz_wrongs_v1';
-const STATS_BY_TAG_KEY = 'quiz_stats_by_tag_v1';
+/* ===============================
+   臨床検査技師 国家試験：医用工学 問題アプリ (v14)
+   - 年度/分野が選べない・進めない・日数が消える不具合を修正
+   - 年度フィルタは「2017」「2017年」「…2017…」に対応
+================================= */
 
-let questions = [];
-let order = [];
-let index = 0;
+const BUILD = '2025-10-19-4';
+const STORE_KEY = 'medtechQuiz:v1';
+const LOG_KEY = 'medtechQuiz:log';
+const DATE_TARGET = '2026-02-18T00:00:00+09:00'; // 試験日
 
-let deferredPrompt = null;
-let mode = 'all';
+// 固定の選択肢
+const FIXED_YEARS = ["2017","2018","2019","2020","2021","2022","2023","2024","2025","過去問","original"];
+const FIXED_TAGS  = ["センサ・トランスデューサ","医用電子回路","医療情報","生体物性","電気・電子","電気的安全対策"]; // 「全ての分野」は空扱い（=未指定）
 
-let selectedSet = new Set();
-let answered = false;
+const $ = (q) => document.querySelector(q);
+const $$ = (q) => Array.from(document.querySelectorAll(q));
 
-const els = {
-  tagFilter: document.getElementById('tagFilter'),
-  yearFilter: document.getElementById('yearFilter'),
-  modeSelect: document.getElementById('modeSelect'),
-  startBtn: document.getElementById('startBtn'),
-  shuffleBtn: document.getElementById('shuffleBtn'),
-  progressNum: document.getElementById('progressNum'),
-  accuracy: document.getElementById('accuracy'),
-  streak: document.getElementById('streak'),
-  progressBar: document.getElementById('progressBar'),
-  viewTop: document.getElementById('viewTop'),
-  viewQuiz: document.getElementById('viewQuiz'),
-  viewEnd: document.getElementById('viewEnd'),
-  qid: document.getElementById('qid'),
-  questionText: document.getElementById('questionText'),
-  qImage: document.getElementById('qImage'),
-  tagsWrap: document.getElementById('tagsWrap'),
-  choices: document.getElementById('choices'),
-  explain: document.getElementById('explain'),
-  prevBtn: document.getElementById('prevBtn'),
-  nextBtn: document.getElementById('nextBtn'),
-  bookmarkBtn: document.getElementById('bookmarkBtn'),
-  finalAccuracy: document.getElementById('finalAccuracy'),
-  backHomeBtn: document.getElementById('backHomeBtn'),
-  resumeBtn: document.getElementById('resumeBtn'),
-  resumeInfo: document.getElementById('resumeInfo'),
+// 状態
+const state = {
+  screen: 'home',
+  all: [],
+  filtered: [],
+  idx: 0,
+  tagFilter: '',
+  yearFilter: '',
+  store: loadStore(),
+  session: null // {startedAt, correct, total}
 };
 
-// ===== 試験日カウントダウン（JST固定） =====
-function updateCountdown() {
-  const now = new Date();
-  const exam = new Date('2026-02-18T00:00:00+09:00');
-  const msPerDay = 24 * 60 * 60 * 1000;
-  let days = Math.ceil((exam.getTime() - now.getTime()) / msPerDay);
-  if (days < 0) days = 0;
-  const el = document.getElementById('countdown');
-  if (el) el.textContent = `残り ${days} 日`;
+function loadStore(){
+  try { const raw = localStorage.getItem(STORE_KEY); if (raw) return JSON.parse(raw); } catch(e){}
+  return { perQ:{}, perTag:{}, last:{screen:'home', tag:'', year:'', idx:0} };
 }
-function scheduleCountdownRefresh() {
-  updateCountdown();
-  const now = new Date();
-  const next = new Date(now);
-  next.setDate(now.getDate() + 1);
-  next.setHours(0,0,0,0);
-  const wait = next.getTime() - now.getTime();
-  setTimeout(() => {
-    updateCountdown();
-    setInterval(updateCountdown, 24*60*60*1000);
-  }, wait);
+function saveStore(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(state.store)); } catch(e){} }
+
+function pushLog(entry){
+  try {
+    const logs = JSON.parse(localStorage.getItem(LOG_KEY) || '[]');
+    logs.unshift({...entry, t: Date.now()});
+    while (logs.length > 200) logs.pop();
+    localStorage.setItem(LOG_KEY, JSON.stringify(logs));
+  } catch(e){}
+}
+function readLogs(limit=50){
+  try { return JSON.parse(localStorage.getItem(LOG_KEY) || '[]').slice(0,limit); } catch(e){ return []; }
+}
+function resetAllLogs(){
+  try {
+    localStorage.removeItem(STORE_KEY);
+    localStorage.removeItem(LOG_KEY);
+  } catch(e){}
+  location.reload();
 }
 
-// ===== 画像ヘルパー（「？」壊れ画像の防止） =====
-const isNoImage = (s) => {
-  if (!s) return true;
-  const t = String(s).trim();
-  if (!t) return true;
-  return /^(-|なし|null|na)$/i.test(t);
-};
-// 健全な画像パスのみ通す（".jpg" 単体などを弾く）
-const normalizeImagePath = (s) => {
-  if (!s) return null;
-  const t = String(s).trim();
-  if (!t) return null;
-  if (/^(-|なし|null|na)$/i.test(t)) return null;
-  if (/^\.[a-zA-Z0-9]+$/.test(t)) return null; // ".jpg" など拡張子だけ
-  if (!/\.(jpg|jpeg|png|webp|gif)$/i.test(t)) return null;
-  return t;
-};
-
-// ===== 汎用 =====
-const shuffle = (arr) => {
-  const a = arr.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+// カウントダウン（試験日まで残り N 日）
+function startCountdown(){
+  const node = $('#countdown');
+  const target = new Date(DATE_TARGET);
+  function tick(){
+    const now = new Date();
+    const diff = target - now;
+    const days = Math.max(0, Math.ceil(diff/(1000*60*60*24)));
+    if (node) node.textContent = `試験日まで残り ${days} 日`;
   }
-  return a;
-};
-const loadJSON = async (path) => {
-  const res = await fetch(path);
-  if (!res.ok) throw new Error('failed to load ' + path);
-  return await res.json();
-};
+  tick(); setInterval(tick, 60*1000);
+}
 
-// ===== 永続化 =====
-let stats = { totalAnswered: 0, totalCorrect: 0, streak: 0 };
+// 起動
+window.addEventListener('DOMContentLoaded', boot);
+async function boot(){
+  startCountdown();
+  try {
+    const res = await fetch(`./questions.json?v=${encodeURIComponent(BUILD)}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`questions.json の取得に失敗（${res.status}）`);
+    const data = await res.json();
+    if (!Array.isArray(data)) throw new Error('questions.json が配列ではありません');
+    state.all = data;
+  } catch (e) {
+    console.error(e);
+    alert('questions.json を読み込めませんでした。');
+    return;
+  }
 
-const saveState = () => {
-  const state = {
-    index, order, mode,
-    stats,
-    currentTag: els.tagFilter.value,
-    currentYear: els.yearFilter.value,
+  try {
+    initHome();
+    initFilters();
+    bindUI();
+    state.screen = 'home';
+    setFooterVisibility();
+    showHome();
+  } catch (e){
+    console.error(e);
+    alert('初期化に失敗しました。');
+  }
+}
+
+// フッターのボタン表示制御（トップでは非表示）
+function setFooterVisibility(){
+  const isHome = state.screen === 'home';
+  $('#prevBtn').classList.toggle('hidden', isHome);
+  $('#nextBtn').classList.toggle('hidden', isHome);
+  $('#progress').classList.toggle('hidden', isHome);
+}
+
+/* ---------- Home ---------- */
+function initHome(){
+  const ysel = $('#homeYearSel'), tsel = $('#homeTagSel');
+  // 年度
+  FIXED_YEARS.forEach(y => ysel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
+  // 分野（先頭は「全ての分野」＝空）
+  FIXED_TAGS.forEach(t => tsel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(t)}">${escapeHTML(t)}</option>`));
+
+  const updateCount = () => {
+    const count = estimateCount({year: ysel.value, tag: tsel.value});
+    $('#homeCount').textContent = `該当 ${count} 問`;
   };
-  localStorage.setItem(STATE_KEY, JSON.stringify(state));
-};
-const loadState = () => {
-  const s = localStorage.getItem(STATE_KEY);
-  if (!s) return null;
-  try { return JSON.parse(s); } catch { return null; }
-};
+  ysel.addEventListener('change', updateCount);
+  tsel.addEventListener('change', updateCount);
 
-const getBookmarks = () => new Set(JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]'));
-const setBookmarks = (set) => localStorage.setItem(BOOKMARK_KEY, JSON.stringify([...set]));
-const getWrongs = () => new Set(JSON.parse(localStorage.getItem(WRONG_KEY) || '[]'));
-const setWrongs = (set) => localStorage.setItem(WRONG_KEY, JSON.stringify([...set]));
-const getStatsByTag = () => JSON.parse(localStorage.getItem(STATS_BY_TAG_KEY) || '{}');
-const setStatsByTag = (obj) => localStorage.setItem(STATS_BY_TAG_KEY, JSON.stringify(obj));
-
-// ===== UI =====
-const updateStatsUI = () => {
-  els.progressNum.textContent = `${Math.min(index+1, Math.max(order.length,1))}/${order.length}`;
-  const acc = stats.totalAnswered ? Math.round((stats.totalCorrect / stats.totalAnswered) * 100) : 0;
-  els.accuracy.textContent = `${acc}%`;
-  els.streak.textContent = stats.streak;
-  const percent = Math.round(((index+1)/Math.max(order.length,1))*100);
-  els.progressBar.style.width = percent + '%';
-};
-const renderTags = (q) => {
-  els.tagsWrap.innerHTML = '';
-  (q.tags || []).forEach(t => {
-    const span = document.createElement('span');
-    span.className = 'tag';
-    span.textContent = t;
-    els.tagsWrap.appendChild(span);
-  });
-};
-
-// 年度タグ：4桁の年 or 'original' を年度扱いにする
-const isYearTag = (t) => {
-  const s = String(t).trim().toLowerCase();
-  return /^\d{4}$/.test(s) || s === 'original';
-};
-const asCorrectArray = (ans) => Array.isArray(ans) ? ans.slice().map(Number) : [Number(ans)];
-
-const showView = (name) => {
-  els.viewTop.classList.remove('active');
-  els.viewQuiz.classList.remove('active');
-  els.viewEnd.classList.remove('active');
-  if (name==='top') els.viewTop.classList.add('active');
-  if (name==='quiz') els.viewQuiz.classList.add('active');
-  if (name==='end') els.viewEnd.classList.add('active');
-};
-
-// ===== 採点 =====
-const gradeCurrent = () => {
-  const q = questions[order[index]];
-  const correctArray = asCorrectArray(q.answerIndex).sort((a,b)=>a-b);
-  const pickedArray = [...selectedSet].sort((a,b)=>a-b);
-  const isAllMatch = correctArray.length === pickedArray.length &&
-    correctArray.every((v, i) => v === pickedArray[i]);
-
-  const buttons = [...document.querySelectorAll('.choice')];
-  buttons.forEach(b => {
-    const bi = Number(b.dataset.index);
-    if (correctArray.includes(bi)) b.classList.add('correct');
-    if (selectedSet.has(bi) && !correctArray.includes(bi)) b.classList.add('incorrect');
-    b.disabled = true;
+  // 年度タイル
+  const yNode = $('#homeYears'); yNode.innerHTML = '';
+  FIXED_YEARS.forEach(y => {
+    const c = estimateCount({year:y, tag: tsel.value});
+    const div = document.createElement('div');
+    div.className = 'tile';
+    div.innerHTML = `<h3>${escapeHTML(y)}</h3><div class="muted">${c}問</div>`;
+    div.addEventListener('click', () => { ysel.value = y; updateCount(); });
+    yNode.appendChild(div);
   });
 
-  stats.totalAnswered += 1;
-  if (isAllMatch) {
-    stats.totalCorrect += 1;
-    stats.streak += 1;
-    const wr = getWrongs(); wr.delete(q.id); setWrongs(wr);
-  } else {
-    stats.streak = 0;
-    const wr = getWrongs(); wr.add(q.id); setWrongs(wr);
+  // 分野タイル（先頭に「全ての分野」）
+  const tNode = $('#homeTags'); tNode.innerHTML = '';
+  const allDiv = document.createElement('div');
+  allDiv.className = 'tile';
+  allDiv.innerHTML = `<h3>全ての分野</h3><div class="muted">${state.all.length}問</div>`;
+  allDiv.addEventListener('click', () => { tsel.value = ''; updateCount(); });
+  tNode.appendChild(allDiv);
+
+  FIXED_TAGS.forEach(t => {
+    const c = estimateCount({year: ysel.value, tag: t});
+    const div = document.createElement('div');
+    div.className = 'tile';
+    div.innerHTML = `<h3>${escapeHTML(t)}</h3><div class="muted">${c}問</div>`;
+    div.addEventListener('click', () => { tsel.value = t; updateCount(); });
+    tNode.appendChild(div);
+  });
+
+  // スタート
+  $('#homeStartBtn').addEventListener('click', () => {
+    startFromHome({year: ysel.value, tag: tsel.value});
+  });
+
+  updateCount();
+}
+
+function estimateCount({year='', tag=''}){
+  return state.all.filter(q => {
+    const tags = (q.tags||[]).map(String);
+    const matchYear = matchYearTag(tags, year);
+    const matchTag = !tag || tags.includes(String(tag));
+    return matchYear && matchTag;
+  }).length;
+}
+
+function startFromHome({year='', tag=''}={}){
+  // クイズ用セレクトにも反映
+  $('#yearFilter').value = year;
+  $('#tagFilter').value = tag;
+  state.yearFilter = year;
+  state.tagFilter = tag;
+  applyFilters();
+  state.idx = 0;
+  state.session = { startedAt: Date.now(), correct: 0, total: state.filtered.length };
+  showQuiz();
+  render();
+}
+
+/* ---------- Filters (quiz) ---------- */
+function initFilters(){
+  const tagSel = $('#tagFilter'), yearSel = $('#yearFilter');
+  FIXED_TAGS.forEach(t => tagSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(t)}">${escapeHTML(t)}</option>`));
+  FIXED_YEARS.forEach(y => yearSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
+}
+
+function applyFilters(){
+  const tag = ($('#tagFilter')?.value ?? state.tagFilter) || '';
+  const year = ($('#yearFilter')?.value ?? state.yearFilter) || '';
+
+  state.filtered = state.all.filter(q => {
+    const tags = (q.tags||[]).map(String);
+    const matchYear = matchYearTag(tags, year);
+    const matchTag = !tag || tags.includes(String(tag));
+    return matchYear && matchTag;
+  });
+
+  state.idx = 0;
+  state.tagFilter = tag;
+  state.yearFilter = year;
+}
+
+/* 年度タグのマッチング（2017/2017年/…2017…、original/過去問は厳密一致） */
+function matchYearTag(tagsArr, year){
+  if (!year) return true;
+  const y = String(year);
+  return tagsArr.some(s0 => {
+    const s = String(s0);
+    if (y === 'original' || y === '過去問') return s === y;
+    if (s === 'original' || s === '過去問') return false;
+    // 4桁年なら部分一致も許容（2017年, 2017-xx, text2017 など）
+    if (/^\d{4}$/.test(y)) {
+      return s === y || s.includes(y) || s.replace(/年$/,'') === y;
+    }
+    return s === y;
+  });
+}
+
+/* ---------- クイズ描画 ---------- */
+function showHome(){
+  $('#homeScreen').classList.remove('hidden');
+  $('#quizScreen').classList.add('hidden');
+  $('#resultScreen').classList.add('hidden');
+  state.screen = 'home';
+  setFooterVisibility();
+}
+function showQuiz(){
+  $('#homeScreen').classList.add('hidden');
+  $('#quizScreen').classList.remove('hidden');
+  $('#resultScreen').classList.add('hidden');
+  state.screen = 'quiz';
+  setFooterVisibility();
+}
+function showResult(){
+  $('#homeScreen').classList.add('hidden');
+  $('#quizScreen').classList.add('hidden');
+  $('#resultScreen').classList.remove('hidden');
+  state.screen = 'result';
+  setFooterVisibility();
+}
+
+function render(){
+  if (state.screen !== 'quiz') return;
+  const total = state.filtered.length;
+  const qtext = $('#qtext'), choices = $('#choices'), qimg = $('#qimage'), explain = $('#explain');
+  if (!total){
+    qtext.textContent = '該当する問題がありません。トップページまたはフィルタを変更してください。';
+    choices.innerHTML = '';
+    qimg.classList.add('hidden');
+    explain.classList.add('hidden');
+    $('#progress').textContent = '';
+    $('#qmeta').textContent = '';
+    $('#nextBtn').disabled = true;
+    return;
   }
-  els.explain.classList.remove('hidden');
-  updateStatsUI();
+  const q = state.filtered[state.idx];
+  $('#qtext').textContent = q.question || '';
+  $('#qmeta').innerHTML = renderTags(q.tags || []);
+  renderImage(q);
+  renderChoices(q);
+  explain.classList.add('hidden'); explain.innerHTML='';
+  $('#progress').textContent = `${state.idx+1} / ${total}`;
+  updateNextButtonAvailability(q);
+}
 
-  const sbt = getStatsByTag();
-  (q.tags || []).forEach(t => {
-    if (!sbt[t]) sbt[t] = { answered: 0, correct: 0 };
-    sbt[t].answered += 1;
-    if (isAllMatch) sbt[t].correct += 1;
-  });
-  setStatsByTag(sbt);
-  localStorage.setItem('quiz_lastAnswered', new Date().toISOString());
-
-  answered = true;
-  els.nextBtn.textContent = (index < order.length-1) ? '次へ ▶' : '結果を見る';
-  saveState();
-};
-
-// ===== 出題レンダリング =====
-const renderQuestion = () => {
-  const q = questions[order[index]];
-  els.qid.textContent = q.id || `Q${order[index]+1}`;
-  els.questionText.textContent = q.question;
-
-  // 本文画像（健全なパスのみ表示、失敗時は隠す）
-  const imgSrc = normalizeImagePath(q.image);
-  if (imgSrc) {
-    els.qImage.classList.remove('hidden');
-    els.qImage.alt = q.imageAlt || '';
-    els.qImage.onerror = () => {
-      els.qImage.classList.add('hidden');
-      els.qImage.removeAttribute('src');
-      els.qImage.removeAttribute('alt');
-    };
-    els.qImage.onload = () => {};
-    els.qImage.src = imgSrc;
+function renderTags(tags){
+  if (!tags || !tags.length) return '';
+  return tags.map(t => `<span class="tag">${escapeHTML(String(t))}</span>`).join('');
+}
+function renderImage(q){
+  const node = $('#qimage');
+  if (q.image){
+    node.classList.remove('hidden');
+    node.innerHTML = `<img src="${escapeAttr(q.image)}" alt="${escapeAttr(q.imageAlt || '問題図')}" style="max-width:100%;border-radius:12px;border:1px solid rgba(15,23,42,.1);">`;
   } else {
-    els.qImage.classList.add('hidden');
-    els.qImage.removeAttribute('src');
-    els.qImage.removeAttribute('alt');
+    node.classList.add('hidden');
+    node.innerHTML = '';
   }
+}
 
-  renderTags(q);
-  els.explain.classList.add('hidden');
-  els.explain.textContent = q.explanation || '';
-  els.choices.innerHTML = '';
-
-  selectedSet = new Set();
-  answered = false;
-  els.nextBtn.textContent = '解答する';
-  els.nextBtn.disabled = true;
-
-  const idxs = q.choices.map((_,i)=>i);
-  const shuffled = shuffle(idxs);
-  shuffled.forEach(i => {
+function renderChoices(q){
+  const wrap = $('#choices'); wrap.innerHTML = '';
+  const multi = Array.isArray(q.answerIndex);
+  const n = (q.choices || []).length;
+  const order = Array.from({length:n}, (_,i)=>i);
+  shuffle(order);
+  order.forEach((origIdx) => {
+    const text = q.choices[origIdx];
     const btn = document.createElement('button');
     btn.className = 'choice';
-    const val = q.choices[i];
-    const choiceImg = (typeof val === 'string') ? normalizeImagePath(val) : null;
-
-    if (choiceImg) {
-      btn.textContent = '';
-      const img = document.createElement('img');
-      img.alt = `choice${i+1}`;
-      img.style.maxWidth = '100%';
-      img.style.height = 'auto';
-      img.onerror = () => {
-        img.remove();
-        btn.textContent = '[画像なし]';
-      };
-      img.onload = () => {};
-      img.src = choiceImg;
-      btn.appendChild(img);
-    } else {
-      btn.textContent = val;
-    }
-
-    btn.dataset.index = i;
+    btn.setAttribute('data-idx', String(origIdx));
+    btn.setAttribute('aria-pressed', 'false');
+    btn.innerHTML = escapeHTML(String(text));
     btn.addEventListener('click', () => {
-      if (answered) return;
-      if (selectedSet.has(i)) { selectedSet.delete(i); btn.classList.remove('selected'); }
-      else { selectedSet.add(i); btn.classList.add('selected'); }
-      els.nextBtn.disabled = selectedSet.size === 0;
+      if (multi){
+        btn.classList.toggle('selected');
+        btn.setAttribute('aria-pressed', String(btn.classList.contains('selected')));
+      } else {
+        $$('#choices .choice').forEach(el => { el.classList.remove('selected'); el.setAttribute('aria-pressed', 'false'); });
+        btn.classList.add('selected');
+        btn.setAttribute('aria-pressed','true');
+      }
+      updateNextButtonAvailability(q);
     });
-    els.choices.appendChild(btn);
+    wrap.appendChild(btn);
   });
+  $('#nextBtn').textContent = '解答する';
+}
 
-  const bms = getBookmarks();
-  els.bookmarkBtn.textContent = bms.has(q.id) ? '★ ブックマーク中' : '☆ ブックマーク';
-
-  updateStatsUI();
-  saveState();
-};
-
-// ===== フィルタ =====
-const applyFilter = () => {
-  const tagSel  = els.tagFilter.value;
-  const yearSel = els.yearFilter.value;
-  const wr = getWrongs();
-  const bms = getBookmarks();
-
-  const base = questions.map((q,i)=>i).filter(i => {
-    const tags = questions[i].tags||[];
-    if (tagSel) {
-      const hasTag = tags.some(t => !isYearTag(t) && String(t)===tagSel);
-      if (!hasTag) return false;
-    }
-    if (yearSel) {
-      const hasYear = tags.some(t => isYearTag(t) && String(t)===yearSel);
-      if (!hasYear) return false;
-    }
-    if (mode==='wrong' && !wr.has(questions[i].id)) return false;
-    if (mode==='bookmarked' && !bms.has(questions[i].id)) return false;
-    return true;
-  });
-
-  order = base;
-  index = 0;
-};
-
-const populateFilters = () => {
-  const yearSet = new Set();
-  const tagSet = new Set();
-  questions.forEach(q => (q.tags||[]).forEach(t => (isYearTag(t)?yearSet:tagSet).add(String(t))));
-
-  // 分野
-  const curTag = els.tagFilter.value;
-  els.tagFilter.innerHTML =
-    '<option value="">全分野</option>' +
-    [...tagSet].sort().map(t => `<option value="${t}">${t}</option>`).join('');
-  if ([...tagSet].includes(curTag)) els.tagFilter.value = curTag;
-
-  // 年度（数値年度→昇順、その後に original）
-  const yearLabel = (y) => (String(y).toLowerCase() === 'original' ? 'original（オリジナル）' : y);
-  const years = [...yearSet].sort((a, b) => {
-    const an = /^\d{4}$/.test(a) ? parseInt(a, 10) : Infinity;
-    const bn = /^\d{4}$/.test(b) ? parseInt(b, 10) : Infinity;
-    return an - bn || String(a).localeCompare(String(b));
-  });
-
-  const curYear = els.yearFilter.value;
-  els.yearFilter.innerHTML =
-    '<option value="">全年度</option>' +
-    years.map(y => `<option value="${y}">${yearLabel(y)}</option>`).join('');
-  if ([...yearSet].includes(curYear)) els.yearFilter.value = curYear;
-};
-
-// ===== 進む・戻る =====
-const next = () => {
-  if (!answered) { gradeCurrent(); return; }
-  if (index < order.length - 1) {
-    index += 1;
-    renderQuestion();
+function updateNextButtonAvailability(q){
+  const selected = $$('#choices .choice.selected');
+  const nextBtn = $('#nextBtn');
+  if (Array.isArray(q.answerIndex)){
+    const need = q.answerIndex.length;
+    nextBtn.disabled = (selected.length !== need);
+    nextBtn.title = selected.length !== need ? `この問題は ${need} 個選んでください` : '';
   } else {
-    const acc = stats.totalAnswered ? Math.round((stats.totalCorrect / stats.totalAnswered) * 100) : 0;
-    els.finalAccuracy.textContent = `${acc}%`;
-    const jp = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
-    const fd = document.getElementById('finalDate');
-    if (fd) fd.textContent = `回答日時：${jp}`;
-    showView('end');
+    nextBtn.disabled = (selected.length !== 1);
+    nextBtn.title = selected.length !== 1 ? '選択肢を1つ選んでください' : '';
   }
-};
-const prev = () => { if (index > 0) { index -= 1; renderQuestion(); } };
+}
 
-// ===== イベント =====
-els.startBtn.addEventListener('click', () => {
-  mode = els.modeSelect.value;
-  applyFilter();
-  if (order.length === 0) { alert('該当の問題がありません。'); return; }
-  order = shuffle(order);
-  index = 0;
-  showView('quiz');
-  renderQuestion();
-});
-els.shuffleBtn.addEventListener('click', () => {
-  order = shuffle(order);
-  index = 0;
-  if (els.viewQuiz.classList.contains('active')) renderQuestion();
-});
-els.prevBtn.addEventListener('click', prev);
-els.nextBtn.addEventListener('click', next);
-els.modeSelect.addEventListener('change', (e) => {
-  mode = e.target.value;
-  if (els.viewQuiz.classList.contains('active')) { applyFilter(); renderQuestion(); }
-});
-els.tagFilter.addEventListener('change', () => {
-  if (els.viewQuiz.classList.contains('active')) { applyFilter(); renderQuestion(); }
-});
-els.yearFilter.addEventListener('change', () => {
-  if (els.viewQuiz.classList.contains('active')) { applyFilter(); renderQuestion(); }
-});
-els.bookmarkBtn.addEventListener('click', () => {
-  const q = questions[order[index]];
-  const b = getBookmarks();
-  if (b.has(q.id)) b.delete(q.id); else b.add(q.id);
-  setBookmarks(b);
-  renderQuestion();
-});
-els.backHomeBtn.addEventListener('click', () => { showView('top'); });
+/* ---------- 採点・遷移 ---------- */
+function grade(){
+  const q = state.filtered[state.idx];
+  const selectedNodes = $$('#choices .choice.selected');
+  if (!selectedNodes.length) { updateNextButtonAvailability(q); return; }
+  if (Array.isArray(q.answerIndex) && selectedNodes.length !== q.answerIndex.length) { updateNextButtonAvailability(q); return; }
 
-window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+  const selected = selectedNodes.map(el => Number(el.getAttribute('data-idx')));
+  const result = isCorrectAnswer(selected, q.answerIndex);
+  const correctSet = toSet(q.answerIndex);
 
-// ===== 初期化 =====
-(async function init(){
-  try {
-    // v= を上げるとSWキャッシュを回避して最新を取りに行きやすい
-    questions = await loadJSON('./questions.json?v=3');
-    populateFilters();
+  $$('#choices .choice').forEach(el => {
+    const idx = Number(el.getAttribute('data-idx'));
+    if (correctSet.has(idx)) el.classList.add('correct');
+    if (selected.includes(idx) && !correctSet.has(idx)) el.classList.add('incorrect');
+  });
 
-    // トップの「前回の続きから」情報
-    const st0 = loadState();
-    const canResume = st0 && Array.isArray(st0.order) && st0.order.length > 0;
-    if (canResume && els.resumeBtn && els.resumeInfo) {
-      els.resumeBtn.classList.remove('hidden');
-      const last = localStorage.getItem('quiz_lastAnswered');
-      const when = last ? new Date(last).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }) : '—';
-      els.resumeInfo.textContent = `前回の進捗：${Math.min((st0.index||0)+1, st0.order.length)}/${st0.order.length}　最終回答：${when}`;
-    }
+  const explain = $('#explain');
+  const multi = Array.isArray(q.answerIndex);
+  const feedback = result.ok
+    ? (multi ? `🎉 全て正解です（${result.total}/${result.total}）` : '🎉 正解です')
+    : (multi ? `▲ 部分正解：${result.partial}/${result.total}。残りの選択肢も確認しましょう。` : `✕ 不正解。もう一度見直しましょう。`);
+  explain.classList.remove('hidden');
+  explain.innerHTML = `<div>${feedback}</div>${q.explanation ? `<div style="margin-top:6px;">${escapeHTML(q.explanation)}</div>` : ''}`;
 
-    const st = loadState();
-    if (st) {
-      stats = st.stats || stats;
-      if (st.currentTag) els.tagFilter.value = st.currentTag;
-      if (st.currentYear) els.yearFilter.value = st.currentYear;
-      mode = st.mode || 'all';
-      els.modeSelect.value = mode;
-      applyFilter();
-    } else {
-      applyFilter();
-    }
+  bumpScore(q, result.ok, selected);
+  if (state.session){ if (result.ok) state.session.correct += 1; }
 
-    els.progressNum.textContent = `0/${order.length}`;
-    els.accuracy.textContent = stats.totalAnswered ? `${Math.round((stats.totalCorrect/stats.totalAnswered)*100)}%` : '0%';
-    els.streak.textContent = stats.streak;
-    els.progressBar.style.width = '0%';
-
-    scheduleCountdownRefresh();
-  } catch (err) {
-    console.error(err);
-    alert('questions.json を読み込めませんでした。');
+  if (state.idx >= state.filtered.length - 1){
+    $('#nextBtn').textContent = '結果を見る';
+  } else {
+    $('#nextBtn').textContent = '次へ';
   }
-})();
+  $('#nextBtn').disabled = false;
+}
 
+function next(){
+  if (state.screen === 'home') return;
+  if (state.screen === 'result'){ showHome(); return; }
+  const btn = $('#nextBtn');
+  if (btn.textContent.includes('解答')) { grade(); return; }
+  if (btn.textContent.includes('結果')) { renderResult(); showResult(); return; }
+  if (state.idx < state.filtered.length - 1) state.idx += 1;
+  render();
+}
+function prev(){
+  if (state.screen !== 'quiz') return;
+  if (state.idx > 0) state.idx -= 1;
+  render();
+}
 
+/* ---------- 結果 ---------- */
+function renderResult(){
+  const s = state.session || {startedAt: Date.now(), correct: 0, total: state.filtered.length};
+  const finishedAt = new Date();
+  const startedAt = new Date(s.startedAt);
+  const rate = s.total ? (s.correct / s.total) : 0;
+
+  const rows = [
+    `<div>解答日時：${finishedAt.toLocaleString('ja-JP')}</div>`,
+    `<div>成績：${s.correct} / ${s.total}（正答率 ${(rate*100).toFixed(1)}%）</div>`,
+    `<div>所要時間：約 ${Math.max(1, Math.round((finishedAt - startedAt)/60000))} 分</div>`,
+    `<div>ポジティブな明るいアドバイス：${makePositiveAdvice(rate)}</div>`
+  ].join('');
+  $('#resultSummary').innerHTML = rows;
+  $('#resultAdvice').textContent = '';
+}
+
+function makePositiveAdvice(rate){
+  if (rate < 0.4) return 'ここから伸びしろがたっぷり！解説を手掛かりに要点を押さえれば必ず伸びます。';
+  if (rate < 0.7) return '良いペースです！間違えた分野を重点的に回せば合格圏が見えてきます。';
+  if (rate < 0.9) return 'かなり仕上がっています！弱点の最終チェックで得点を安定させましょう。';
+  return '最高の出来！自信を持って本番に臨めるレベルです。';
+}
+
+/* ---------- 成績・弱点 ---------- */
+function openStats(){
+  const dlg = $('#statsDlg'); if (!dlg) return;
+  const tbody = $('#tagTable tbody'); tbody.innerHTML='';
+  const rows = Object.entries(state.store.perTag || {}).map(([tag, rec]) => {
+    const rate = rec.attempts ? (rec.correct/rec.attempts) : 0;
+    return {tag, ...rec, rate};
+  }).sort((a,b)=> b.rate - a.rate || b.attempts - a.attempts);
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${escapeHTML(r.tag)}</td><td>${r.correct}</td><td>${r.attempts}</td><td>${(r.rate*100).toFixed(1)}%</td>`;
+    tbody.appendChild(tr);
+  });
+
+  const weakTbody = $('#weakTable tbody'); weakTbody.innerHTML='';
+  const weakTags = rows.filter(r => r.attempts>=5).sort((a,b)=> a.rate - b.rate).slice(0,10);
+  weakTags.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>タグ: ${escapeHTML(r.tag)}</td><td>${r.correct}</td><td>${r.attempts}</td><td>${(r.rate*100).toFixed(1)}%</td>`;
+    weakTbody.appendChild(tr);
+  });
+
+  const logs = readLogs(50);
+  const logNode = $('#logList'); logNode.innerHTML = logs.map(L => {
+    const dt = new Date(L.t).toLocaleString('ja-JP');
+    const ans = Array.isArray(L.answerIndex) ? `[${L.answerIndex.join(',')}]` : String(L.answerIndex);
+    const sel = Array.isArray(L.selected) ? `[${L.selected.join(',')}]` : String(L.selected);
+    const tagStr = (L.tags||[]).map(t => `<span class="tag">${escapeHTML(String(t))}</span>`).join('');
+    return `<div style="padding:8px 0; border-bottom:1px dashed rgba(15,23,42,.1);">
+      <div class="muted">${dt}</div>
+      <div>${L.ok ? '✅ 正解' : '❌ 不正解'} / 問題ID: ${escapeHTML(String(L.id))}</div>
+      <div class="muted">選択: ${sel} / 正解: ${ans}</div>
+      <div>${tagStr}</div>
+    </div>`;
+  }).join('');
+
+  dlg.showModal();
+}
+
+/* ---------- スコア記録 ---------- */
+function bumpScore(q, ok, selected){
+  const id = q.id ?? `idx:${state.idx}`;
+  const pq = state.store.perQ?.[id] || {attempts:0, correct:0};
+  pq.attempts += 1; if (ok) pq.correct += 1;
+  state.store.perQ = state.store.perQ || {}; state.store.perQ[id] = pq;
+
+  const tags = Array.from(new Set((q.tags || [])));
+  state.store.perTag = state.store.perTag || {};
+  for (const t of tags){
+    const rec = state.store.perTag[t] || {attempts:0, correct:0};
+    rec.attempts += 1; if (ok) rec.correct += 1;
+    state.store.perTag[t] = rec;
+  }
+  pushLog({ id, ok, selected, answerIndex: q.answerIndex, tags });
+  saveStore();
+}
+
+/* ---------- バインド ---------- */
+function bindUI(){
+  $('#homeBtn')?.addEventListener('click', showHome);
+  $('#statsBtn')?.addEventListener('click', openStats);
+  $('#resetStats')?.addEventListener('click', resetAllLogs);
+  $('#closeStats')?.addEventListener('click', () => $('#statsDlg').close());
+
+  $('#tagFilter')?.addEventListener('change', () => { applyFilters(); render(); });
+  $('#yearFilter')?.addEventListener('change', () => { applyFilters(); render(); });
+
+  $('#nextBtn')?.addEventListener('click', next);
+  $('#prevBtn')?.addEventListener('click', prev);
+
+  $('#resultToHome')?.addEventListener('click', showHome);
+  $('#resultRestart')?.addEventListener('click', () => startFromHome({year: state.yearFilter, tag: state.tagFilter}));
+}
+
+/* ---------- ユーティリティ ---------- */
+function shuffle(a){ for (let i=a.length-1; i>0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',\"'\":'&#39;' }[m])); }
+function escapeAttr(s){ return escapeHTML(String(s)).replace(/"/g,'&quot;'); }
+
+// 採点ヘルパ
+function isCorrectAnswer(userSelectedIndices, answerIndex){
+  if (Array.isArray(answerIndex)){
+    const correct = [...answerIndex].sort((a,b)=>a-b);
+    const user = [...new Set(userSelectedIndices)].sort((a,b)=>a-b);
+    const partial = intersectCount(user, correct);
+    if (correct.length !== user.length) return { ok:false, partial, total: correct.length };
+    const ok = correct.every((v,i)=>v===user[i]);
+    return { ok, partial: ok ? correct.length : partial, total: correct.length };
+  } else {
+    const ok = userSelectedIndices.length === 1 && userSelectedIndices[0] === answerIndex;
+    const partial = ok ? 1 : (userSelectedIndices.includes(answerIndex) ? 1 : 0);
+    return { ok, partial, total:1 };
+  }
+}
+function intersectCount(a, b){ let i=0,j=0,c=0; while(i<a.length&&j<b.length){ if(a[i]===b[j]){c++;i++;j++;} else if(a[i]<b[j]) i++; else j++; } return c; }
+function toSet(ans){ return new Set(Array.isArray(ans) ? ans : [ans]); }
+
+// SW
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
