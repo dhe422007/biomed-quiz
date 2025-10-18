@@ -1,8 +1,10 @@
 /* ===============================
-   臨床検査技師 国家試験：医用工学 問題アプリ (v14.1)
+   臨床検査技師 国家試験：医用工学 問題アプリ (v14.3)
+   - ヘッダーの「トップページへ」「成績・弱点」を強調色ボタンに
+   - 問題のタグ表示を削除し、代わりにIDを表示
 ================================= */
 
-const BUILD = '2025-10-19-7';
+const BUILD = '2025-10-19-8';
 const STORE_KEY = 'medtechQuiz:v1';
 const LOG_KEY = 'medtechQuiz:log';
 const DATE_TARGET = '2026-02-18T00:00:00+09:00'; // 試験日
@@ -238,7 +240,8 @@ function render(){
   }
   const q = state.filtered[state.idx];
   $('#qtext').textContent = q.question || '';
-  $('#qmeta').innerHTML = renderTags(q.tags || []);
+  // タグは表示しない。代わりにIDのみ表示
+  $('#qmeta').textContent = `ID：${getQuestionId(q)}`;
   renderImage(q);
   renderChoices(q);
   explain.classList.add('hidden'); explain.innerHTML='';
@@ -246,10 +249,10 @@ function render(){
   updateNextButtonAvailability(q);
 }
 
-function renderTags(tags){
-  if (!tags || !tags.length) return '';
-  return tags.map(t => `<span class="tag">${escapeHTML(String(t))}</span>`).join('');
+function getQuestionId(q){
+  return (q && (q.id!==undefined && q.id!==null)) ? String(q.id) : `idx:${state.idx}`;
 }
+
 function renderImage(q){
   const node = $('#qimage');
   if (q.image){
