@@ -3498,5 +3498,1145 @@
     "answerIndex": 0,
     "imageAlt": "nan",
     "explanation": "二要素認証は、「知識情報」「所持情報」「生体情報」のうち2つを組み合わせることで、セキュリティを大幅に向上させる認証方式です。"
+  },
+  {
+    "id": "cGPT-1",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "OSI参照モデルでアプリケーション層に属するのはどれか。",
+    "choices": [
+      "Ethernet",
+      "IP",
+      "TCP",
+      "HTTP(S)",
+      "ARP"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "アプリ層はアプリ同士のやり取り（HTTP/HTTPS等）を規定する。"
+  },
+  {
+    "id": "cGPT-2",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "医療画像通信の標準規格はどれか。",
+    "choices": [
+      "HL7",
+      "DICOM",
+      "ICD-10",
+      "JLAC10",
+      "FHIR"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "DICOMは画像・波形・構造化報告の交換規格。"
+  },
+  {
+    "id": "cGPT-3",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "臨床検査項目コードの国内標準はどれか。",
+    "choices": [
+      "ICD-10",
+      "JLAC10/11",
+      "CPT",
+      "LOINC",
+      "DRG"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "日本の検査コード体系はJLAC。"
+  },
+  {
+    "id": "cGPT-4",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "UPSの主目的はどれか。",
+    "choices": [
+      "冷却",
+      "無線化",
+      "停電時の無停電供給",
+      "漏れ電流低減",
+      "帯域拡張"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "瞬低・停電でシステムを維持し安全停止を可能にする。"
+  },
+  {
+    "id": "cGPT-5",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "64種類を一意に表す最小ビット数はどれか。",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "2^6=64で最小。"
+  },
+  {
+    "id": "cGPT-6",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "1,000種類を一意に表す最小ビット数はどれか。",
+    "choices": [
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "2^10=1024≥1000。"
+  },
+  {
+    "id": "cGPT-7",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "2 byteで表せる状態数はどれか。",
+    "choices": [
+      "256",
+      "512",
+      "1024",
+      "4096",
+      "65536"
+    ],
+    "answerIndex": 3,
+    "imageAlt": "nan",
+    "explanation": "16bit=2^16=65,536。"
+  },
+  {
+    "id": "cGPT-8",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "サンプリング定理で必要最小サンプリング周波数は信号帯域Bに対しどれか。",
+    "choices": [
+      "B/2",
+      "B",
+      "2B",
+      "4B",
+      "8B"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "ナイキスト周波数は2B。"
+  },
+  {
+    "id": "cGPT-9",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "A/D変換の「量子化」を説明する語はどれか。",
+    "choices": [
+      "時間離散化",
+      "振幅離散化",
+      "周波数離散化",
+      "位相離散化",
+      "雑音除去"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "量子化は振幅を離散レベルへ写像。"
+  },
+  {
+    "id": "cGPT-10",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "8bit・0〜2.56VのA/D分解能に最も近いのはどれか。",
+    "choices": [
+      "1 mV",
+      "5 mV",
+      "10 mV",
+      "20 mV",
+      "50 mV"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "2.56/256=0.01V=10 mV。"
+  },
+  {
+    "id": "cGPT-11",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "直列接続の増幅器で利得×10を3段の総利得[dB]はどれか。",
+    "choices": [
+      "20",
+      "30",
+      "40",
+      "60",
+      "100"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "20log10(1000)=60 dB。"
+  },
+  {
+    "id": "cGPT-12",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "利得20倍(26 dB)と200倍(46 dB)直列の合計[dB]はどれか。",
+    "choices": [
+      "46",
+      "52",
+      "60",
+      "66",
+      "72"
+    ],
+    "answerIndex": 3,
+    "imageAlt": "nan",
+    "explanation": "dBは加算：26+46=72 dB。"
+  },
+  {
+    "id": "cGPT-13",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "理想OPアンプの特徴で誤りはどれか。",
+    "choices": [
+      "無限大利得",
+      "無限大入力抵抗",
+      "0出力抵抗",
+      "無限帯域",
+      "無限CMRR"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "実機は帯域有限（GBW制約）。"
+  },
+  {
+    "id": "cGPT-14",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "RCローパスの遮断周波数での出力は入力のどれか。",
+    "choices": [
+      "1倍",
+      "0.9倍",
+      "1/√2倍",
+      "1/2倍",
+      "0倍"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "−3 dB点で振幅は1/√2。"
+  },
+  {
+    "id": "cGPT-15",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "PWMは何を変える変調か。",
+    "choices": [
+      "パルス高さ",
+      "パルス幅",
+      "パルス間隔",
+      "周波数",
+      "位相"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "PWM=幅を情報化。"
+  },
+  {
+    "id": "cGPT-16",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "PFMは何を変える変調か。",
+    "choices": [
+      "幅",
+      "高さ",
+      "周期(周波数)",
+      "位相",
+      "直流オフセット"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "PFMは周波数を変調。"
+  },
+  {
+    "id": "cGPT-17",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気・電子"
+    ],
+    "question": "電力量の単位はどれか。",
+    "choices": [
+      "W",
+      "V",
+      "A",
+      "Wh",
+      "Hz"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "電力量=電力×時間。"
+  },
+  {
+    "id": "cGPT-18",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気・電子"
+    ],
+    "question": "仕事率P=IVと等価な式はどれか。",
+    "choices": [
+      "I/R",
+      "V/R",
+      "I^2R",
+      "V^2I",
+      "V^2/R"
+    ],
+    "answerIndex": 3,
+    "imageAlt": "nan",
+    "explanation": "P=I^2R=V^2/R。"
+  },
+  {
+    "id": "cGPT-19",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気・電子"
+    ],
+    "question": "抵抗率ρ、長さL、断面積Aの抵抗Rはどれか。",
+    "choices": [
+      "ρA/L",
+      "ρL/A",
+      "LA/ρ",
+      "ρ/L",
+      "L/ρA"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "導体の基本式。"
+  },
+  {
+    "id": "cGPT-20",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気・電子"
+    ],
+    "question": "100 V_rms商用交流の最大瞬時値に最も近いのはどれか。",
+    "choices": [
+      "100 V",
+      "120 V",
+      "141 V",
+      "170 V",
+      "200 V"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "Vmax=√2×Vrms≈1.414×100。"
+  },
+  {
+    "id": "cGPT-21",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "マクロショックで最小感知電流に近いのはどれか。",
+    "choices": [
+      "0.1 mA",
+      "1 mA",
+      "5 mA",
+      "10 mA",
+      "100 mA"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "皮膚経由の最小感知は約1 mA。"
+  },
+  {
+    "id": "cGPT-22",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "心室細動を起こす危険域のマクロショック電流はどれか。",
+    "choices": [
+      "1 mA",
+      "10 mA",
+      "30 mA",
+      "100 mA",
+      "1 A"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "50–100 mAでVf誘発域。"
+  },
+  {
+    "id": "cGPT-23",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "医用電気機器のクラスIIの特徴はどれか。",
+    "choices": [
+      "保護接地必須",
+      "2重/強化絶縁",
+      "3Pプラグ",
+      "内部電源のみ",
+      "漏れ電流規定なし"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "クラスIIは保護接地なしで強化絶縁。"
+  },
+  {
+    "id": "cGPT-24",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "装着部型式CFの特徴はどれか。",
+    "choices": [
+      "体表用",
+      "心腔内適合",
+      "外科機器用",
+      "非接地機器専用",
+      "中出力専用"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "CFは厳しい患者漏れ電流基準で心腔内可。"
+  },
+  {
+    "id": "cGPT-25",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "非接地配線方式が要求されるのはどれか。",
+    "choices": [
+      "一般病室",
+      "検体検査室",
+      "生理検査室",
+      "ICU/CCU",
+      "事務室"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "生命維持医用室では絶縁監視が必要。"
+  },
+  {
+    "id": "cGPT-26",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "Fターム：ホール素子は何の検出に用いるか。",
+    "choices": [
+      "温度",
+      "光",
+      "ひずみ",
+      "磁場",
+      "流量"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "ローレンツ力起源のホール電圧。"
+  },
+  {
+    "id": "cGPT-27",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "サーミスタの特性はどれか。",
+    "choices": [
+      "温度独立",
+      "NTC特性が一般的",
+      "PTCのみ",
+      "直線性良好",
+      "低感度"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "多くは温度上昇で抵抗低下(NTC)。"
+  },
+  {
+    "id": "cGPT-28",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "ストレインゲージの測定で用いる回路はどれか。",
+    "choices": [
+      "コルピッツ",
+      "ウィーン",
+      "ウィートストンブリッジ",
+      "ハートレー",
+      "多重器"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "微小抵抗変化を差動で検出。"
+  },
+  {
+    "id": "cGPT-29",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "圧電素子の特徴はどれか。",
+    "choices": [
+      "温度で起電",
+      "光で起電",
+      "圧力で起電",
+      "流量で起電",
+      "電界で起電"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "逆圧電/正圧電効果。"
+  },
+  {
+    "id": "cGPT-30",
+    "tags": [
+      "医用工学",
+      "original",
+      "生体物性"
+    ],
+    "question": "超音波の性質で正しいのはどれか。",
+    "choices": [
+      "高周波ほど減衰小",
+      "生体中は横波主体",
+      "周波数高いほど指向性良",
+      "反射で周波数低下",
+      "空気で減衰最小"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "開口一定なら周波数↑でビーム狭小化。"
+  },
+  {
+    "id": "cGPT-31",
+    "tags": [
+      "医用工学",
+      "original",
+      "生体物性"
+    ],
+    "question": "音速が最も速い組織はどれか。",
+    "choices": [
+      "空気",
+      "脂肪",
+      "水",
+      "肝臓",
+      "骨"
+    ],
+    "answerIndex": 3,
+    "imageAlt": "nan",
+    "explanation": "骨は約3000–4000 m/sで最速。"
+  },
+  {
+    "id": "cGPT-32",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "医療用カプノメータが用いる吸収帯はどれか。",
+    "choices": [
+      "可視赤",
+      "近赤外",
+      "赤外線",
+      "紫外線",
+      "X線"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "CO₂は赤外吸収が強い。"
+  },
+  {
+    "id": "cGPT-33",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "サーマルアレイ式記録の誤りはどれか。",
+    "choices": [
+      "感熱紙使用",
+      "目盛同時記録可",
+      "kHz級リアルタイム",
+      "デジタル変換必須",
+      "高密度素子配列"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "アナログ直熱で記録可能、必須ではない。"
+  },
+  {
+    "id": "cGPT-34",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "動画の拡張子として標準的なのはどれか。",
+    "choices": [
+      "CSV",
+      "MP4",
+      "TIFF",
+      "PNG",
+      "BMP"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "汎用動画コンテナ。"
+  },
+  {
+    "id": "cGPT-35",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "静止画の標準拡張子はどれか。",
+    "choices": [
+      "MP3",
+      "JPEG",
+      "MP4",
+      "FLV",
+      "WAV"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "写真圧縮規格。"
+  },
+  {
+    "id": "cGPT-36",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "2.4 GHz帯を用いるのはどれか。",
+    "choices": [
+      "GPS",
+      "Bluetooth",
+      "NFC",
+      "ZigBee",
+      "LTE"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "BluetoothやWi-Fiは2.4 GHz帯を使用。"
+  },
+  {
+    "id": "cGPT-37",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "フローチャートの判断記号はどれか。",
+    "choices": [
+      "楕円",
+      "長方形",
+      "ひし形",
+      "台形",
+      "円"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "条件分岐はひし形。"
+  },
+  {
+    "id": "cGPT-38",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "定義済み処理（サブルーチン）記号はどれか。",
+    "choices": [
+      "二重線長方形",
+      "ひし形",
+      "楕円",
+      "台形",
+      "雲形"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "端に二重線の長方形。"
+  },
+  {
+    "id": "cGPT-39",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "ANDの論理積を表す真理値はどれか。",
+    "choices": [
+      "1+1=1",
+      "1+0=1",
+      "1・0=1",
+      "1・1=1",
+      "0・0=1"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "ANDは両方1で1。"
+  },
+  {
+    "id": "cGPT-40",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "NANDの出力が0となる入力の組はどれか。",
+    "choices": [
+      "0,0",
+      "0,1",
+      "1,0",
+      "1,1",
+      "いずれも0"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "NANDはANDの否定。"
+  },
+  {
+    "id": "cGPT-41",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "RAIDを用いる主目的はどれか。",
+    "choices": [
+      "処理速度向上のみ",
+      "画像圧縮",
+      "通信暗号化",
+      "記憶信頼性・冗長性",
+      "消費電力削減"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "ミラー/パリティで耐障害性を高める。"
+  },
+  {
+    "id": "cGPT-42",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "ファイアウォールの主機能はどれか。",
+    "choices": [
+      "デフラグ",
+      "パケットフィルタリング",
+      "画像圧縮",
+      "時刻同期",
+      "電源制御"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "通信の通過可否を制御。"
+  },
+  {
+    "id": "cGPT-43",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "OS自動アップデート停止が招く主なリスクはどれか。",
+    "choices": [
+      "暗号強化",
+      "互換性向上",
+      "脆弱性放置",
+      "省電力化",
+      "帯域節約"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "未適用パッチが侵入経路になる。"
+  },
+  {
+    "id": "cGPT-44",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "JLACと最も近い概念の海外標準はどれか。",
+    "choices": [
+      "LOINC",
+      "ICD-10",
+      "CPT",
+      "SNOMED-CT",
+      "RxNorm"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "検査項目コードの国際標準はLOINC。"
+  },
+  {
+    "id": "cGPT-45",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "医療情報の一次利用はどれか。",
+    "choices": [
+      "研究",
+      "教育",
+      "経営",
+      "診断・治療",
+      "広報"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "一次利用は本来目的（診療）への利用。"
+  },
+  {
+    "id": "cGPT-46",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "220 nmの電磁波はどれか。",
+    "choices": [
+      "UVA",
+      "UVB",
+      "UVC",
+      "可視青",
+      "近赤外"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "200–280 nmはUVC帯。"
+  },
+  {
+    "id": "cGPT-47",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "電子レンジ700 Wで水200 mLを60 s加熱した温度上昇のおよそはどれか。",
+    "choices": [
+      "5℃",
+      "10℃",
+      "20℃",
+      "50℃",
+      "80℃"
+    ],
+    "answerIndex": 2,
+    "imageAlt": "nan",
+    "explanation": "Q=Pt=42000 J、ΔT≈42000/(0.2×4200)≈50℃。"
+  },
+  {
+    "id": "cGPT-48",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "ひずみ→電圧変換で感度を最も高めやすいのはどれか。",
+    "choices": [
+      "単独ゲージ",
+      "2アクティブ",
+      "全ブリッジ(4ゲージ)",
+      "直列抵抗",
+      "並列抵抗"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "温度補償と感度向上が可能。"
+  },
+  {
+    "id": "cGPT-49",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気・電子"
+    ],
+    "question": "100 Ω負荷で100 Wの装置を200 Ωにした時の消費電力（電圧一定）はどれか。",
+    "choices": [
+      "25 W",
+      "50 W",
+      "100 W",
+      "150 W",
+      "200 W"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "P=V^2/R、R2倍でPは1/2。"
+  },
+  {
+    "id": "cGPT-50",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "商用交流で感電離脱限界に近い電流はどれか。",
+    "choices": [
+      "0.5 mA",
+      "1 mA",
+      "10 mA",
+      "100 mA",
+      "1 A"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "自力離脱の限界は数mA〜十mA域。"
+  },
+  {
+    "id": "cGPT-51",
+    "tags": [
+      "医用工学",
+      "original",
+      "生体物性"
+    ],
+    "question": "体内導電率の大小関係で正しいのはどれか。",
+    "choices": [
+      "脂肪>筋",
+      "全血<血清",
+      "角質<真皮",
+      "細胞膜>細胞内液",
+      "骨髄<リンパ"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "電解質濃度が高いほど導電率は高い。"
+  },
+  {
+    "id": "cGPT-52",
+    "tags": [
+      "医用工学",
+      "original",
+      "生体物性"
+    ],
+    "question": "生体の異方性が強い組織はどれか。",
+    "choices": [
+      "皮下脂肪",
+      "骨格筋",
+      "肝臓",
+      "腎臓",
+      "脳白質"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "繊維配向で導電率が方向依存。"
+  },
+  {
+    "id": "cGPT-53",
+    "tags": [
+      "医用工学",
+      "original",
+      "生体物性"
+    ],
+    "question": "37℃の音速で誤りはどれか。",
+    "choices": [
+      "空気350 m/s",
+      "脂肪900 m/s",
+      "水1480 m/s",
+      "血液1570 m/s",
+      "骨4080 m/s"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "脂肪は約1450 m/s程度。"
+  },
+  {
+    "id": "cGPT-54",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "Wi-Fiの物理層規格はどれか。",
+    "choices": [
+      "IEEE 802.3",
+      "IEEE 802.11",
+      "IEEE 1394",
+      "Bluetooth SIG",
+      "ZigBee"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "無線LANは802.11。"
+  },
+  {
+    "id": "cGPT-55",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "A/Dで「標本化」を指すのはどれか。",
+    "choices": [
+      "正規化",
+      "標準化",
+      "離散時間化",
+      "量子化",
+      "符号化"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "時間方向の離散化が標本化。"
+  },
+  {
+    "id": "cGPT-56",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "1 MHz超音波で吸収が最小に近い媒質はどれか。",
+    "choices": [
+      "空気",
+      "水",
+      "筋",
+      "脂肪",
+      "肝臓"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "水は吸収が小さく透過性が高い。"
+  },
+  {
+    "id": "cGPT-57",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "漏れ電流の定義で誤りはどれか。",
+    "choices": [
+      "接地漏れ電流",
+      "誘導電流",
+      "接触電流",
+      "患者漏れ電流",
+      "患者測定電流"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "規格上の漏れ電流カテゴリには含まれない。"
+  },
+  {
+    "id": "cGPT-58",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "SQLで正しい説明はどれか。",
+    "choices": [
+      "通信制御言語",
+      "マークアップ言語",
+      "データベース言語",
+      "OSカーネル",
+      "暗号化手順"
+    ],
+    "answerIndex": 1,
+    "imageAlt": "nan",
+    "explanation": "検索・定義・操作を行う言語。"
+  },
+  {
+    "id": "cGPT-59",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "サンプリング周波数が最も高く必要なのはどれか。",
+    "choices": [
+      "心電図",
+      "心音図",
+      "脳波",
+      "脈波",
+      "筋電図"
+    ],
+    "answerIndex": 3,
+    "imageAlt": "nan",
+    "explanation": "EMGは周波数帯域が高い。"
+  },
+  {
+    "id": "cGPT-60",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "ひずみゲージの温度ドリフト抑制に有効なのはどれか。",
+    "choices": [
+      "直列抵抗追加",
+      "全ブリッジ化",
+      "サンプリング低下",
+      "直流オフセット付与",
+      "高電圧駆動"
+    ],
+    "answerIndex": 0,
+    "imageAlt": "nan",
+    "explanation": "対称配置で温度起因の抵抗変化を打ち消す。"
   }
 ]
