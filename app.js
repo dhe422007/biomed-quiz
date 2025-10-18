@@ -1,12 +1,17 @@
 
 /* =========================
-   医用工学 問題アプリ core (v10)
-   - 複数解答対応（完全一致／部分一致表示）
-   - 分野別成績・弱点レポート
-   - エラーハンドリング強化 & キャッシュ対策
+   医用工学 問題アプリ (v11)
+   - トップページの実装（年度/分野から開始）
+   - 問題中は「トップページへ」ボタンでいつでも戻れる
+   - キーボードショートカット案内削除
+   - 「並び」セレクト削除
+   - 選択肢の先頭マーク（○/□）撤去
+   - 「original」「過去問」は年度側として扱う
+   - 複数解答は完全一致で正解＋部分一致フィードバック
+   - 分野別正答率・弱点ダイアログ
    ========================= */
 
-const BUILD = '2025-10-18-1';
+const BUILD = '2025-10-18-2';
 const STORE_KEY = 'medtechQuiz:v1';
 const LOG_KEY = 'medtechQuiz:log';
 const DATE_TARGET = '2026-02-18T00:00:00+09:00';
@@ -15,38 +20,26 @@ const $ = (q) => document.querySelector(q);
 const $$ = (q) => Array.from(document.querySelectorAll(q));
 
 const state = {
+  screen: 'home',    // 'home' | 'quiz'
   all: [],
   filtered: [],
   idx: 0,
-  order: 'seq',
   tagFilter: '',
   yearFilter: '',
   store: loadStore(),
 };
-
-function showFatal(msg){
-  const main = document.querySelector('main');
-  if (!main) return;
-  const el = document.createElement('div');
-  el.className = 'card';
-  el.style.borderColor = 'rgba(239,68,68,.35)';
-  el.innerHTML = `<div style="font-weight:700;color:#ef4444;">読み込みエラー</div><div class="muted" style="margin-top:6px;">${escapeHTML(String(msg))}</div>`;
-  main.prepend(el);
-}
-
-window.addEventListener('error', (e)=> showFatal(e.message||'不明なエラー'));
-window.addEventListener('unhandledrejection', (e)=> showFatal(e.reason?.message || 'データ取得に失敗しました'));
 
 function loadStore(){
   try {
     const raw = localStorage.getItem(STORE_KEY);
     if (raw) return JSON.parse(raw);
   } catch(e){}
-  return { perQ:{}, perTag:{}, last:{tag:'', year:'', order:'seq', idx:0} };
+  return { perQ:{}, perTag:{}, last:{screen:'home', tag:'', year:'', idx:0} };
 }
 function saveStore(){
   try { localStorage.setItem(STORE_KEY, JSON.stringify(state.store)); } catch(e){}
 }
+
 function pushLog(entry){
   try {
     const logs = JSON.parse(localStorage.getItem(LOG_KEY) || '[]');
@@ -83,80 +76,161 @@ async function boot(){
     showFatal(e.message || String(e));
     return;
   }
-
   try {
+    initHome(state.all);
     initFilters(state.all);
-    if (state.store.last) {
-      const last = state.store.last;
+    bindUI();
+    // 復元
+    const last = state.store.last || {};
+    state.screen = last.screen || 'home';
+    if (state.screen === 'quiz') {
       if ($('#tagFilter')) $('#tagFilter').value = last.tag || '';
       if ($('#yearFilter')) $('#yearFilter').value = last.year || '';
-      if ($('#orderSel')) $('#orderSel').value = last.order || 'seq';
+      state.tagFilter = last.tag || '';
+      state.yearFilter = last.year || '';
+      applyFilters();
+      if (last.idx < state.filtered.length) state.idx = last.idx;
+      showQuiz();
+      render();
+    } else {
+      showHome();
     }
-    applyFilters();
-    if (state.store.last && state.store.last.idx < state.filtered.length){
-      state.idx = state.store.last.idx;
-    }
-    render();
-    bindUI();
   } catch (e){
-    showFatal('UI初期化に失敗: ' + (e.message || String(e)));
+    showFatal('初期化に失敗: ' + (e.message || String(e)));
   }
 }
 
+function showHome(){
+  $('#homeScreen').classList.remove('hidden');
+  $('#quizScreen').classList.add('hidden');
+  state.screen = 'home';
+  state.store.last.screen = 'home';
+  saveStore();
+}
+function showQuiz(){
+  $('#homeScreen').classList.add('hidden');
+  $('#quizScreen').classList.remove('hidden');
+  state.screen = 'quiz';
+  state.store.last.screen = 'quiz';
+  saveStore();
+}
+
+function showFatal(msg){
+  const main = document.querySelector('main');
+  if (!main) return;
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.style.borderColor = 'rgba(239,68,68,.35)';
+  el.innerHTML = `<div style="font-weight:700;color:#ef4444;">読み込みエラー</div><div class="muted" style="margin-top:6px;">${escapeHTML(String(msg))}</div>`;
+  main.prepend(el);
+}
+
+/* ---------- Home (トップページ) ---------- */
+function initHome(all){
+  const { years, tags, countByYear, countByTag } = collectFacets(all);
+
+  const yNode = $('#homeYears'); yNode.innerHTML = '';
+  years.forEach(y => {
+    const c = countByYear[y] || 0;
+    const div = document.createElement('div');
+    div.className = 'tile';
+    div.innerHTML = `<h3>${escapeHTML(y)}</h3><div class="muted">${c}問</div>`;
+    div.addEventListener('click', () => startFromHome({year:y}));
+    yNode.appendChild(div);
+  });
+
+  const tNode = $('#homeTags'); tNode.innerHTML = '';
+  tags.forEach(t => {
+    const c = countByTag[t] || 0;
+    const div = document.createElement('div');
+    div.className = 'tile';
+    div.innerHTML = `<h3>${escapeHTML(t)}</h3><div class="muted">${c}問</div>`;
+    div.addEventListener('click', () => startFromHome({tag:t}));
+    tNode.appendChild(div);
+  });
+}
+
+function collectFacets(all){
+  const years = new Set();
+  const tags = new Set();
+  const countByYear = {};
+  const countByTag = {};
+  for (const q of all){
+    const seenTag = new Set();
+    const seenYear = new Set();
+    for (const raw of (q.tags || [])){
+      const t = String(raw);
+      if (/^\d{4}$/.test(t) || t === 'original' || t === '過去問'){
+        years.add(t);
+        if (!seenYear.has(t)){ countByYear[t] = (countByYear[t]||0)+1; seenYear.add(t); }
+      } else {
+        tags.add(t);
+        if (!seenTag.has(t)){ countByTag[t] = (countByTag[t]||0)+1; seenTag.add(t); }
+      }
+    }
+  }
+  return { years: [...years].sort(), tags: [...tags].sort(), countByYear, countByTag };
+}
+
+function startFromHome({year='', tag=''}={}){
+  // フィルタセットしてクイズ画面へ
+  if ($('#yearFilter')) $('#yearFilter').value = year;
+  if ($('#tagFilter')) $('#tagFilter').value = tag;
+  state.yearFilter = year;
+  state.tagFilter = tag;
+  applyFilters();
+  state.idx = 0;
+  state.store.last = {screen:'quiz', tag: state.tagFilter, year: state.yearFilter, idx: 0};
+  saveStore();
+  showQuiz();
+  render();
+}
+
+/* ---------- Filters (quiz) ---------- */
 function initFilters(all){
   const tagSel = $('#tagFilter'), yearSel = $('#yearFilter');
   if (!tagSel || !yearSel) return;
-  const tags = new Set(), years = new Set();
+  const tSet = new Set(), ySet = new Set();
   for (const q of all){
-    for (const t of (q.tags || [])){
-      if (/^\d{4}$/.test(String(t))) years.add(String(t));
-      else tags.add(String(t));
+    for (const raw of (q.tags || [])){
+      const t = String(raw);
+      if (/^\d{4}$/.test(t) || t === 'original' || t === '過去問') ySet.add(t);
+      else tSet.add(t);
     }
   }
-  [...tags].sort().forEach(t => tagSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(t)}">${escapeHTML(t)}</option>`));
-  [...years].sort().forEach(y => yearSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
+  [...tSet].sort().forEach(t => tagSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(t)}">${escapeHTML(t)}</option>`));
+  [...ySet].sort().forEach(y => yearSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
 }
 
 function applyFilters(){
-  const tag = $('#tagFilter')?.value || '';
-  const year = $('#yearFilter')?.value || '';
-  const order = $('#orderSel')?.value || 'seq';
+  const tag = ($('#tagFilter')?.value ?? state.tagFilter) || '';
+  const year = ($('#yearFilter')?.value ?? state.yearFilter) || '';
 
   let list = state.all.filter(q => {
     const tags = (q.tags||[]).map(String);
-    const matchYear = !year || tags.includes(String(year));
+    const yearish = tags.filter(t => /^\d{4}$/.test(t) || t === 'original' || t === '過去問');
+    const matchYear = !year || yearish.includes(String(year));
     const matchTag = !tag || tags.includes(String(tag));
     return matchYear && matchTag;
   });
 
-  if (order === 'shuffle'){
-    list = shuffle([...list]);
-  } else if (order === 'wrong'){
-    list.sort((a,b)=>scoreOf(a.id)-scoreOf(b.id));
-  }
-
   state.filtered = list;
   state.idx = 0;
-  state.order = order;
   state.tagFilter = tag;
   state.yearFilter = year;
-  state.store.last = {tag, year, order, idx:0};
+  state.store.last = {screen: state.screen, tag, year, idx: 0};
   saveStore();
 }
 
-function scoreOf(id){
-  const rec = state.store.perQ[id];
-  if (!rec || !rec.attempts) return 0.5;
-  return rec.correct/rec.attempts;
-}
-
+/* ---------- Render (quiz) ---------- */
 function render(){
+  if (state.screen !== 'quiz') return;
   const total = state.filtered.length;
   const qtext = $('#qtext'), choices = $('#choices'), qimg = $('#qimage'), explain = $('#explain');
   if (!qtext || !choices || !qimg || !explain) return;
 
   if (!total){
-    qtext.textContent = '該当する問題がありません。フィルタを変更してください。';
+    qtext.textContent = '該当する問題がありません。トップページまたはフィルタを変更してください。';
     choices.innerHTML = '';
     qimg.classList.add('hidden');
     explain.classList.add('hidden');
@@ -202,7 +276,8 @@ function renderChoices(q){
     btn.className = 'choice';
     btn.setAttribute('data-idx', String(idx));
     btn.setAttribute('aria-pressed', 'false');
-    btn.innerHTML = (multi ? '□ ' : '○ ') + escapeHTML(String(text));
+    // 先頭マーク（○/□）は廃止。純粋なテキストのみ。
+    btn.innerHTML = escapeHTML(String(text));
     btn.addEventListener('click', () => {
       if (multi){
         btn.classList.toggle('selected');
@@ -218,7 +293,9 @@ function renderChoices(q){
   if ($('#nextBtn')) $('#nextBtn').textContent = '解答する';
 }
 
+/* ---------- Grade ---------- */
 function grade(){
+  if (state.screen !== 'quiz') return;
   const q = state.filtered[state.idx];
   if (!q) return;
   const selected = $$('#choices .choice.selected').map(el => Number(el.getAttribute('data-idx')));
@@ -276,18 +353,22 @@ function isCorrectAnswer(userSelectedIndices, answerIndex){
 function intersectCount(a, b){ let i=0,j=0,c=0; while(i<a.length&&j<b.length){ if(a[i]===b[j]){c++;i++;j++;} else if(a[i]<b[j]) i++; else j++; } return c; }
 function toSet(ans){ return new Set(Array.isArray(ans) ? ans : [ans]); }
 
+/* ---------- Nav ---------- */
 function next(){
+  if (state.screen !== 'quiz') return;
   if ($('#nextBtn').textContent.includes('解答')) { grade(); return; }
   if (state.idx < state.filtered.length - 1) state.idx += 1;
   state.store.last.idx = state.idx; saveStore();
   render();
 }
 function prev(){
+  if (state.screen !== 'quiz') return;
   if (state.idx > 0) state.idx -= 1;
   state.store.last.idx = state.idx; saveStore();
   render();
 }
 
+/* ---------- Stats Dialog ---------- */
 function openStats(){
   const dlg = $('#statsDlg'); if (!dlg) return;
   const tbody = $('#tagTable tbody'); tbody.innerHTML='';
@@ -333,41 +414,23 @@ function openStats(){
   dlg.showModal();
 }
 
+/* ---------- Bind ---------- */
 function bindUI(){
-  $('#orderSel')?.addEventListener('change', () => { applyFilters(); render(); });
-  $('#tagFilter')?.addEventListener('change', () => { applyFilters(); render(); });
-  $('#yearFilter')?.addEventListener('change', () => { applyFilters(); render(); });
-  $('#nextBtn')?.addEventListener('click', next);
-  $('#prevBtn')?.addEventListener('click', prev);
+  $('#homeBtn')?.addEventListener('click', showHome);
   $('#statsBtn')?.addEventListener('click', openStats);
   $('#closeStats')?.addEventListener('click', () => $('#statsDlg').close());
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter'){ e.preventDefault(); next(); }
-    else if (e.key === 'ArrowRight'){ e.preventDefault(); next(); }
-    else if (e.key === 'ArrowLeft'){ prev(); }
-    else if (/^[1-5]$/.test(e.key)){
-      const idx = Number(e.key)-1;
-      const btn = document.querySelector(`#choices .choice[data-idx="${idx}"]`);
-      if (!btn) return;
-      const q = state.filtered[state.idx];
-      const multi = Array.isArray(q.answerIndex);
-      if (multi) btn.click();
-      else {
-        $$('#choices .choice').forEach(el => el.classList.remove('selected'));
-        btn.classList.add('selected');
-        btn.setAttribute('aria-pressed','true');
-      }
-    }
-  });
+  $('#tagFilter')?.addEventListener('change', () => { applyFilters(); render(); });
+  $('#yearFilter')?.addEventListener('change', () => { applyFilters(); render(); });
+
+  $('#nextBtn')?.addEventListener('click', next);
+  $('#prevBtn')?.addEventListener('click', prev);
 }
 
-function shuffle(a){ for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+/* ---------- Utils ---------- */
+function intersectCount(a, b){ let i=0,j=0,c=0; while(i<a.length&&j<b.length){ if(a[i]===b[j]){c++;i++;j++;} else if(a[i]<b[j]) i++; else j++; } return c; }
+function toSet(ans){ return new Set(Array.isArray(ans) ? ans : [ans]); }
 function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
 function escapeAttr(s){ return escapeHTML(String(s)).replace(/"/g,'&quot;'); }
 
 window.addEventListener('DOMContentLoaded', boot);
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(()=>{});
-}
