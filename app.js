@@ -1,10 +1,10 @@
 /* ===============================
-   臨床検査技師 国家試験：医用工学 問題アプリ (v14.3)
-   - ヘッダーの「トップページへ」「成績・弱点」を強調色ボタンに
-   - 問題のタグ表示を削除し、代わりにIDを表示
+   臨床検査技師 国家試験：医用工学 問題アプリ (v15.0 / GA4 wired)
+   - GA4 Measurement ID: G-XW1PC70BW4
+   - quiz_start イベント送信を追加（年度・分野付き）
 ================================= */
 
-const BUILD = '2025-10-19-8';
+const BUILD = '2025-10-19-9';
 const STORE_KEY = 'medtechQuiz:v1';
 const LOG_KEY = 'medtechQuiz:log';
 const DATE_TARGET = '2026-02-18T00:00:00+09:00'; // 試験日
@@ -152,6 +152,19 @@ function estimateCount({year='', tag=''}){
 }
 
 function startFromHome({year='', tag=''}={}){
+  // GA4: 解答スタートイベントを送信（毎回）
+  try {
+    const selectedYear = year || '';
+    const selectedTag  = tag  || '';
+    if (typeof gtag === 'function') {
+      gtag('event', 'quiz_start', {
+        year: selectedYear,
+        tag: selectedTag
+      });
+    }
+  } catch(e) {}
+
+  // クイズ用セレクトにも反映
   $('#yearFilter').value = year;
   $('#tagFilter').value = tag;
   state.yearFilter = year;

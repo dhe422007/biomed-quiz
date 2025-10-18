@@ -6,6 +6,35 @@
   <title>臨床検査技師 国家試験：医用工学 問題アプリ</title>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0f172a">
+
+  <!-- Google tag (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XW1PC70BW4"></script>
+  <script>
+    // GA4 basic setup
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XW1PC70BW4', { send_page_view: true });
+  </script>
+
+  <!-- Anonymous user id (PII禁止・端末ローカルでUUID生成) -->
+  <script>
+    (function(){
+      try {
+        const KEY = 'quiz_anonymous_uid';
+        let uid = localStorage.getItem(KEY);
+        if (!uid) {
+          uid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+          );
+          localStorage.setItem(KEY, uid);
+        }
+        // Set user_id for GA4 (anonymous)
+        gtag('set', { 'user_id': uid });
+      } catch(e) {}
+    })();
+  </script>
+
   <style>
     :root { --fg:#0f172a; --muted:#475569; --bg:#f8fafc; --accent:#2563eb; --ok:#16a34a; --ng:#ef4444; }
     * { box-sizing: border-box; }
@@ -167,7 +196,7 @@
     </div>
   </dialog>
 
-  <script src="app.js?v=14.3"></script>
+  <script src="app.js?v=15.0"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').catch(()=>{});
