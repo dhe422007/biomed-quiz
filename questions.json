@@ -7,8 +7,6 @@
       "過去問",
       "電気・電子"
     ],
-    "image": "assets/images/2025_AM_95.jpg",
-    "imageAlt": "画像あり",
     "question": "図の回路で12Ωの抵抗に流れる電流 I [A] はどれか。",
     "choices": [
       "0.1",
@@ -18,6 +16,8 @@
       "0.8"
     ],
     "answerIndex": 0,
+    "image": "assets/images/2025_AM_95.jpg",
+    "imageAlt": "画像あり",
     "explanation": "要復習"
   },
   {
@@ -28,8 +28,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "通信プロトコルの階層のうち、アプリケーション層の規格はどれか。",
     "choices": [
       "Ethernet",
@@ -49,8 +47,6 @@
       "過去問",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "測定対象の物理量変化に対応して電気抵抗が変化するセンサはどれか。2つ選べ。",
     "choices": [
       "圧電素子",
@@ -73,8 +69,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "64種類の項目をコード化する場合、必要最低限の記憶容量 [bit] はどれか。",
     "choices": [
       "4",
@@ -94,8 +88,6 @@
       "過去問",
       "生体物性"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "生体組織の電気的性質で誤っているのはどれか。",
     "choices": [
       "血液は脂肪に比べ導電率が低い。",
@@ -115,8 +107,6 @@
       "過去問",
       "生体物性"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "生体内に照射された超音波の性質で正しいのはどれか。",
     "choices": [
       "周波数が高いほど指向性が高い。",
@@ -136,8 +126,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "我が国の標準臨床検査コード〈臨床検査マスター〉はどれか。",
     "choices": [
       "HIS",
@@ -157,8 +145,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "コンピュータが瞬間的な停電により電源を失った場合、途切れることなく電源を供給する装置はどれか。",
     "choices": [
       "CPU",
@@ -178,8 +164,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "assets/images/2025_PM_98.jpg",
-    "imageAlt": "画像あり",
     "question": "AとBの論理演算を模式化した図を示す。斜線部分を示すのはどれか。",
     "choices": [
       "OR",
@@ -189,6 +173,8 @@
       "NAND"
     ],
     "answerIndex": 3,
+    "image": "assets/images/2025_PM_98.jpg",
+    "imageAlt": "画像あり",
     "explanation": "要復習"
   },
   {
@@ -199,8 +185,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "商用交流によるマクロショックで、自分の筋肉を動かして離脱できる限界電流[mA]はどれか。",
     "choices": [
       "0.1",
@@ -220,8 +204,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "動画の標準的なファイル拡張子はどれか。2つ選べ。",
     "choices": [
       "CSV",
@@ -244,8 +226,6 @@
       "過去問",
       "生体物性"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ヤング率〈縦弾性率〉が最も大きいのはどれか。",
     "choices": [
       "筋(引張り)",
@@ -265,8 +245,6 @@
       "過去問",
       "電気・電子"
     ],
-    "image": "assets/images/2024_AM_96.jpg",
-    "imageAlt": "画像あり",
     "question": "図の回路で点Aの電圧はどれか。",
     "choices": [
       "2.5 V",
@@ -276,6 +254,8 @@
       "7.5 V"
     ],
     "answerIndex": 1,
+    "image": "assets/images/2024_AM_96.jpg",
+    "imageAlt": "画像あり",
     "explanation": "要復習"
   },
   {
@@ -286,8 +266,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "電圧増幅度がそれぞれ4倍、10倍、100倍の増幅器を直列に接続したとき総合した増幅度[dB]はどれか。",
     "choices": [
       "24",
@@ -307,8 +285,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ミクロショック対策を目的としているのはどれか。2つ選べ。",
     "choices": [
       "3Pプラグ",
@@ -331,8 +307,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "情報の概念で誤っているのはどれか。",
     "choices": [
       "情報の表現は2進数で行われる。",
@@ -352,8 +326,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "コンピュータに接続した複数の端末を用いて処理を行うシステムはどれか。2つ選べ。",
     "choices": [
       "分散処理",
@@ -376,8 +348,6 @@
       "過去問",
       "生体物性"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "生体組織の商用交流における導電率の大小関係で正しいのはどれか。",
     "choices": [
       "角 質 > 真 皮",
@@ -397,8 +367,6 @@
       "過去問",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "電気工学に関する関係式で誤っているのはどれか。",
     "choices": [
       "仕事=仕事率×時間",
@@ -418,8 +386,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ME機器のBF形装着部を表す医療機器関連図記号はどれか。",
     "choices": [
       "assets/images/2024_PM_98_1.jpg",
@@ -439,8 +405,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "assets/images/2024_PM_99.jpg",
-    "imageAlt": "画像あり",
     "question": "図のフローチャートを開始から終了まで実行してsに1から3までの整数の和を得たい。①に入る記号はどれか。",
     "choices": [
       "<",
@@ -450,6 +414,8 @@
       "≧"
     ],
     "answerIndex": 0,
+    "image": "assets/images/2024_PM_99.jpg",
+    "imageAlt": "画像あり",
     "explanation": "要復習"
   },
   {
@@ -460,8 +426,6 @@
       "過去問",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "100Ωの負荷につながれた装置の消費電力が100Wであった。この装置の負荷を200Ωに変えたときの消費電力[W]はどれか。",
     "choices": [
       "25",
@@ -481,8 +445,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "医用電気機器のクラス別分類で正しいのはどれか。",
     "choices": [
       "クラスI機器の追加保護手段は補強絶縁である。",
@@ -502,8 +464,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "静止画の標準的なファイル拡張子はどれか。2つ選べ。",
     "choices": [
       "CSV",
@@ -526,8 +486,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "医療情報システムで保健医療情報交換の標準規格はどれか。",
     "choices": [
       "DICOM",
@@ -547,8 +505,6 @@
       "過去問",
       "生体物性"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "37℃の媒質中における音速[m/s]として誤っているのはどれか。",
     "choices": [
       "空 気：350",
@@ -568,8 +524,6 @@
       "過去問",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "物理量の変化が電気抵抗の変化として現れるトランスデューサはどれか。2つ選べ。",
     "choices": [
       "サーミスタ",
@@ -592,8 +546,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "電子レンジと同じ2.4GHzの電波を使用しているのはどれか。2つ選べ。",
     "choices": [
       "Bluetooth",
@@ -616,8 +568,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "判断を表すフローチャート記号はどれか。",
     "choices": [
       "assets/images/2023_PM_98_1.jpg",
@@ -637,8 +587,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "1,000種類の検査項目をコード化する場合、最小限必要な記憶容量[bit]はどれか。",
     "choices": [
       "6",
@@ -658,8 +606,6 @@
       "過去問",
       "生体物性"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "超音波の伝搬速度が最も速いのはどれか。",
     "choices": [
       "水",
@@ -679,8 +625,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "電圧利得が20倍の増幅器を3つ直列につないだ増幅器の利得[dB]はどれか。ただし、log2 = 0.3とする。",
     "choices": [
       "46",
@@ -700,8 +644,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "アナログ信号をデジタル信号へ変換するとき、サンプル値の最大値と最小値の間を一定の幅で分割することを示すのはどれか。",
     "choices": [
       "正規化",
@@ -721,8 +663,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "医療情報システムで臨床検査項目分類コードとして用いられるのはどれか。",
     "choices": [
       "DICOM",
@@ -742,8 +682,6 @@
       "過去問",
       "生体物性"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "波長220nmの光の分類はどれか。",
     "choices": [
       "紫外線A",
@@ -763,8 +701,6 @@
       "過去問",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "200mL、20℃の水を700Wの電子レンジで1分間加熱した。加えられたエネルギーがすべて水の加熱に使われたとき、水のおよその温度[℃]はどれか。ただし、水の比熱は4,200J/(kg・℃)とする。",
     "choices": [
       "40",
@@ -784,8 +720,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "2 byte で表せる状態の数はどれか。",
     "choices": [
       "16 通り",
@@ -805,8 +739,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "臨床検査情報一次利用はどれか。",
     "choices": [
       "保健所への報告",
@@ -826,8 +758,6 @@
       "過去問",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "トランスデューサでないのはどれか。",
     "choices": [
       "圧電素子",
@@ -847,8 +777,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "カラーRGB各1byteの階調、1,000×1,000画素、60フレーム/秒、15秒の動画がある。データを圧縮しない場合、動画ファイルのおよそのサイズ[byte]はどれか。",
     "choices": [
       "2.7×106",
@@ -868,8 +796,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "電圧利得20倍の増幅器A₁と200倍のA₂を直列に接続したときの増幅度として最も近い値[dB]はどれか。",
     "choices": [
       "30",
@@ -889,8 +815,6 @@
       "過去問",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "測定対象の物理量変化に対応した起電力を利用したセンサはどれか。2つ選べ。",
     "choices": [
       "圧電素子",
@@ -913,8 +837,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "病院電気設備の安全基準〈JIS T 1022〉において非接地配線方式を設けなければならない医用室はどれか。",
     "choices": [
       "集中治療室",
@@ -934,8 +856,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "コンピュータデータベースの操作言語はどれか。",
     "choices": [
       "SQL",
@@ -955,8 +875,6 @@
       "過去問",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "銅製導線が長さ20.0m、断面積0.10mm²のとき、銅の抵抗率を1.68×10⁻⁸Ωmとすると、その両端間の抵抗値[Ω]はどれか。",
     "choices": [
       "0.84",
@@ -976,8 +894,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "商用交流によるマクロショックで最小感知電流[mA]はどれか。",
     "choices": [
       "0.1",
@@ -997,8 +913,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "コンピュータのハードディスク装置の信頼性向上のために利用されるのはどれか。",
     "choices": [
       "GPU",
@@ -1018,8 +932,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "300種類の検査項目をコード化する場合、最小限必要な記憶容量[bit]はどれか。",
     "choices": [
       "6",
@@ -1039,8 +951,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ネットワーク情報システムに外部からの侵入を許す原因となるのはどれか。",
     "choices": [
       "ファイアウォールの設置",
@@ -1060,8 +970,6 @@
       "過去問",
       "生体物性"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "超音波(1MHz)の吸収係数が最も小さいのはどれか。",
     "choices": [
       "筋 肉",
@@ -1081,8 +989,6 @@
       "過去問",
       "電気・電子"
     ],
-    "image": "assets/images/2020_AM_96.jpg",
-    "imageAlt": "nan",
     "question": "図の回路でA-B間の合成抵抗[kΩ]はどれか。",
     "choices": [
       "15",
@@ -1092,6 +998,7 @@
       "60"
     ],
     "answerIndex": 0,
+    "image": "assets/images/2020_AM_96.jpg",
     "explanation": "要復習"
   },
   {
@@ -1102,8 +1009,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "理想的な演算増幅器の特徴として誤っているのはどれか。",
     "choices": [
       "電圧増幅度が大きい。",
@@ -1123,8 +1028,6 @@
       "過去問",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "カプノメータに用いられるのはどれか。",
     "choices": [
       "赤外線",
@@ -1144,8 +1047,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "assets/images/2020_AM_99.jpg",
-    "imageAlt": "nan",
     "question": "AとBの論理演算を模式化した図を示す。網掛け部分を示すのはどれか。",
     "choices": [
       "OR",
@@ -1155,6 +1056,7 @@
       "NAND"
     ],
     "answerIndex": 1,
+    "image": "assets/images/2020_AM_99.jpg",
     "explanation": "要復習"
   },
   {
@@ -1165,8 +1067,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "生体信号をデジタル記録する場合、最も高いサンプリング周波数が必要となるのはどれか。",
     "choices": [
       "脳 波",
@@ -1186,8 +1086,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "100kHzの交流電流が体表の2か所に張り付けた電極間に流れたとき、およその最小感知電流と考えられるのはどれか。",
     "choices": [
       "10μA",
@@ -1207,8 +1105,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ME機器のCF形装着部を表す医療機器関連図記号はどれか。",
     "choices": [
       "assets/images/2020_PM_97_1.jpg",
@@ -1228,8 +1124,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "コンピュータの入出力インターフェースの規格はどれか。",
     "choices": [
       "OS",
@@ -1249,8 +1143,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "医療情報システムで病名コードとして用いられるのはどれか。",
     "choices": [
       "HL7",
@@ -1270,8 +1162,6 @@
       "過去問",
       "生体物性"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "生体組織の電気的特性について正しいのはどれか。",
     "choices": [
       "結合組織の透磁率は鉄とほぼ等しい。",
@@ -1291,8 +1181,6 @@
       "過去問",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "商用交流100Vの瞬時値で最大電圧[V]に近いのはどれか。",
     "choices": [
       "100",
@@ -1312,8 +1200,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "信号の大きさの違いをパルスの幅の違いに変換する変調はどれか。",
     "choices": [
       "PAM",
@@ -1333,8 +1219,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "体表から商用交流100Vが加わって生じる電撃で、心室細動を発生させる電流閾値はどれか。",
     "choices": [
       "100μA",
@@ -1354,8 +1238,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "情報システムのセキュリティ対策として適切でないのはどれか。",
     "choices": [
       "OSのアップデート",
@@ -1375,8 +1257,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "アナログ信号のデジタル信号への変換において信号を一定の時間間隔で読み取ることを示すのはどれか。",
     "choices": [
       "正規化",
@@ -1396,8 +1276,6 @@
       "過去問",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "磁場を検出できるのはどれか。2つ選べ。",
     "choices": [
       "ストレンゲージ",
@@ -1420,8 +1298,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "DNAの塩基をA、C、G、Tの4種類で表すとき、連続した塩基3個の配列で表現できる最大の情報量はどれか。",
     "choices": [
       "12",
@@ -1441,8 +1317,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "定義済み処理を表すフローチャート記号はどれか。",
     "choices": [
       "assets/images/2019_PM_98_1.jpg",
@@ -1462,8 +1336,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "臨床検査情報の一次利用はどれか。",
     "choices": [
       "保健所への報告",
@@ -1483,8 +1355,6 @@
       "過去問",
       "生体物性"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "放射線に対する組織・臓器の相対的な感受性(組織加重係数)が最も小さいのはどれか。",
     "choices": [
       "胃",
@@ -1504,8 +1374,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "assets/images/2018_AM_96.jpg",
-    "imageAlt": "nan",
     "question": "図の入出力関係となる回路はどれか。",
     "choices": [
       "assets/images/2018_AM_96_1.jpg",
@@ -1515,6 +1383,7 @@
       "assets/images/2018_AM_96_5.jpg"
     ],
     "answerIndex": 0,
+    "image": "assets/images/2018_AM_96.jpg",
     "explanation": "要復習"
   },
   {
@@ -1525,8 +1394,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "コンピュータのCPUはどれか。",
     "choices": [
       "演算装置",
@@ -1546,8 +1413,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "8 bitのAD変換器で0~2.5Vの電圧を変換するとき、電圧の分解能に最も近いのはどれか。",
     "choices": [
       "1mV",
@@ -1567,8 +1432,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "医療に関わる個人情報について正しいのはどれか。2つ選べ。",
     "choices": [
       "検体検査の結果は個人情報に含まれない。",
@@ -1591,8 +1454,6 @@
       "過去問",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "単位と物理量の組合せで正しいのはどれか。",
     "choices": [
       "A ───── インダクタンス",
@@ -1612,8 +1473,6 @@
       "過去問",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "磁場を起電力に変換するトランスデューサはどれか。",
     "choices": [
       "ストレンゲージ",
@@ -1633,8 +1492,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "JIS T 0601-1 : 2012において医用電気機器の漏れ電流でないのはどれか。",
     "choices": [
       "接触電流",
@@ -1657,8 +1514,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "assets/images/2018_PM_98.jpg",
-    "imageAlt": "nan",
     "question": "図のフローチャートを開始から終了まで実行して、bに0~10の偶数を合計した値を得たい。①に入る記号はどれか。",
     "choices": [
       "<",
@@ -1668,6 +1523,7 @@
       ">"
     ],
     "answerIndex": 0,
+    "image": "assets/images/2018_PM_98.jpg",
     "explanation": "要復習"
   },
   {
@@ -1678,8 +1534,6 @@
       "過去問",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "100kΩの抵抗器にもう1つの抵抗器を並列に接続し、それらの合成抵抗を50kΩとしたい。接続すべき抵抗器の抵抗値[kΩ]はどれか。",
     "choices": [
       "0.5",
@@ -1699,8 +1553,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "assets/images/2017_AM_96.jpg",
-    "imageAlt": "nan",
     "question": "図の回路で正しいのはどれか。",
     "choices": [
       "低域通過回路として機能する。",
@@ -1710,6 +1562,7 @@
       "遮断周波数では出力電圧は入力電圧の$\\frac{1}{\\sqrt{2}}$となる。"
     ],
     "answerIndex": 3,
+    "image": "assets/images/2017_AM_96.jpg",
     "explanation": "要復習"
   },
   {
@@ -1720,8 +1573,6 @@
       "過去問",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "サーマルアレイ式記録器で誤っているのはどれか。",
     "choices": [
       "記録に感光紙を使用する。",
@@ -1741,8 +1592,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "文字コードはどれか。",
     "choices": [
       "ASCII",
@@ -1762,8 +1611,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "個人情報に該当しないのはどれか。",
     "choices": [
       "検体番号",
@@ -1783,8 +1630,6 @@
       "過去問",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "入力電圧を50倍に増幅する増幅器Aと200倍に増幅する増幅器Bがある。増幅器AとBを直列に接続したときの全体の増幅度[dB]はどれか。",
     "choices": [
       "40",
@@ -1804,8 +1649,6 @@
       "過去問",
       "電気・電子"
     ],
-    "image": "assets/images/2017_PM_96.jpg",
-    "imageAlt": "nan",
     "question": "図の回路の入力(A、B)と出力(Y)の組合せで正しいのはどれか。2つ選べ。",
     "choices": [
       "A=0、B=0 ───── Y=0",
@@ -1818,6 +1661,7 @@
       1,
       2
     ],
+    "image": "assets/images/2017_PM_96.jpg",
     "explanation": "要復習"
   },
   {
@@ -1828,8 +1672,6 @@
       "過去問",
       "電気的安全対策"
     ],
-    "image": "assets/images/2017_PM_97.jpg",
-    "imageAlt": "nan",
     "question": "図に示す医用機器関連図記号の説明はどれか。",
     "choices": [
       "高電圧",
@@ -1839,6 +1681,7 @@
       "クラスII機器"
     ],
     "answerIndex": 0,
+    "image": "assets/images/2017_PM_97.jpg",
     "explanation": "要復習"
   },
   {
@@ -1849,8 +1692,6 @@
       "過去問",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "複数のハードディスクを組み合わせて信頼性を高めるのはどれか。",
     "choices": [
       "IEEE1394",
@@ -1869,8 +1710,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "10Ω、20Ω、30Ωの3つの抵抗を並列に接続したときの合成抵抗[Ω]に最も近いのはどれか。",
     "choices": [
       "5.5",
@@ -1889,8 +1728,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "assets/images/Gem_2.jpg",
-    "imageAlt": "nan",
     "question": "図の回路の機能として正しいのはどれか。",
     "choices": [
       "直流成分を通過させる",
@@ -1900,6 +1737,7 @@
       "入力波形を積分する"
     ],
     "answerIndex": 0,
+    "image": "assets/images/Gem_2.jpg",
     "explanation": "コンデンサは周波数が低いほどインピーダンスが高くなるため、低周波成分をカットし、高周波成分を通過させる働きがあります。"
   },
   {
@@ -1909,8 +1747,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "理想的な演算増幅器（オペアンプ）の特徴として正しいのはどれか。",
     "choices": [
       "入力インピーダンスがゼロ",
@@ -1929,8 +1765,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "2つの入力がともに「1」のときのみ、出力が「1」となる論理ゲートはどれか。",
     "choices": [
       "OR",
@@ -1949,8 +1783,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "10Vの電圧で2Aの電流が流れる抵抗器の消費電力[W]はどれか。",
     "choices": [
       "5",
@@ -1969,8 +1801,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "交流電圧の実効値が100Vのとき、最大値[V]に最も近いのはどれか。",
     "choices": [
       "71",
@@ -1989,8 +1819,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "温度変化を抵抗値の変化として検出するセンサはどれか。",
     "choices": [
       "ホール素子",
@@ -2009,8 +1837,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "生体内で超音波の伝搬速度が最も遅いのはどれか。",
     "choices": [
       "骨",
@@ -2029,8 +1855,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "分光光度計の原理に関わる法則はどれか。",
     "choices": [
       "オームの法則",
@@ -2049,8 +1873,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "圧力を加えると電圧が発生する現象を利用したトランスデューサはどれか。",
     "choices": [
       "差動トランス",
@@ -2069,8 +1891,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "赤外線を利用する医療機器はどれか。",
     "choices": [
       "MRI",
@@ -2089,8 +1909,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "物理量の変化を静電容量の変化として捉えるセンサはどれか。",
     "choices": [
       "サーミスタ",
@@ -2109,8 +1927,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "アナログ信号をデジタル信号に変換する過程で、信号を一定の時間間隔で区切る処理を何というか。",
     "choices": [
       "量子化",
@@ -2129,8 +1945,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "次の生体信号のうち、記録に最も高いサンプリング周波数を必要とするのはどれか。",
     "choices": [
       "脳波",
@@ -2149,8 +1963,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "10ビットのAD変換器で、入力電圧範囲が0～5Vのときの電圧分解能[mV]に最も近いのはどれか。",
     "choices": [
       "1",
@@ -2169,8 +1981,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "信号の大きさを、あらかじめ定められた段階的な数値に割り当てる処理はどれか。",
     "choices": [
       "標本化",
@@ -2189,8 +1999,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "1024種類の項目をコード化するのに最低限必要なビット数はどれか。",
     "choices": [
       "8",
@@ -2209,8 +2017,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "2進数「1101」を10進数に変換するとどれか。",
     "choices": [
       "11",
@@ -2229,8 +2035,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "商用交流によるマクロショックにおいて、自分の意思で感電状態から離脱できる限界の電流（離脱限界電流）の値[mA]に最も近いのはどれか。",
     "choices": [
       "1",
@@ -2249,8 +2053,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ミクロショックを防止するために最も重要な対策はどれか。",
     "choices": [
       "絶縁トランスの使用",
@@ -2269,8 +2071,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "医用電気機器の装着部の安全性の分類で、心臓に直接適用可能なことを示すのはどれか。",
     "choices": [
       "B形装着部",
@@ -2289,8 +2089,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "JIS T 0601-1で規定される漏れ電流でないのはどれか。",
     "choices": [
       "接地漏れ電流",
@@ -2309,8 +2107,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "停電時にコンピュータなどの機器へ電力を供給し続けるための装置はどれか。",
     "choices": [
       "UPS",
@@ -2329,8 +2125,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ME機器の保護接地線の目的として正しいのはどれか。",
     "choices": [
       "ノイズを減らす",
@@ -2349,8 +2143,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "医用画像の保存と通信に関する標準規格はどれか。",
     "choices": [
       "HL7",
@@ -2369,8 +2161,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "検査オーダーや結果報告など、テキストベースの医療情報を交換するための標準規格はどれか。",
     "choices": [
       "PACS",
@@ -2389,8 +2179,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "複数のハードディスクを組み合わせて信頼性や性能を向上させる技術はどれか。",
     "choices": [
       "SSD",
@@ -2409,8 +2197,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ネットワークにおいて、外部からの不正アクセスを防ぐためのシステムはどれか。",
     "choices": [
       "ルータ",
@@ -2429,8 +2215,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "臨床検査の項目をコード化した、日本臨床検査標準協議会(JCCLS)が定めたコードはどれか。",
     "choices": [
       "ICD10",
@@ -2449,8 +2233,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "病院情報システム(HIS)と検査情報システム(LIS)を連携させる目的として、最も適切なのはどれか。",
     "choices": [
       "検査機器の精度管理",
@@ -2469,8 +2251,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "assets/images/Gem_31.jpg",
-    "imageAlt": "nan",
     "question": "図の回路（積分回路）に矩形波を入力したとき、出力波形として最も近いのはどれか。",
     "choices": [
       "正弦波",
@@ -2480,6 +2260,7 @@
       "直流"
     ],
     "answerIndex": 1,
+    "image": "assets/images/Gem_31.jpg",
     "explanation": "理想的な積分回路は、入力電圧を時間で積分した波形を出力します。矩形波を積分すると、傾きが一定の直線となり、三角波が得られます。"
   },
   {
@@ -2489,8 +2270,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "インピーダンスの単位はどれか。",
     "choices": [
       "F (ファラド)",
@@ -2509,8 +2288,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "周波数が高くなるほど電流が流れにくくなる素子はどれか。",
     "choices": [
       "抵抗",
@@ -2529,8 +2306,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "2つの入力 A, B のいずれか一方が「1」のときのみ出力が「1」となる論理ゲートはどれか。",
     "choices": [
       "AND",
@@ -2549,8 +2324,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "assets/images/Gem_35.jpg",
-    "imageAlt": "nan",
     "question": "図の回路（非反転増幅回路）の電圧増幅度はどれか。",
     "choices": [
       "−(Rf​/R1​)",
@@ -2560,6 +2333,7 @@
       "1+(R1​/Rf​)"
     ],
     "answerIndex": 0,
+    "image": "assets/images/Gem_35.jpg",
     "explanation": "非反転増幅回路の電圧増幅度は、Av​=1+(Rf​/R1​) で表されます。入力信号は(+)端子に入力されます。"
   },
   {
@@ -2569,8 +2343,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "10μFのコンデンサに10Vの電圧を加えたとき、蓄えられる電荷[μC]はどれか。",
     "choices": [
       "1",
@@ -2589,8 +2361,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "磁場を検出するセンサで、超伝導現象を利用するのはどれか。",
     "choices": [
       "ホール素子",
@@ -2609,8 +2379,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "血液ガス分析装置でPCO2​を測定する電極はどれか。",
     "choices": [
       "クラーク電極",
@@ -2629,8 +2397,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "放射線のうち、電離作用が最も強いのはどれか。",
     "choices": [
       "α線",
@@ -2649,8 +2415,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "光の波長が同じでも、偏光面の振動方向が異なる光を分離できるのはどれか。",
     "choices": [
       "プリズム",
@@ -2669,8 +2433,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "遠心分離機で、回転半径を2倍にすると遠心力は何倍になるか。（回転数は一定とする）",
     "choices": [
       "1/2倍",
@@ -2689,8 +2451,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "パルスオキシメータの測定を妨げる要因でないのはどれか。",
     "choices": [
       "体動",
@@ -2709,8 +2469,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "200Hzまでの周波数成分を含む生体信号を標本化するとき、エイリアシングを防ぐために最低限必要な標本化周波数[Hz]はどれか。",
     "choices": [
       "100",
@@ -2729,8 +2487,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "心電図の基線動揺を除去するのに最も適したフィルタはどれか。",
     "choices": [
       "ハイパスフィルタ",
@@ -2749,8 +2505,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ある信号をフーリエ変換した目的として、最も適切なのはどれか。",
     "choices": [
       "時間的変化を調べる",
@@ -2769,8 +2523,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "16進数「2A」を10進数に変換するとどれか。",
     "choices": [
       "32",
@@ -2789,8 +2541,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "8bitで表現できる階調数はどれか。",
     "choices": [
       "8",
@@ -2809,8 +2559,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "データの圧縮方法で、完全に元のデータに復元できるのはどれか。",
     "choices": [
       "JPEG",
@@ -2829,8 +2577,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "医療ガス配管の色で、酸素を示すのはどれか。",
     "choices": [
       "緑",
@@ -2849,8 +2595,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "B形装着部を示す図記号（シンボル）はどれか。",
     "choices": [
       "人の形と心臓",
@@ -2869,8 +2613,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "高圧蒸気滅菌（オートクレーブ）の滅菌条件として標準的なのはどれか。",
     "choices": [
       "100℃, 60分",
@@ -2889,8 +2631,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ME機器の故障ではないアラームの原因はどれか。",
     "choices": [
       "電源コードの断線",
@@ -2909,8 +2649,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "病院電気設備の安全基準 JIS T 1022 において、非接地配線方式の設置が義務付けられているのはどれか。",
     "choices": [
       "一般病室",
@@ -2929,8 +2667,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "心室細動を誘発する危険性が最も高い電流の種類はどれか。",
     "choices": [
       "直流",
@@ -2949,8 +2685,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ネットワークにおいて、個々の機器を識別するために割り当てられる固有の番号はどれか。",
     "choices": [
       "IPアドレス",
@@ -2969,8 +2703,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "病院内で撮影された患者の内視鏡画像を、院外の専門医に読影依頼する際に利用されるシステムはどれか。",
     "choices": [
       "HIS",
@@ -2989,8 +2721,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "電子カルテを真正性の観点から担保する三原則に含まれないのはどれか。",
     "choices": [
       "見読性",
@@ -3009,8 +2739,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "コンピュータウイルスの一種で、自己増殖機能を持たず、有用なソフトウェアに見せかけて侵入し、被害を及ぼすのはどれか。",
     "choices": [
       "ワーム",
@@ -3029,8 +2757,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "処方箋情報を電子的に管理・交換するための標準コードはどれか。",
     "choices": [
       "ICD10",
@@ -3049,8 +2775,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "個人情報保護法において、特定の個人を識別できないように加工した情報はどれか。",
     "choices": [
       "仮名加工情報",
@@ -3069,8 +2793,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "電圧利得が100倍の増幅器の利得[dB]はどれか。",
     "choices": [
       "10",
@@ -3089,8 +2811,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "抵抗RとコンデンサCを直列接続した回路の時定数τを表す式はどれか。",
     "choices": [
       "R+C",
@@ -3109,8 +2829,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "図の回路（ホイートストンブリッジ）が平衡状態にあるとき、Rx​の値[Ω]はどれか。(R1​=10,R2​=20,R3​=30)",
     "choices": [
       "15",
@@ -3129,8 +2847,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "抵抗と電源のみを用いて構成できる論理回路はどれか。",
     "choices": [
       "AND",
@@ -3149,8 +2865,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "導線の電気抵抗について正しいのはどれか。",
     "choices": [
       "長さに反比例する",
@@ -3169,8 +2883,6 @@
       "original",
       "電気・電子"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "交流回路において、電圧と電流の位相が90度ずれる素子はどれか。",
     "choices": [
       "抵抗",
@@ -3189,8 +2901,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "2種類の異なる金属を接合し、接合点の温度差によって起電力が生じる現象はどれか。",
     "choices": [
       "ホール効果",
@@ -3209,8 +2919,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "超音波ドプラ法で計測しているのは何か。",
     "choices": [
       "血流の有無",
@@ -3229,8 +2937,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "内視鏡など、熱に弱い医療器具の滅菌に用いられるのはどれか。",
     "choices": [
       "高圧蒸気滅菌",
@@ -3249,8 +2955,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "放射線のうち、透過力が最も強いのはどれか。",
     "choices": [
       "α線",
@@ -3269,8 +2973,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "溶存するイオンの濃度を測定するのに用いられるのはどれか。",
     "choices": [
       "pH電極",
@@ -3289,8 +2991,6 @@
       "original",
       "センサ・トランスデューサ"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "消毒と滅菌の違いについて正しいのはどれか。",
     "choices": [
       "消毒はウイルスに無効である",
@@ -3309,8 +3009,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "心電図計測において、商用交流電源によるハムノイズ（50/60Hz）を除去するのに最適なフィルタはどれか。",
     "choices": [
       "ハイパスフィルタ",
@@ -3329,8 +3027,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "1ピクセルをRGB各8bitで表現する1024×768ピクセルの非圧縮カラー画像のデータ量[MB]に最も近いのはどれか。",
     "choices": [
       "0.8",
@@ -3349,8 +3045,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "SN比（信号対雑音比）の改善方法として適切でないのはどれか。",
     "choices": [
       "信号を加算平均する",
@@ -3369,8 +3063,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "A/D変換の量子化ビット数を増やすとどうなるか。",
     "choices": [
       "標本化周波数が上がる",
@@ -3389,8 +3081,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ZIPやLHAなどのファイル圧縮方式の分類はどれか。",
     "choices": [
       "可逆圧縮",
@@ -3409,8 +3099,6 @@
       "original",
       "医用電子回路"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "矩形波に含まれる周波数成分について正しいのはどれか。",
     "choices": [
       "基本周波数のみ",
@@ -3429,8 +3117,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "保護接地（アース）がされていないクラスI機器で漏電が発生した場合、人体に流れる電流はどれか。",
     "choices": [
       "患者漏れ電流",
@@ -3449,8 +3135,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "患者が心臓カテーテル検査を受けている際に発生すると最も危険なのはどれか。",
     "choices": [
       "マクロショック",
@@ -3469,8 +3153,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "クラスIIの医用電気機器の特徴はどれか。",
     "choices": [
       "保護接地が必要である",
@@ -3489,8 +3171,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "医療ガス配管の色で、笑気（亜酸化窒素）を示すのはどれか。",
     "choices": [
       "緑",
@@ -3509,8 +3189,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "生体情報モニタのアラーム設定で、緊急度が最も高いことを示す色は一般的にどれか。",
     "choices": [
       "赤",
@@ -3529,8 +3207,6 @@
       "original",
       "電気的安全対策"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "患者漏れ電流の許容値が最も厳しく規定されている装着部はどれか。",
     "choices": [
       "B形",
@@ -3549,8 +3225,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "HIS（病院情報システム）の主な機能でないのはどれか。",
     "choices": [
       "オーダリング",
@@ -3569,8 +3243,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "コンピュータウイルスの一種で、ネットワークを介して自己増殖を繰り返すのはどれか。",
     "choices": [
       "ワーム",
@@ -3589,8 +3261,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ネットワークに接続されたコンピュータに割り振られる、インターネット上の住所のような識別番号はどれか。",
     "choices": [
       "MACアドレス",
@@ -3609,8 +3279,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "医療情報の二次利用に該当するのはどれか。",
     "choices": [
       "患者の診断",
@@ -3629,8 +3297,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "ネットワークセキュリティ対策で、データの盗聴や改ざんを防ぐために通信内容を暗号化する技術はどれか。",
     "choices": [
       "ファイアウォール",
@@ -3649,8 +3315,6 @@
       "original",
       "医療情報"
     ],
-    "image": "nan.jpg",
-    "imageAlt": "nan",
     "question": "情報システムへのログイン時に、パスワードに加えてICカードや生体情報など、複数の要素で本人確認を行う方式はどれか。",
     "choices": [
       "シングルサインオン",
@@ -3661,5 +3325,1085 @@
     ],
     "answerIndex": 0,
     "explanation": "二要素認証は、「知識情報」「所持情報」「生体情報」のうち2つを組み合わせることで、セキュリティを大幅に向上させる認証方式です。"
+  },
+  {
+    "id": "cGPT-1",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "OSI参照モデルでアプリケーション層に属するのはどれか。",
+    "choices": [
+      "Ethernet",
+      "IP",
+      "TCP",
+      "HTTP(S)",
+      "ARP"
+    ],
+    "answerIndex": 2,
+    "explanation": "アプリ層はアプリ同士のやり取り（HTTP/HTTPS等）を規定する。"
+  },
+  {
+    "id": "cGPT-2",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "医療画像通信の標準規格はどれか。",
+    "choices": [
+      "HL7",
+      "DICOM",
+      "ICD-10",
+      "JLAC10",
+      "FHIR"
+    ],
+    "answerIndex": 0,
+    "explanation": "DICOMは画像・波形・構造化報告の交換規格。"
+  },
+  {
+    "id": "cGPT-3",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "臨床検査項目コードの国内標準はどれか。",
+    "choices": [
+      "ICD-10",
+      "JLAC10/11",
+      "CPT",
+      "LOINC",
+      "DRG"
+    ],
+    "answerIndex": 0,
+    "explanation": "日本の検査コード体系はJLAC。"
+  },
+  {
+    "id": "cGPT-4",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "UPSの主目的はどれか。",
+    "choices": [
+      "冷却",
+      "無線化",
+      "停電時の無停電供給",
+      "漏れ電流低減",
+      "帯域拡張"
+    ],
+    "answerIndex": 1,
+    "explanation": "瞬低・停電でシステムを維持し安全停止を可能にする。"
+  },
+  {
+    "id": "cGPT-5",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "64種類を一意に表す最小ビット数はどれか。",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 1,
+    "explanation": "2^6=64で最小。"
+  },
+  {
+    "id": "cGPT-6",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "1,000種類を一意に表す最小ビット数はどれか。",
+    "choices": [
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "answerIndex": 1,
+    "explanation": "2^10=1024≥1000。"
+  },
+  {
+    "id": "cGPT-7",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "2 byteで表せる状態数はどれか。",
+    "choices": [
+      "256",
+      "512",
+      "1024",
+      "4096",
+      "65536"
+    ],
+    "answerIndex": 3,
+    "explanation": "16bit=2^16=65,536。"
+  },
+  {
+    "id": "cGPT-8",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "サンプリング定理で必要最小サンプリング周波数は信号帯域Bに対しどれか。",
+    "choices": [
+      "B/2",
+      "B",
+      "2B",
+      "4B",
+      "8B"
+    ],
+    "answerIndex": 1,
+    "explanation": "ナイキスト周波数は2B。"
+  },
+  {
+    "id": "cGPT-9",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "A/D変換の「量子化」を説明する語はどれか。",
+    "choices": [
+      "時間離散化",
+      "振幅離散化",
+      "周波数離散化",
+      "位相離散化",
+      "雑音除去"
+    ],
+    "answerIndex": 0,
+    "explanation": "量子化は振幅を離散レベルへ写像。"
+  },
+  {
+    "id": "cGPT-10",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "8bit・0〜2.56VのA/D分解能に最も近いのはどれか。",
+    "choices": [
+      "1 mV",
+      "5 mV",
+      "10 mV",
+      "20 mV",
+      "50 mV"
+    ],
+    "answerIndex": 1,
+    "explanation": "2.56/256=0.01V=10 mV。"
+  },
+  {
+    "id": "cGPT-11",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "直列接続の増幅器で利得×10を3段の総利得[dB]はどれか。",
+    "choices": [
+      "20",
+      "30",
+      "40",
+      "60",
+      "100"
+    ],
+    "answerIndex": 2,
+    "explanation": "20log10(1000)=60 dB。"
+  },
+  {
+    "id": "cGPT-12",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "利得20倍(26 dB)と200倍(46 dB)直列の合計[dB]はどれか。",
+    "choices": [
+      "46",
+      "52",
+      "60",
+      "66",
+      "72"
+    ],
+    "answerIndex": 3,
+    "explanation": "dBは加算：26+46=72 dB。"
+  },
+  {
+    "id": "cGPT-13",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "理想OPアンプの特徴で誤りはどれか。",
+    "choices": [
+      "無限大利得",
+      "無限大入力抵抗",
+      "0出力抵抗",
+      "無限帯域",
+      "無限CMRR"
+    ],
+    "answerIndex": 2,
+    "explanation": "実機は帯域有限（GBW制約）。"
+  },
+  {
+    "id": "cGPT-14",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "RCローパスの遮断周波数での出力は入力のどれか。",
+    "choices": [
+      "1倍",
+      "0.9倍",
+      "1/√2倍",
+      "1/2倍",
+      "0倍"
+    ],
+    "answerIndex": 1,
+    "explanation": "−3 dB点で振幅は1/√2。"
+  },
+  {
+    "id": "cGPT-15",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "PWMは何を変える変調か。",
+    "choices": [
+      "パルス高さ",
+      "パルス幅",
+      "パルス間隔",
+      "周波数",
+      "位相"
+    ],
+    "answerIndex": 0,
+    "explanation": "PWM=幅を情報化。"
+  },
+  {
+    "id": "cGPT-16",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "PFMは何を変える変調か。",
+    "choices": [
+      "幅",
+      "高さ",
+      "周期(周波数)",
+      "位相",
+      "直流オフセット"
+    ],
+    "answerIndex": 1,
+    "explanation": "PFMは周波数を変調。"
+  },
+  {
+    "id": "cGPT-17",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気・電子"
+    ],
+    "question": "電力量の単位はどれか。",
+    "choices": [
+      "W",
+      "V",
+      "A",
+      "Wh",
+      "Hz"
+    ],
+    "answerIndex": 2,
+    "explanation": "電力量=電力×時間。"
+  },
+  {
+    "id": "cGPT-18",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気・電子"
+    ],
+    "question": "仕事率P=IVと等価な式はどれか。",
+    "choices": [
+      "I/R",
+      "V/R",
+      "I^2R",
+      "V^2I",
+      "V^2/R"
+    ],
+    "answerIndex": 3,
+    "explanation": "P=I^2R=V^2/R。"
+  },
+  {
+    "id": "cGPT-19",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気・電子"
+    ],
+    "question": "抵抗率ρ、長さL、断面積Aの抵抗Rはどれか。",
+    "choices": [
+      "ρA/L",
+      "ρL/A",
+      "LA/ρ",
+      "ρ/L",
+      "L/ρA"
+    ],
+    "answerIndex": 0,
+    "explanation": "導体の基本式。"
+  },
+  {
+    "id": "cGPT-20",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気・電子"
+    ],
+    "question": "100 V_rms商用交流の最大瞬時値に最も近いのはどれか。",
+    "choices": [
+      "100 V",
+      "120 V",
+      "141 V",
+      "170 V",
+      "200 V"
+    ],
+    "answerIndex": 1,
+    "explanation": "Vmax=√2×Vrms≈1.414×100。"
+  },
+  {
+    "id": "cGPT-21",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "マクロショックで最小感知電流に近いのはどれか。",
+    "choices": [
+      "0.1 mA",
+      "1 mA",
+      "5 mA",
+      "10 mA",
+      "100 mA"
+    ],
+    "answerIndex": 0,
+    "explanation": "皮膚経由の最小感知は約1 mA。"
+  },
+  {
+    "id": "cGPT-22",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "心室細動を起こす危険域のマクロショック電流はどれか。",
+    "choices": [
+      "1 mA",
+      "10 mA",
+      "30 mA",
+      "100 mA",
+      "1 A"
+    ],
+    "answerIndex": 2,
+    "explanation": "50–100 mAでVf誘発域。"
+  },
+  {
+    "id": "cGPT-23",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "医用電気機器のクラスIIの特徴はどれか。",
+    "choices": [
+      "保護接地必須",
+      "2重/強化絶縁",
+      "3Pプラグ",
+      "内部電源のみ",
+      "漏れ電流規定なし"
+    ],
+    "answerIndex": 0,
+    "explanation": "クラスIIは保護接地なしで強化絶縁。"
+  },
+  {
+    "id": "cGPT-24",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "装着部型式CFの特徴はどれか。",
+    "choices": [
+      "体表用",
+      "心腔内適合",
+      "外科機器用",
+      "非接地機器専用",
+      "中出力専用"
+    ],
+    "answerIndex": 0,
+    "explanation": "CFは厳しい患者漏れ電流基準で心腔内可。"
+  },
+  {
+    "id": "cGPT-25",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "非接地配線方式が要求されるのはどれか。",
+    "choices": [
+      "一般病室",
+      "検体検査室",
+      "生理検査室",
+      "ICU/CCU",
+      "事務室"
+    ],
+    "answerIndex": 2,
+    "explanation": "生命維持医用室では絶縁監視が必要。"
+  },
+  {
+    "id": "cGPT-26",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "Fターム：ホール素子は何の検出に用いるか。",
+    "choices": [
+      "温度",
+      "光",
+      "ひずみ",
+      "磁場",
+      "流量"
+    ],
+    "answerIndex": 2,
+    "explanation": "ローレンツ力起源のホール電圧。"
+  },
+  {
+    "id": "cGPT-27",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "サーミスタの特性はどれか。",
+    "choices": [
+      "温度独立",
+      "NTC特性が一般的",
+      "PTCのみ",
+      "直線性良好",
+      "低感度"
+    ],
+    "answerIndex": 0,
+    "explanation": "多くは温度上昇で抵抗低下(NTC)。"
+  },
+  {
+    "id": "cGPT-28",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "ストレインゲージの測定で用いる回路はどれか。",
+    "choices": [
+      "コルピッツ",
+      "ウィーン",
+      "ウィートストンブリッジ",
+      "ハートレー",
+      "多重器"
+    ],
+    "answerIndex": 1,
+    "explanation": "微小抵抗変化を差動で検出。"
+  },
+  {
+    "id": "cGPT-29",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "圧電素子の特徴はどれか。",
+    "choices": [
+      "温度で起電",
+      "光で起電",
+      "圧力で起電",
+      "流量で起電",
+      "電界で起電"
+    ],
+    "answerIndex": 1,
+    "explanation": "逆圧電/正圧電効果。"
+  },
+  {
+    "id": "cGPT-30",
+    "tags": [
+      "医用工学",
+      "original",
+      "生体物性"
+    ],
+    "question": "超音波の性質で正しいのはどれか。",
+    "choices": [
+      "高周波ほど減衰小",
+      "生体中は横波主体",
+      "周波数高いほど指向性良",
+      "反射で周波数低下",
+      "空気で減衰最小"
+    ],
+    "answerIndex": 1,
+    "explanation": "開口一定なら周波数↑でビーム狭小化。"
+  },
+  {
+    "id": "cGPT-31",
+    "tags": [
+      "医用工学",
+      "original",
+      "生体物性"
+    ],
+    "question": "音速が最も速い組織はどれか。",
+    "choices": [
+      "空気",
+      "脂肪",
+      "水",
+      "肝臓",
+      "骨"
+    ],
+    "answerIndex": 3,
+    "explanation": "骨は約3000–4000 m/sで最速。"
+  },
+  {
+    "id": "cGPT-32",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "医療用カプノメータが用いる吸収帯はどれか。",
+    "choices": [
+      "可視赤",
+      "近赤外",
+      "赤外線",
+      "紫外線",
+      "X線"
+    ],
+    "answerIndex": 2,
+    "explanation": "CO₂は赤外吸収が強い。"
+  },
+  {
+    "id": "cGPT-33",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "サーマルアレイ式記録の誤りはどれか。",
+    "choices": [
+      "感熱紙使用",
+      "目盛同時記録可",
+      "kHz級リアルタイム",
+      "デジタル変換必須",
+      "高密度素子配列"
+    ],
+    "answerIndex": 2,
+    "explanation": "アナログ直熱で記録可能、必須ではない。"
+  },
+  {
+    "id": "cGPT-34",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "動画の拡張子として標準的なのはどれか。",
+    "choices": [
+      "CSV",
+      "MP4",
+      "TIFF",
+      "PNG",
+      "BMP"
+    ],
+    "answerIndex": 0,
+    "explanation": "汎用動画コンテナ。"
+  },
+  {
+    "id": "cGPT-35",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "静止画の標準拡張子はどれか。",
+    "choices": [
+      "MP3",
+      "JPEG",
+      "MP4",
+      "FLV",
+      "WAV"
+    ],
+    "answerIndex": 0,
+    "explanation": "写真圧縮規格。"
+  },
+  {
+    "id": "cGPT-36",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "2.4 GHz帯を用いるのはどれか。",
+    "choices": [
+      "GPS",
+      "Bluetooth",
+      "NFC",
+      "ZigBee",
+      "LTE"
+    ],
+    "answerIndex": 0,
+    "explanation": "BluetoothやWi-Fiは2.4 GHz帯を使用。"
+  },
+  {
+    "id": "cGPT-37",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "フローチャートの判断記号はどれか。",
+    "choices": [
+      "楕円",
+      "長方形",
+      "ひし形",
+      "台形",
+      "円"
+    ],
+    "answerIndex": 1,
+    "explanation": "条件分岐はひし形。"
+  },
+  {
+    "id": "cGPT-38",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "定義済み処理（サブルーチン）記号はどれか。",
+    "choices": [
+      "二重線長方形",
+      "ひし形",
+      "楕円",
+      "台形",
+      "雲形"
+    ],
+    "answerIndex": 0,
+    "explanation": "端に二重線の長方形。"
+  },
+  {
+    "id": "cGPT-39",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "ANDの論理積を表す真理値はどれか。",
+    "choices": [
+      "1+1=1",
+      "1+0=1",
+      "1・0=1",
+      "1・1=1",
+      "0・0=1"
+    ],
+    "answerIndex": 2,
+    "explanation": "ANDは両方1で1。"
+  },
+  {
+    "id": "cGPT-40",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "NANDの出力が0となる入力の組はどれか。",
+    "choices": [
+      "0,0",
+      "0,1",
+      "1,0",
+      "1,1",
+      "いずれも0"
+    ],
+    "answerIndex": 2,
+    "explanation": "NANDはANDの否定。"
+  },
+  {
+    "id": "cGPT-41",
+    "tags": [
+      "医用工学",
+      "original",
+      "医用電子回路"
+    ],
+    "question": "RAIDを用いる主目的はどれか。",
+    "choices": [
+      "処理速度向上のみ",
+      "画像圧縮",
+      "通信暗号化",
+      "記憶信頼性・冗長性",
+      "消費電力削減"
+    ],
+    "answerIndex": 2,
+    "explanation": "ミラー/パリティで耐障害性を高める。"
+  },
+  {
+    "id": "cGPT-42",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "ファイアウォールの主機能はどれか。",
+    "choices": [
+      "デフラグ",
+      "パケットフィルタリング",
+      "画像圧縮",
+      "時刻同期",
+      "電源制御"
+    ],
+    "answerIndex": 0,
+    "explanation": "通信の通過可否を制御。"
+  },
+  {
+    "id": "cGPT-43",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "OS自動アップデート停止が招く主なリスクはどれか。",
+    "choices": [
+      "暗号強化",
+      "互換性向上",
+      "脆弱性放置",
+      "省電力化",
+      "帯域節約"
+    ],
+    "answerIndex": 1,
+    "explanation": "未適用パッチが侵入経路になる。"
+  },
+  {
+    "id": "cGPT-44",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "JLACと最も近い概念の海外標準はどれか。",
+    "choices": [
+      "LOINC",
+      "ICD-10",
+      "CPT",
+      "SNOMED-CT",
+      "RxNorm"
+    ],
+    "answerIndex": 0,
+    "explanation": "検査項目コードの国際標準はLOINC。"
+  },
+  {
+    "id": "cGPT-45",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "医療情報の一次利用はどれか。",
+    "choices": [
+      "研究",
+      "教育",
+      "経営",
+      "診断・治療",
+      "広報"
+    ],
+    "answerIndex": 2,
+    "explanation": "一次利用は本来目的（診療）への利用。"
+  },
+  {
+    "id": "cGPT-46",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "220 nmの電磁波はどれか。",
+    "choices": [
+      "UVA",
+      "UVB",
+      "UVC",
+      "可視青",
+      "近赤外"
+    ],
+    "answerIndex": 1,
+    "explanation": "200–280 nmはUVC帯。"
+  },
+  {
+    "id": "cGPT-47",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "電子レンジ700 Wで水200 mLを60 s加熱した温度上昇のおよそはどれか。",
+    "choices": [
+      "5℃",
+      "10℃",
+      "20℃",
+      "50℃",
+      "80℃"
+    ],
+    "answerIndex": 2,
+    "explanation": "Q=Pt=42000 J、ΔT≈42000/(0.2×4200)≈50℃。"
+  },
+  {
+    "id": "cGPT-48",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "ひずみ→電圧変換で感度を最も高めやすいのはどれか。",
+    "choices": [
+      "単独ゲージ",
+      "2アクティブ",
+      "全ブリッジ(4ゲージ)",
+      "直列抵抗",
+      "並列抵抗"
+    ],
+    "answerIndex": 1,
+    "explanation": "温度補償と感度向上が可能。"
+  },
+  {
+    "id": "cGPT-49",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気・電子"
+    ],
+    "question": "100 Ω負荷で100 Wの装置を200 Ωにした時の消費電力（電圧一定）はどれか。",
+    "choices": [
+      "25 W",
+      "50 W",
+      "100 W",
+      "150 W",
+      "200 W"
+    ],
+    "answerIndex": 0,
+    "explanation": "P=V^2/R、R2倍でPは1/2。"
+  },
+  {
+    "id": "cGPT-50",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "商用交流で感電離脱限界に近い電流はどれか。",
+    "choices": [
+      "0.5 mA",
+      "1 mA",
+      "10 mA",
+      "100 mA",
+      "1 A"
+    ],
+    "answerIndex": 1,
+    "explanation": "自力離脱の限界は数mA〜十mA域。"
+  },
+  {
+    "id": "cGPT-51",
+    "tags": [
+      "医用工学",
+      "original",
+      "生体物性"
+    ],
+    "question": "体内導電率の大小関係で正しいのはどれか。",
+    "choices": [
+      "脂肪>筋",
+      "全血<血清",
+      "角質<真皮",
+      "細胞膜>細胞内液",
+      "骨髄<リンパ"
+    ],
+    "answerIndex": 0,
+    "explanation": "電解質濃度が高いほど導電率は高い。"
+  },
+  {
+    "id": "cGPT-52",
+    "tags": [
+      "医用工学",
+      "original",
+      "生体物性"
+    ],
+    "question": "生体の異方性が強い組織はどれか。",
+    "choices": [
+      "皮下脂肪",
+      "骨格筋",
+      "肝臓",
+      "腎臓",
+      "脳白質"
+    ],
+    "answerIndex": 0,
+    "explanation": "繊維配向で導電率が方向依存。"
+  },
+  {
+    "id": "cGPT-53",
+    "tags": [
+      "医用工学",
+      "original",
+      "生体物性"
+    ],
+    "question": "37℃の音速で誤りはどれか。",
+    "choices": [
+      "空気350 m/s",
+      "脂肪900 m/s",
+      "水1480 m/s",
+      "血液1570 m/s",
+      "骨4080 m/s"
+    ],
+    "answerIndex": 0,
+    "explanation": "脂肪は約1450 m/s程度。"
+  },
+  {
+    "id": "cGPT-54",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "Wi-Fiの物理層規格はどれか。",
+    "choices": [
+      "IEEE 802.3",
+      "IEEE 802.11",
+      "IEEE 1394",
+      "Bluetooth SIG",
+      "ZigBee"
+    ],
+    "answerIndex": 0,
+    "explanation": "無線LANは802.11。"
+  },
+  {
+    "id": "cGPT-55",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "A/Dで「標本化」を指すのはどれか。",
+    "choices": [
+      "正規化",
+      "標準化",
+      "離散時間化",
+      "量子化",
+      "符号化"
+    ],
+    "answerIndex": 1,
+    "explanation": "時間方向の離散化が標本化。"
+  },
+  {
+    "id": "cGPT-56",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "1 MHz超音波で吸収が最小に近い媒質はどれか。",
+    "choices": [
+      "空気",
+      "水",
+      "筋",
+      "脂肪",
+      "肝臓"
+    ],
+    "answerIndex": 0,
+    "explanation": "水は吸収が小さく透過性が高い。"
+  },
+  {
+    "id": "cGPT-57",
+    "tags": [
+      "医用工学",
+      "original",
+      "電気的安全対策"
+    ],
+    "question": "漏れ電流の定義で誤りはどれか。",
+    "choices": [
+      "接地漏れ電流",
+      "誘導電流",
+      "接触電流",
+      "患者漏れ電流",
+      "患者測定電流"
+    ],
+    "answerIndex": 0,
+    "explanation": "規格上の漏れ電流カテゴリには含まれない。"
+  },
+  {
+    "id": "cGPT-58",
+    "tags": [
+      "医用工学",
+      "original",
+      "医療情報"
+    ],
+    "question": "SQLで正しい説明はどれか。",
+    "choices": [
+      "通信制御言語",
+      "マークアップ言語",
+      "データベース言語",
+      "OSカーネル",
+      "暗号化手順"
+    ],
+    "answerIndex": 1,
+    "explanation": "検索・定義・操作を行う言語。"
+  },
+  {
+    "id": "cGPT-59",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "サンプリング周波数が最も高く必要なのはどれか。",
+    "choices": [
+      "心電図",
+      "心音図",
+      "脳波",
+      "脈波",
+      "筋電図"
+    ],
+    "answerIndex": 3,
+    "explanation": "EMGは周波数帯域が高い。"
+  },
+  {
+    "id": "cGPT-60",
+    "tags": [
+      "医用工学",
+      "original",
+      "センサ・トランスデューサ"
+    ],
+    "question": "ひずみゲージの温度ドリフト抑制に有効なのはどれか。",
+    "choices": [
+      "直列抵抗追加",
+      "全ブリッジ化",
+      "サンプリング低下",
+      "直流オフセット付与",
+      "高電圧駆動"
+    ],
+    "answerIndex": 0,
+    "explanation": "対称配置で温度起因の抵抗変化を打ち消す。"
   }
 ]
