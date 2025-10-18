@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ja">
 <head>
@@ -15,7 +16,7 @@
     .bar { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
     h1 { font-size:20px; margin:0 12px 0 0; }
     .pill { padding:6px 10px; border:1px solid rgba(15,23,42,.12); border-radius:999px; font-size:12px; color:var(--muted); }
-    main { max-width:980px; margin: 20px auto; padding: 0 16px 80px; }
+    main { max-width:980px; margin: 20px auto; padding: 0 16px 100px; }
     .card { border:1px solid rgba(15,23,42,.10); border-radius:16px; padding:20px; box-shadow: 0 2px 16px rgba(15,23,42,.04); }
     .qtext { font-size:18px; line-height:1.6; margin: 8px 0 12px; white-space: pre-wrap; }
     .choices { display:grid; gap:10px; }
@@ -94,7 +95,7 @@
           <div id="homeTags" class="grid"></div>
         </div>
       </div>
-      <div class="muted" style="margin-top:12px;">※ 「全ての分野」を選ぶと全問題から出題します。「医用工学」という分野は表示していません。</div>
+      <div class="muted" style="margin-top:12px;">※ 成績は端末ローカルにのみ保存されます。</div>
     </section>
 
     <!-- 問題画面 -->
@@ -122,7 +123,7 @@
     <section id="resultScreen" class="card hidden">
       <div class="section-title">結果</div>
       <div id="resultSummary" class="qtext"></div>
-      <div id="resultAdvice" class="muted" style="margin-top:8px;"></div>
+      <div id="resultAdvice" class="qtext" style="margin-top:8px;"></div>
       <div style="margin-top:12px;">
         <button id="resultToHome" class="btn ghost">トップページへ戻る</button>
         <button id="resultRestart" class="btn">同じ条件でもう一度</button>
@@ -171,7 +172,7 @@
     </div>
   </dialog>
 
-  <script src="app.js?v=12"></script>
+  <script src="app.js?v=13"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').catch(()=>{});

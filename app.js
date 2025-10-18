@@ -1,12 +1,15 @@
+
 /* ==========================================
-   臨床検査技師 国家試験：医用工学 問題アプリ (v12)
-   See requirements in previous message.
+   臨床検査技師 国家試験：医用工学 問題アプリ (v13)
 =========================================== */
 
-const BUILD = '2025-10-19-1';
+const BUILD = '2025-10-19-2';
 const STORE_KEY = 'medtechQuiz:v1';
 const LOG_KEY = 'medtechQuiz:log';
 const DATE_TARGET = '2026-02-18T00:00:00+09:00';
+
+const FIXED_YEARS = ["2017","2018","2019","2020","2021","2022","2023","2024","2025","過去問","original"];
+const FIXED_TAGS  = ["センサ・トランスデューサ","医用電子回路","医療情報","生体物性","電気・電子","電気的安全対策"]; // 「全ての分野」は空扱い
 
 const $ = (q) => document.querySelector(q);
 const $$ = (q) => Array.from(document.querySelectorAll(q));
@@ -76,6 +79,7 @@ async function boot(){
     bindUI();
     const last = state.store.last || {};
     state.screen = last.screen || 'home';
+    setFooterVisibility();
     if (state.screen === 'quiz') {
       if ($('#tagFilter')) $('#tagFilter').value = last.tag || '';
       if ($('#yearFilter')) $('#yearFilter').value = last.year || '';
@@ -95,12 +99,20 @@ async function boot(){
   }
 }
 
+function setFooterVisibility(){
+  const isHome = state.screen === 'home';
+  $('#prevBtn').classList.toggle('hidden', isHome);
+  $('#nextBtn').classList.toggle('hidden', isHome);
+  $('#progress').classList.toggle('hidden', isHome);
+}
+
 function showHome(){
   $('#homeScreen').classList.remove('hidden');
   $('#quizScreen').classList.add('hidden');
   $('#resultScreen').classList.add('hidden');
   state.screen = 'home';
   state.store.last.screen = 'home'; saveStore();
+  setFooterVisibility();
 }
 function showQuiz(){
   $('#homeScreen').classList.add('hidden');
@@ -108,6 +120,7 @@ function showQuiz(){
   $('#resultScreen').classList.add('hidden');
   state.screen = 'quiz';
   state.store.last.screen = 'quiz'; saveStore();
+  setFooterVisibility();
 }
 function showResult(){
   $('#homeScreen').classList.add('hidden');
@@ -115,6 +128,7 @@ function showResult(){
   $('#resultScreen').classList.remove('hidden');
   state.screen = 'result';
   state.store.last.screen = 'result'; saveStore();
+  setFooterVisibility();
 }
 
 function showFatal(msg){
@@ -127,13 +141,13 @@ function showFatal(msg){
   main.prepend(el);
 }
 
-/* ---------- Home ---------- */
+/* ---------- Home (fixed lists) ---------- */
 function initHome(all){
-  const { years, tags, countByYear, countByTag } = collectFacets(all);
-  // セレクト
   const ysel = $('#homeYearSel'), tsel = $('#homeTagSel');
-  years.forEach(y => ysel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
-  tags.forEach(t => tsel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(t)}">${escapeHTML(t)}</option>`));
+  // 固定の年度
+  FIXED_YEARS.forEach(y => ysel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
+  // 固定の分野（セレクト；先頭には既に「全ての分野」）
+  FIXED_TAGS.forEach(t => tsel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(t)}">${escapeHTML(t)}</option>`));
 
   function updateCount(){
     const year = ysel.value;
@@ -143,27 +157,28 @@ function initHome(all){
   }
   ysel.addEventListener('change', updateCount);
   tsel.addEventListener('change', updateCount);
-  updateCount();
 
-  // タイル
+  // タイル（年度）
   const yNode = $('#homeYears'); yNode.innerHTML = '';
-  years.forEach(y => {
-    const c = countByYear[y] || 0;
+  FIXED_YEARS.forEach(y => {
+    const c = estimateCount(all, {year:y, tag:tsel.value});
     const div = document.createElement('div');
     div.className = 'tile';
     div.innerHTML = `<h3>${escapeHTML(y)}</h3><div class="muted">${c}問</div>`;
     div.addEventListener('click', () => { ysel.value = y; updateCount(); });
     yNode.appendChild(div);
   });
+
+  // タイル（分野）：先頭に「全ての分野」
   const tNode = $('#homeTags'); tNode.innerHTML = '';
-  // 「全ての分野」
   const allDiv = document.createElement('div');
   allDiv.className = 'tile';
   allDiv.innerHTML = `<h3>全ての分野</h3><div class="muted">${all.length}問</div>`;
   allDiv.addEventListener('click', () => { tsel.value = ''; updateCount(); });
   tNode.appendChild(allDiv);
-  tags.forEach(t => {
-    const c = countByTag[t] || 0;
+
+  FIXED_TAGS.forEach(t => {
+    const c = estimateCount(all, {year:ysel.value, tag:t});
     const div = document.createElement('div');
     div.className = 'tile';
     div.innerHTML = `<h3>${escapeHTML(t)}</h3><div class="muted">${c}問</div>`;
@@ -171,6 +186,10 @@ function initHome(all){
     tNode.appendChild(div);
   });
 
+  // 初期カウント
+  updateCount();
+
+  // スタート
   $('#homeStartBtn').addEventListener('click', () => {
     const year = ysel.value;
     const tag = tsel.value;
@@ -181,33 +200,11 @@ function initHome(all){
 function estimateCount(all, {year='', tag=''}){
   return all.filter(q => {
     const tags = (q.tags||[]).map(String);
-    const yearish = tags.filter(t => /^\d{4}$/.test(t) || t === 'original' || t === '過去問');
+    const yearish = tags.filter(t => /^\\d{4}$/.test(t) || t === 'original' || t === '過去問');
     const matchYear = !year || yearish.includes(String(year));
     const matchTag = !tag || tags.includes(String(tag));
     return matchYear && matchTag;
   }).length;
-}
-
-function collectFacets(all){
-  const years = new Set();
-  const tags = new Set();
-  const countByYear = {};
-  const countByTag = {};
-  for (const q of all){
-    const seenTag = new Set();
-    const seenYear = new Set();
-    for (const raw of (q.tags || [])){
-      const t = String(raw);
-      if (/^\\d{4}$/.test(t) || t === 'original' || t === '過去問'){
-        years.add(t);
-        if (!seenYear.has(t)){ countByYear[t] = (countByYear[t]||0)+1; seenYear.add(t); }
-      } else if (t !== '医用工学') {
-        tags.add(t);
-        if (!seenTag.has(t)){ countByTag[t] = (countByTag[t]||0)+1; seenTag.add(t); }
-      }
-    }
-  }
-  return { years: [...years].sort(), tags: [...tags].sort(), countByYear, countByTag };
 }
 
 function startFromHome({year='', tag=''}={}){
@@ -228,16 +225,10 @@ function startFromHome({year='', tag=''}={}){
 function initFilters(all){
   const tagSel = $('#tagFilter'), yearSel = $('#yearFilter');
   if (!tagSel || !yearSel) return;
-  const tSet = new Set(), ySet = new Set();
-  for (const q of all){
-    for (const raw of (q.tags || [])){
-      const t = String(raw);
-      if (/^\\d{4}$/.test(t) || t === 'original' || t === '過去問') ySet.add(t);
-      else if (t !== '医用工学') tSet.add(t);
-    }
-  }
-  [...tSet].sort().forEach(t => tagSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(t)}">${escapeHTML(t)}</option>`));
-  [...ySet].sort().forEach(y => yearSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
+  // 分野セレクトは固定候補＋空(すべて)
+  FIXED_TAGS.forEach(t => tagSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(t)}">${escapeHTML(t)}</option>`));
+  // 年度セレクトは固定候補
+  FIXED_YEARS.forEach(y => yearSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
 }
 
 function applyFilters(){
@@ -310,7 +301,8 @@ function renderChoices(q){
   const wrap = $('#choices'); if (!wrap) return;
   wrap.innerHTML = '';
   const multi = Array.isArray(q.answerIndex);
-  const order = [0,1,2,3,4];
+  const n = (q.choices || []).length;
+  const order = Array.from({length:n}, (_,i)=>i);
   shuffle(order);
   order.forEach((origIdx) => {
     const text = q.choices[origIdx];
@@ -393,7 +385,7 @@ function bumpScore(q, ok, selected){
   pq.attempts += 1; if (ok) pq.correct += 1;
   state.store.perQ[id] = pq;
 
-  const tags = Array.from(new Set((q.tags || []).filter(t => t !== '医用工学')));
+  const tags = Array.from(new Set((q.tags || [])));
   for (const t of tags){
     const rec = state.store.perTag[t] || {attempts:0, correct:0};
     rec.attempts += 1; if (ok) rec.correct += 1;
@@ -444,20 +436,22 @@ function renderResult(){
   const finishedAt = new Date();
   const startedAt = new Date(s.startedAt);
   const rate = s.total ? (s.correct / s.total) : 0;
-  const str = [
-    `解答日時：${finishedAt.toLocaleString('ja-JP')}`,
-    `出題範囲：年度「${state.yearFilter || 'すべて'}」 / 分野「${state.tagFilter || '全ての分野'}」`,
-    `成績：${s.correct} / ${s.total}（正答率 ${(rate*100).toFixed(1)}%）`,
-    `所要時間：約 ${Math.max(1, Math.round((finishedAt - startedAt)/60000))} 分`
-  ].join('\\n');
-  $('#resultSummary').textContent = str;
 
-  let advice = 'この調子で学習を継続しましょう。';
-  if (rate < 0.4) advice = 'まずは基礎の見直しを。正誤の解説を熟読し、苦手分野を集中攻略しましょう。';
-  else if (rate < 0.7) advice = '惜しいです。間違えた問題をタグ別に復習し、同じ形式を繰り返すのがおすすめです。';
-  else if (rate < 0.9) advice = '仕上げ段階です。弱点タグを重点的に周回して得点を安定化しましょう。';
-  else advice = '素晴らしい達成度です。実戦ペースでの演習に移行しましょう。';
-  $('#resultAdvice').textContent = advice;
+  const rows = [
+    `<div>解答日時：${finishedAt.toLocaleString('ja-JP')}</div>`,
+    `<div>成績：${s.correct} / ${s.total}（正答率 ${(rate*100).toFixed(1)}%）</div>`,
+    `<div>所要時間：約 ${Math.max(1, Math.round((finishedAt - startedAt)/60000))} 分</div>`,
+    `<div>ポジティブな明るいアドバイス：${makePositiveAdvice(rate)}</div>`
+  ].join('');
+  $('#resultSummary').innerHTML = rows;
+  $('#resultAdvice').textContent = '';
+}
+
+function makePositiveAdvice(rate){
+  if (rate < 0.4) return 'ここから伸びしろがたっぷり！解説を手掛かりに要点を押さえれば必ず伸びます。';
+  if (rate < 0.7) return '良いペースです！間違えた分野を重点的に回せば合格圏が見えてきます。';
+  if (rate < 0.9) return 'かなり仕上がっています！弱点の最終チェックで得点を安定させましょう。';
+  return '最高の出来！自信を持って本番に臨めるレベルです。';
 }
 
 /* ---------- Stats Dialog ---------- */
