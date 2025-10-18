@@ -10,12 +10,10 @@
   <!-- Google tag (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XW1PC70BW4"></script>
   <script>
-    // GA4 basic setup (with optional debug mode)
+    // GA4 basic setup (with optional debug mode via ?ga_debug=1 or localStorage.ga_debug='1')
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-
-    // Debug mode if ?ga_debug=1 もしくは localStorage.ga_debug === '1'
     (function(){
       const params = new URLSearchParams(location.search);
       const debug = params.get('ga_debug') === '1' || localStorage.getItem('ga_debug') === '1';
@@ -31,14 +29,14 @@
         const KEY = 'quiz_anonymous_uid';
         let uid = localStorage.getItem(KEY);
         if (!uid) {
-          uid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-          );
+          uid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, function(c){
+            return (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
+          });
           localStorage.setItem(KEY, uid);
         }
         gtag('set', { 'user_id': uid });
-        // 起動時ヘルスチェック（Realtime/DebugViewで可視化）
-        gtag('event', 'app_loaded', { uid });
+        // Optional health ping for DebugView
+        gtag('event', 'app_loaded', { uid: uid });
         console.log('[GA] app_loaded sent', { uid });
       } catch(e) { console.warn('[GA] uid init error', e); }
     })();
@@ -204,7 +202,7 @@
     </div>
   </dialog>
 
-  <script src="app.js?v=15.1"></script>
+  <script src="app.js?v=15.2"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').catch(()=>{});
