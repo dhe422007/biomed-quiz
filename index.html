@@ -1,10 +1,9 @@
-
 <!doctype html>
 <html lang="ja">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>医用工学 問題アプリ</title>
+  <title>臨床検査技師 国家試験：医用工学 問題アプリ</title>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0f172a">
   <style>
@@ -16,15 +15,15 @@
     .bar { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
     h1 { font-size:20px; margin:0 12px 0 0; }
     .pill { padding:6px 10px; border:1px solid rgba(15,23,42,.12); border-radius:999px; font-size:12px; color:var(--muted); }
-    main { max-width:980px; margin: 20px auto; padding: 0 16px 60px; }
+    main { max-width:980px; margin: 20px auto; padding: 0 16px 80px; }
     .card { border:1px solid rgba(15,23,42,.10); border-radius:16px; padding:20px; box-shadow: 0 2px 16px rgba(15,23,42,.04); }
     .qtext { font-size:18px; line-height:1.6; margin: 8px 0 12px; white-space: pre-wrap; }
     .choices { display:grid; gap:10px; }
     .choice { text-align:left; border:1px solid rgba(15,23,42,.15); border-radius:12px; padding:12px 14px; background:#fff; cursor:pointer; transition:.15s; }
     .choice:hover { border-color: var(--accent); box-shadow: 0 2px 14px rgba(37, 99, 235, .08); transform: translateY(-1px); }
-    .choice.selected { border-color: var(--accent); outline: 2px solid rgba(37,99,235,.15); }
-    .choice.correct { border-color: var(--ok); background: rgba(22,163,74,.06); }
-    .choice.incorrect { border-color: var(--ng); background: rgba(239,68,68,.06); }
+    .choice.selected { border-color: var(--accent); outline: 2px solid rgba(37,99,235,.15); background: #2563eb; color: #fff; }
+    .choice.correct { border-color: var(--ok); background: rgba(22,163,74,.12); color:#083311; }
+    .choice.incorrect { border-color: var(--ng); background: rgba(239,68,68,.12); color:#5f1111; }
     .muted { color: var(--muted); font-size:13px; }
     .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
     select, button, input { font-size:14px; }
@@ -32,29 +31,32 @@
     .btn { border:none; background: var(--accent); color:#fff; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600; }
     .btn.ghost { background:#fff; color:var(--fg); border:1px solid rgba(15,23,42,.15); }
     .btn.flat { background:transparent; color:var(--muted); }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
     .spacer { flex:1; }
     .explain { margin-top:12px; padding:12px; border-radius:12px; background:#f8fafc; border:1px solid rgba(15,23,42,.10); }
     .hidden { display:none; }
-    footer { position:fixed; bottom:0; left:0; right:0; background:rgba(255,255,255,.95); border-top:1px solid rgba(15,23,42,.08); }
+    .footer-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(255,255,255,.95); border-top:1px solid rgba(15,23,42,.08); }
     .foot { max-width:980px; margin:0 auto; padding: 10px 16px; display:flex; gap:10px; align-items:center; }
     table { width:100%; border-collapse: collapse; }
     th, td { padding:8px 6px; border-bottom:1px solid rgba(15,23,42,.08); text-align:left; }
     th { background: #f8fafc; }
     .tag { display:inline-block; padding:2px 8px; border:1px solid rgba(15,23,42,.12); border-radius:999px; margin-right:6px; margin-bottom:6px; font-size:12px; color:var(--muted); }
     /* Home */
-    .grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
     .tile { border:1px solid rgba(15,23,42,.12); border-radius:14px; padding:14px; background:#fff; cursor:pointer; transition:.15s; }
     .tile:hover { border-color: var(--accent); box-shadow: 0 2px 14px rgba(37, 99, 235, .08); transform: translateY(-1px); }
     .tile h3 { margin:0 0 6px; font-size:16px; }
     .tile .muted { font-size:12px; }
     .section-title { font-weight:700; margin: 6px 0 10px; }
+    .hint { font-size:12px; color:var(--muted); }
+    .selbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; background:#f8fafc; border:1px solid rgba(15,23,42,.1); padding:12px; border-radius:12px; }
   </style>
 </head>
 <body>
   <header>
     <div class="wrap bar">
-      <h1>医用工学 問題アプリ</h1>
-      <span id="countdown" class="pill">準備中…</span>
+      <h1>臨床検査技師 国家試験：医用工学 問題アプリ</h1>
+      <span id="countdown" class="pill">試験日まで残り … 日</span>
       <div class="spacer"></div>
       <button id="homeBtn" class="btn ghost">トップページへ</button>
       <button id="statsBtn" class="btn ghost">成績・弱点</button>
@@ -64,25 +66,40 @@
   <main>
     <!-- トップページ -->
     <section id="homeScreen" class="card">
-      <div class="row" style="margin-bottom:8px;">
-        <div class="section-title">はじめに、出題範囲を選んでください</div>
+      <div class="section-title">出題範囲を選択して「解答スタート」を押してください</div>
+      <div class="selbar" style="margin-bottom:14px;">
+        <div>
+          <label class="muted">年度</label>
+          <select id="homeYearSel">
+            <option value="">（すべての年度）</option>
+          </select>
+        </div>
+        <div>
+          <label class="muted">分野</label>
+          <select id="homeTagSel">
+            <option value="">全ての分野</option>
+          </select>
+        </div>
+        <button id="homeStartBtn" class="btn">解答スタート</button>
+        <span id="homeCount" class="muted hint"></span>
       </div>
+
       <div class="row" style="gap:20px; align-items:flex-start;">
         <div style="flex:1;">
-          <div class="section-title">年度で選ぶ</div>
+          <div class="section-title">年度</div>
           <div id="homeYears" class="grid"></div>
         </div>
         <div style="flex:1;">
-          <div class="section-title">分野で選ぶ</div>
+          <div class="section-title">分野</div>
           <div id="homeTags" class="grid"></div>
         </div>
       </div>
+      <div class="muted" style="margin-top:12px;">※ 「全ての分野」を選ぶと全問題から出題します。「医用工学」という分野は表示していません。</div>
     </section>
 
     <!-- 問題画面 -->
     <section id="quizScreen" class="card hidden">
       <div class="row" style="gap:8px; margin-bottom:10px;">
-        <!-- 以前の「並び」セレクトは削除しました -->
         <label class="muted">分野</label>
         <select id="tagFilter">
           <option value="">すべて</option>
@@ -92,7 +109,6 @@
           <option value="">すべて</option>
         </select>
         <div class="spacer"></div>
-        <!-- キーボードショートカット案内は削除 -->
       </div>
 
       <div id="qmeta" class="muted"></div>
@@ -101,24 +117,39 @@
       <div id="choices" class="choices"></div>
       <div id="explain" class="explain hidden"></div>
     </section>
+
+    <!-- 結果画面 -->
+    <section id="resultScreen" class="card hidden">
+      <div class="section-title">結果</div>
+      <div id="resultSummary" class="qtext"></div>
+      <div id="resultAdvice" class="muted" style="margin-top:8px;"></div>
+      <div style="margin-top:12px;">
+        <button id="resultToHome" class="btn ghost">トップページへ戻る</button>
+        <button id="resultRestart" class="btn">同じ条件でもう一度</button>
+      </div>
+      <div class="muted" style="margin-top:10px;">※ 成績は端末ローカルにのみ保存されます。</div>
+    </section>
   </main>
 
-  <footer>
+  <div class="footer-bar">
     <div class="foot">
       <button id="prevBtn" class="btn ghost">前へ</button>
       <button id="nextBtn" class="btn">解答する</button>
       <div class="spacer"></div>
       <span id="progress" class="muted"></span>
+      <span class="muted">© H.U.</span>
     </div>
-  </footer>
+  </div>
 
   <dialog id="statsDlg">
     <header class="bar">
       <strong style="padding-left:6px;">成績・弱点レポート</strong>
       <div class="spacer"></div>
+      <button id="resetStats" class="btn ghost">ログをリセット</button>
       <button id="closeStats" class="btn flat">閉じる</button>
     </header>
     <div class="content">
+      <div class="muted" style="margin-bottom:10px;">※ 成績・ログは端末ローカル（この端末のみ）に保存されます。</div>
       <section>
         <h3>分野別 正答率</h3>
         <table id="tagTable">
@@ -140,7 +171,7 @@
     </div>
   </dialog>
 
-  <script src="app.js?v=11"></script>
+  <script src="app.js?v=12"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').catch(()=>{});

@@ -1,17 +1,9 @@
+/* ==========================================
+   臨床検査技師 国家試験：医用工学 問題アプリ (v12)
+   See requirements in previous message.
+=========================================== */
 
-/* =========================
-   医用工学 問題アプリ (v11)
-   - トップページの実装（年度/分野から開始）
-   - 問題中は「トップページへ」ボタンでいつでも戻れる
-   - キーボードショートカット案内削除
-   - 「並び」セレクト削除
-   - 選択肢の先頭マーク（○/□）撤去
-   - 「original」「過去問」は年度側として扱う
-   - 複数解答は完全一致で正解＋部分一致フィードバック
-   - 分野別正答率・弱点ダイアログ
-   ========================= */
-
-const BUILD = '2025-10-18-2';
+const BUILD = '2025-10-19-1';
 const STORE_KEY = 'medtechQuiz:v1';
 const LOG_KEY = 'medtechQuiz:log';
 const DATE_TARGET = '2026-02-18T00:00:00+09:00';
@@ -20,25 +12,21 @@ const $ = (q) => document.querySelector(q);
 const $$ = (q) => Array.from(document.querySelectorAll(q));
 
 const state = {
-  screen: 'home',    // 'home' | 'quiz'
+  screen: 'home',    // 'home' | 'quiz' | 'result'
   all: [],
   filtered: [],
   idx: 0,
   tagFilter: '',
   yearFilter: '',
   store: loadStore(),
+  session: null // {startedAt, correct, total}
 };
 
 function loadStore(){
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e){}
+  try { const raw = localStorage.getItem(STORE_KEY); if (raw) return JSON.parse(raw); } catch(e){}
   return { perQ:{}, perTag:{}, last:{screen:'home', tag:'', year:'', idx:0} };
 }
-function saveStore(){
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(state.store)); } catch(e){}
-}
+function saveStore(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(state.store)); } catch(e){} }
 
 function pushLog(entry){
   try {
@@ -51,6 +39,13 @@ function pushLog(entry){
 function readLogs(limit=50){
   try { return JSON.parse(localStorage.getItem(LOG_KEY) || '[]').slice(0,limit); } catch(e){ return []; }
 }
+function resetAllLogs(){
+  try {
+    localStorage.removeItem(STORE_KEY);
+    localStorage.removeItem(LOG_KEY);
+  } catch(e){}
+  location.reload();
+}
 
 function startCountdown(){
   const node = $('#countdown');
@@ -59,7 +54,7 @@ function startCountdown(){
     const now = new Date();
     const diff = target - now;
     const days = Math.max(0, Math.ceil(diff/(1000*60*60*24)));
-    if (node) node.textContent = `残り ${days} 日`;
+    if (node) node.textContent = `試験日まで残り ${days} 日`;
   }
   tick(); setInterval(tick, 60*1000);
 }
@@ -73,14 +68,12 @@ async function boot(){
     if (!Array.isArray(data)) throw new Error('questions.json が配列ではありません');
     state.all = data;
   } catch (e) {
-    showFatal(e.message || String(e));
-    return;
+    showFatal(e.message || String(e)); return;
   }
   try {
     initHome(state.all);
     initFilters(state.all);
     bindUI();
-    // 復元
     const last = state.store.last || {};
     state.screen = last.screen || 'home';
     if (state.screen === 'quiz') {
@@ -92,6 +85,8 @@ async function boot(){
       if (last.idx < state.filtered.length) state.idx = last.idx;
       showQuiz();
       render();
+    } else if (state.screen === 'result') {
+      showResult();
     } else {
       showHome();
     }
@@ -103,16 +98,23 @@ async function boot(){
 function showHome(){
   $('#homeScreen').classList.remove('hidden');
   $('#quizScreen').classList.add('hidden');
+  $('#resultScreen').classList.add('hidden');
   state.screen = 'home';
-  state.store.last.screen = 'home';
-  saveStore();
+  state.store.last.screen = 'home'; saveStore();
 }
 function showQuiz(){
   $('#homeScreen').classList.add('hidden');
   $('#quizScreen').classList.remove('hidden');
+  $('#resultScreen').classList.add('hidden');
   state.screen = 'quiz';
-  state.store.last.screen = 'quiz';
-  saveStore();
+  state.store.last.screen = 'quiz'; saveStore();
+}
+function showResult(){
+  $('#homeScreen').classList.add('hidden');
+  $('#quizScreen').classList.add('hidden');
+  $('#resultScreen').classList.remove('hidden');
+  state.screen = 'result';
+  state.store.last.screen = 'result'; saveStore();
 }
 
 function showFatal(msg){
@@ -125,29 +127,65 @@ function showFatal(msg){
   main.prepend(el);
 }
 
-/* ---------- Home (トップページ) ---------- */
+/* ---------- Home ---------- */
 function initHome(all){
   const { years, tags, countByYear, countByTag } = collectFacets(all);
+  // セレクト
+  const ysel = $('#homeYearSel'), tsel = $('#homeTagSel');
+  years.forEach(y => ysel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
+  tags.forEach(t => tsel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(t)}">${escapeHTML(t)}</option>`));
 
+  function updateCount(){
+    const year = ysel.value;
+    const tag = tsel.value;
+    const count = estimateCount(all, {year, tag});
+    $('#homeCount').textContent = `該当 ${count} 問`;
+  }
+  ysel.addEventListener('change', updateCount);
+  tsel.addEventListener('change', updateCount);
+  updateCount();
+
+  // タイル
   const yNode = $('#homeYears'); yNode.innerHTML = '';
   years.forEach(y => {
     const c = countByYear[y] || 0;
     const div = document.createElement('div');
     div.className = 'tile';
     div.innerHTML = `<h3>${escapeHTML(y)}</h3><div class="muted">${c}問</div>`;
-    div.addEventListener('click', () => startFromHome({year:y}));
+    div.addEventListener('click', () => { ysel.value = y; updateCount(); });
     yNode.appendChild(div);
   });
-
   const tNode = $('#homeTags'); tNode.innerHTML = '';
+  // 「全ての分野」
+  const allDiv = document.createElement('div');
+  allDiv.className = 'tile';
+  allDiv.innerHTML = `<h3>全ての分野</h3><div class="muted">${all.length}問</div>`;
+  allDiv.addEventListener('click', () => { tsel.value = ''; updateCount(); });
+  tNode.appendChild(allDiv);
   tags.forEach(t => {
     const c = countByTag[t] || 0;
     const div = document.createElement('div');
     div.className = 'tile';
     div.innerHTML = `<h3>${escapeHTML(t)}</h3><div class="muted">${c}問</div>`;
-    div.addEventListener('click', () => startFromHome({tag:t}));
+    div.addEventListener('click', () => { tsel.value = t; updateCount(); });
     tNode.appendChild(div);
   });
+
+  $('#homeStartBtn').addEventListener('click', () => {
+    const year = ysel.value;
+    const tag = tsel.value;
+    startFromHome({year, tag});
+  });
+}
+
+function estimateCount(all, {year='', tag=''}){
+  return all.filter(q => {
+    const tags = (q.tags||[]).map(String);
+    const yearish = tags.filter(t => /^\d{4}$/.test(t) || t === 'original' || t === '過去問');
+    const matchYear = !year || yearish.includes(String(year));
+    const matchTag = !tag || tags.includes(String(tag));
+    return matchYear && matchTag;
+  }).length;
 }
 
 function collectFacets(all){
@@ -160,10 +198,10 @@ function collectFacets(all){
     const seenYear = new Set();
     for (const raw of (q.tags || [])){
       const t = String(raw);
-      if (/^\d{4}$/.test(t) || t === 'original' || t === '過去問'){
+      if (/^\\d{4}$/.test(t) || t === 'original' || t === '過去問'){
         years.add(t);
         if (!seenYear.has(t)){ countByYear[t] = (countByYear[t]||0)+1; seenYear.add(t); }
-      } else {
+      } else if (t !== '医用工学') {
         tags.add(t);
         if (!seenTag.has(t)){ countByTag[t] = (countByTag[t]||0)+1; seenTag.add(t); }
       }
@@ -173,13 +211,13 @@ function collectFacets(all){
 }
 
 function startFromHome({year='', tag=''}={}){
-  // フィルタセットしてクイズ画面へ
   if ($('#yearFilter')) $('#yearFilter').value = year;
   if ($('#tagFilter')) $('#tagFilter').value = tag;
   state.yearFilter = year;
   state.tagFilter = tag;
   applyFilters();
   state.idx = 0;
+  state.session = { startedAt: Date.now(), correct: 0, total: state.filtered.length };
   state.store.last = {screen:'quiz', tag: state.tagFilter, year: state.yearFilter, idx: 0};
   saveStore();
   showQuiz();
@@ -194,8 +232,8 @@ function initFilters(all){
   for (const q of all){
     for (const raw of (q.tags || [])){
       const t = String(raw);
-      if (/^\d{4}$/.test(t) || t === 'original' || t === '過去問') ySet.add(t);
-      else tSet.add(t);
+      if (/^\\d{4}$/.test(t) || t === 'original' || t === '過去問') ySet.add(t);
+      else if (t !== '医用工学') tSet.add(t);
     }
   }
   [...tSet].sort().forEach(t => tagSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(t)}">${escapeHTML(t)}</option>`));
@@ -208,7 +246,7 @@ function applyFilters(){
 
   let list = state.all.filter(q => {
     const tags = (q.tags||[]).map(String);
-    const yearish = tags.filter(t => /^\d{4}$/.test(t) || t === 'original' || t === '過去問');
+    const yearish = tags.filter(t => /^\\d{4}$/.test(t) || t === 'original' || t === '過去問');
     const matchYear = !year || yearish.includes(String(year));
     const matchTag = !tag || tags.includes(String(tag));
     return matchYear && matchTag;
@@ -239,7 +277,6 @@ function render(){
     $('#nextBtn').disabled = true;
     return;
   }
-  $('#nextBtn').disabled = false;
 
   const q = state.filtered[state.idx];
   $('#qtext').textContent = q.question || '';
@@ -247,7 +284,9 @@ function render(){
   renderImage(q);
   renderChoices(q);
   explain.classList.add('hidden'); explain.innerHTML='';
+
   $('#progress').textContent = `${state.idx+1} / ${total}`;
+  updateNextButtonAvailability(q);
 }
 
 function renderTags(tags){
@@ -271,12 +310,14 @@ function renderChoices(q){
   const wrap = $('#choices'); if (!wrap) return;
   wrap.innerHTML = '';
   const multi = Array.isArray(q.answerIndex);
-  (q.choices || []).forEach((text, idx) => {
+  const order = [0,1,2,3,4];
+  shuffle(order);
+  order.forEach((origIdx) => {
+    const text = q.choices[origIdx];
     const btn = document.createElement('button');
     btn.className = 'choice';
-    btn.setAttribute('data-idx', String(idx));
+    btn.setAttribute('data-idx', String(origIdx));
     btn.setAttribute('aria-pressed', 'false');
-    // 先頭マーク（○/□）は廃止。純粋なテキストのみ。
     btn.innerHTML = escapeHTML(String(text));
     btn.addEventListener('click', () => {
       if (multi){
@@ -287,18 +328,37 @@ function renderChoices(q){
         btn.classList.add('selected');
         btn.setAttribute('aria-pressed','true');
       }
+      updateNextButtonAvailability(q);
     });
     wrap.appendChild(btn);
   });
-  if ($('#nextBtn')) $('#nextBtn').textContent = '解答する';
+  $('#nextBtn').textContent = '解答する';
 }
 
-/* ---------- Grade ---------- */
+function updateNextButtonAvailability(q){
+  const selected = $$('#choices .choice.selected');
+  const nextBtn = $('#nextBtn');
+  if (!nextBtn) return;
+  if (Array.isArray(q.answerIndex)){
+    const need = q.answerIndex.length;
+    nextBtn.disabled = (selected.length !== need);
+    nextBtn.title = selected.length !== need ? `この問題は ${need} 個選んでください` : '';
+  } else {
+    nextBtn.disabled = (selected.length !== 1);
+    nextBtn.title = selected.length !== 1 ? '選択肢を1つ選んでください' : '';
+  }
+}
+
+/* ---------- Grade / Flow ---------- */
 function grade(){
   if (state.screen !== 'quiz') return;
   const q = state.filtered[state.idx];
   if (!q) return;
-  const selected = $$('#choices .choice.selected').map(el => Number(el.getAttribute('data-idx')));
+  const selectedNodes = $$('#choices .choice.selected');
+  if (!selectedNodes.length) { updateNextButtonAvailability(q); return; }
+  if (Array.isArray(q.answerIndex) && selectedNodes.length !== q.answerIndex.length) { updateNextButtonAvailability(q); return; }
+
+  const selected = selectedNodes.map(el => Number(el.getAttribute('data-idx')));
   const result = isCorrectAnswer(selected, q.answerIndex);
   const correctSet = toSet(q.answerIndex);
 
@@ -317,7 +377,14 @@ function grade(){
   explain.innerHTML = `<div>${feedback}</div>${q.explanation ? `<div style="margin-top:6px;">${escapeHTML(q.explanation)}</div>` : ''}`;
 
   bumpScore(q, result.ok, selected);
-  $('#nextBtn').textContent = '次へ';
+  if (state.session){ if (result.ok) state.session.correct += 1; }
+
+  if (state.idx >= state.filtered.length - 1){
+    $('#nextBtn').textContent = '結果を見る';
+  } else {
+    $('#nextBtn').textContent = '次へ';
+  }
+  $('#nextBtn').disabled = false;
 }
 
 function bumpScore(q, ok, selected){
@@ -326,7 +393,7 @@ function bumpScore(q, ok, selected){
   pq.attempts += 1; if (ok) pq.correct += 1;
   state.store.perQ[id] = pq;
 
-  const tags = Array.from(new Set(q.tags || []));
+  const tags = Array.from(new Set((q.tags || []).filter(t => t !== '医用工学')));
   for (const t of tags){
     const rec = state.store.perTag[t] || {attempts:0, correct:0};
     rec.attempts += 1; if (ok) rec.correct += 1;
@@ -353,10 +420,13 @@ function isCorrectAnswer(userSelectedIndices, answerIndex){
 function intersectCount(a, b){ let i=0,j=0,c=0; while(i<a.length&&j<b.length){ if(a[i]===b[j]){c++;i++;j++;} else if(a[i]<b[j]) i++; else j++; } return c; }
 function toSet(ans){ return new Set(Array.isArray(ans) ? ans : [ans]); }
 
-/* ---------- Nav ---------- */
+/* ---------- Navigation ---------- */
 function next(){
-  if (state.screen !== 'quiz') return;
-  if ($('#nextBtn').textContent.includes('解答')) { grade(); return; }
+  if (state.screen === 'home') return;
+  if (state.screen === 'result'){ showHome(); return; }
+  const btn = $('#nextBtn');
+  if (btn.textContent.includes('解答')) { grade(); return; }
+  if (btn.textContent.includes('結果')) { renderResult(); showResult(); return; }
   if (state.idx < state.filtered.length - 1) state.idx += 1;
   state.store.last.idx = state.idx; saveStore();
   render();
@@ -366,6 +436,28 @@ function prev(){
   if (state.idx > 0) state.idx -= 1;
   state.store.last.idx = state.idx; saveStore();
   render();
+}
+
+/* ---------- Result ---------- */
+function renderResult(){
+  const s = state.session || {startedAt: Date.now(), correct: 0, total: state.filtered.length};
+  const finishedAt = new Date();
+  const startedAt = new Date(s.startedAt);
+  const rate = s.total ? (s.correct / s.total) : 0;
+  const str = [
+    `解答日時：${finishedAt.toLocaleString('ja-JP')}`,
+    `出題範囲：年度「${state.yearFilter || 'すべて'}」 / 分野「${state.tagFilter || '全ての分野'}」`,
+    `成績：${s.correct} / ${s.total}（正答率 ${(rate*100).toFixed(1)}%）`,
+    `所要時間：約 ${Math.max(1, Math.round((finishedAt - startedAt)/60000))} 分`
+  ].join('\\n');
+  $('#resultSummary').textContent = str;
+
+  let advice = 'この調子で学習を継続しましょう。';
+  if (rate < 0.4) advice = 'まずは基礎の見直しを。正誤の解説を熟読し、苦手分野を集中攻略しましょう。';
+  else if (rate < 0.7) advice = '惜しいです。間違えた問題をタグ別に復習し、同じ形式を繰り返すのがおすすめです。';
+  else if (rate < 0.9) advice = '仕上げ段階です。弱点タグを重点的に周回して得点を安定化しましょう。';
+  else advice = '素晴らしい達成度です。実戦ペースでの演習に移行しましょう。';
+  $('#resultAdvice').textContent = advice;
 }
 
 /* ---------- Stats Dialog ---------- */
@@ -383,17 +475,10 @@ function openStats(){
   });
 
   const weakTbody = $('#weakTable tbody'); weakTbody.innerHTML='';
-  const weakTags = rows.filter(r => r.attempts>=5).sort((a,b)=> a.rate - b.rate).slice(0,8);
+  const weakTags = rows.filter(r => r.attempts>=5).sort((a,b)=> a.rate - b.rate).slice(0,10);
   weakTags.forEach(r => {
     const tr = document.createElement('tr');
     tr.innerHTML = `<td>タグ: ${escapeHTML(r.tag)}</td><td>${r.correct}</td><td>${r.attempts}</td><td>${(r.rate*100).toFixed(1)}%</td>`;
-    weakTbody.appendChild(tr);
-  });
-  const weakQ = Object.entries(state.store.perQ).map(([id, rec]) => ({id, ...rec, rate: rec.attempts? rec.correct/rec.attempts : 0}))
-                  .filter(r => r.attempts>=3).sort((a,b)=> a.rate - b.rate).slice(0,8);
-  weakQ.forEach(r => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>問題: ${escapeHTML(r.id)}</td><td>${r.correct}</td><td>${r.attempts}</td><td>${(r.rate*100).toFixed(1)}%</td>`;
     weakTbody.appendChild(tr);
   });
 
@@ -418,6 +503,7 @@ function openStats(){
 function bindUI(){
   $('#homeBtn')?.addEventListener('click', showHome);
   $('#statsBtn')?.addEventListener('click', openStats);
+  $('#resetStats')?.addEventListener('click', resetAllLogs);
   $('#closeStats')?.addEventListener('click', () => $('#statsDlg').close());
 
   $('#tagFilter')?.addEventListener('change', () => { applyFilters(); render(); });
@@ -425,12 +511,18 @@ function bindUI(){
 
   $('#nextBtn')?.addEventListener('click', next);
   $('#prevBtn')?.addEventListener('click', prev);
+
+  $('#resultToHome')?.addEventListener('click', showHome);
+  $('#resultRestart')?.addEventListener('click', () => startFromHome({year: state.yearFilter, tag: state.tagFilter}));
 }
 
 /* ---------- Utils ---------- */
-function intersectCount(a, b){ let i=0,j=0,c=0; while(i<a.length&&j<b.length){ if(a[i]===b[j]){c++;i++;j++;} else if(a[i]<b[j]) i++; else j++; } return c; }
-function toSet(ans){ return new Set(Array.isArray(ans) ? ans : [ans]); }
+function shuffle(a){ for (let i=a.length-1; i>0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
 function escapeAttr(s){ return escapeHTML(String(s)).replace(/"/g,'&quot;'); }
 
 window.addEventListener('DOMContentLoaded', boot);
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
