@@ -1,22 +1,18 @@
 /* ===============================
-   臨床検査技師 国家試験：医用工学 問題アプリ (v14)
-   - 年度/分野が選べない・進めない・日数が消える不具合を修正
-   - 年度フィルタは「2017」「2017年」「…2017…」に対応
+   臨床検査技師 国家試験：医用工学 問題アプリ (v14.1)
 ================================= */
 
-const BUILD = '2025-10-19-4';
+const BUILD = '2025-10-19-6';
 const STORE_KEY = 'medtechQuiz:v1';
 const LOG_KEY = 'medtechQuiz:log';
 const DATE_TARGET = '2026-02-18T00:00:00+09:00'; // 試験日
 
-// 固定の選択肢
 const FIXED_YEARS = ["2017","2018","2019","2020","2021","2022","2023","2024","2025","過去問","original"];
-const FIXED_TAGS  = ["センサ・トランスデューサ","医用電子回路","医療情報","生体物性","電気・電子","電気的安全対策"]; // 「全ての分野」は空扱い（=未指定）
+const FIXED_TAGS  = ["センサ・トランスデューサ","医用電子回路","医療情報","生体物性","電気・電子","電気的安全対策"]; // 「全ての分野」= 空
 
 const $ = (q) => document.querySelector(q);
 const $$ = (q) => Array.from(document.querySelectorAll(q));
 
-// 状態
 const state = {
   screen: 'home',
   all: [],
@@ -25,7 +21,7 @@ const state = {
   tagFilter: '',
   yearFilter: '',
   store: loadStore(),
-  session: null // {startedAt, correct, total}
+  session: null
 };
 
 function loadStore(){
@@ -53,7 +49,6 @@ function resetAllLogs(){
   location.reload();
 }
 
-// カウントダウン（試験日まで残り N 日）
 function startCountdown(){
   const node = $('#countdown');
   const target = new Date(DATE_TARGET);
@@ -66,7 +61,6 @@ function startCountdown(){
   tick(); setInterval(tick, 60*1000);
 }
 
-// 起動
 window.addEventListener('DOMContentLoaded', boot);
 async function boot(){
   startCountdown();
@@ -78,24 +72,21 @@ async function boot(){
     state.all = data;
   } catch (e) {
     console.error(e);
-    alert('questions.json を読み込めませんでした。');
+    const node = document.createElement('div');
+    node.className = 'card';
+    node.style.borderColor = 'rgba(239,68,68,.35)';
+    node.innerHTML = '<strong style="color:#ef4444">questions.json の読み込みに失敗しました。</strong>';
+    document.querySelector('main').prepend(node);
     return;
   }
 
-  try {
-    initHome();
-    initFilters();
-    bindUI();
-    state.screen = 'home';
-    setFooterVisibility();
-    showHome();
-  } catch (e){
-    console.error(e);
-    alert('初期化に失敗しました。');
-  }
+  initHome();
+  initFilters();
+  bindUI();
+  showHome();
+  setFooterVisibility();
 }
 
-// フッターのボタン表示制御（トップでは非表示）
 function setFooterVisibility(){
   const isHome = state.screen === 'home';
   $('#prevBtn').classList.toggle('hidden', isHome);
@@ -106,9 +97,7 @@ function setFooterVisibility(){
 /* ---------- Home ---------- */
 function initHome(){
   const ysel = $('#homeYearSel'), tsel = $('#homeTagSel');
-  // 年度
   FIXED_YEARS.forEach(y => ysel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
-  // 分野（先頭は「全ての分野」＝空）
   FIXED_TAGS.forEach(t => tsel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(t)}">${escapeHTML(t)}</option>`));
 
   const updateCount = () => {
@@ -118,7 +107,6 @@ function initHome(){
   ysel.addEventListener('change', updateCount);
   tsel.addEventListener('change', updateCount);
 
-  // 年度タイル
   const yNode = $('#homeYears'); yNode.innerHTML = '';
   FIXED_YEARS.forEach(y => {
     const c = estimateCount({year:y, tag: tsel.value});
@@ -129,7 +117,6 @@ function initHome(){
     yNode.appendChild(div);
   });
 
-  // 分野タイル（先頭に「全ての分野」）
   const tNode = $('#homeTags'); tNode.innerHTML = '';
   const allDiv = document.createElement('div');
   allDiv.className = 'tile';
@@ -146,7 +133,6 @@ function initHome(){
     tNode.appendChild(div);
   });
 
-  // スタート
   $('#homeStartBtn').addEventListener('click', () => {
     startFromHome({year: ysel.value, tag: tsel.value});
   });
@@ -164,7 +150,6 @@ function estimateCount({year='', tag=''}){
 }
 
 function startFromHome({year='', tag=''}={}){
-  // クイズ用セレクトにも反映
   $('#yearFilter').value = year;
   $('#tagFilter').value = tag;
   state.yearFilter = year;
@@ -199,7 +184,7 @@ function applyFilters(){
   state.yearFilter = year;
 }
 
-/* 年度タグのマッチング（2017/2017年/…2017…、original/過去問は厳密一致） */
+/* 年度タグのマッチング */
 function matchYearTag(tagsArr, year){
   if (!year) return true;
   const y = String(year);
@@ -207,7 +192,6 @@ function matchYearTag(tagsArr, year){
     const s = String(s0);
     if (y === 'original' || y === '過去問') return s === y;
     if (s === 'original' || s === '過去問') return false;
-    // 4桁年なら部分一致も許容（2017年, 2017-xx, text2017 など）
     if (/^\d{4}$/.test(y)) {
       return s === y || s.includes(y) || s.replace(/年$/,'') === y;
     }
@@ -215,7 +199,7 @@ function matchYearTag(tagsArr, year){
   });
 }
 
-/* ---------- クイズ描画 ---------- */
+/* ---------- Quiz ---------- */
 function showHome(){
   $('#homeScreen').classList.remove('hidden');
   $('#quizScreen').classList.add('hidden');
@@ -319,7 +303,6 @@ function updateNextButtonAvailability(q){
   }
 }
 
-/* ---------- 採点・遷移 ---------- */
 function grade(){
   const q = state.filtered[state.idx];
   const selectedNodes = $$('#choices .choice.selected');
@@ -370,7 +353,7 @@ function prev(){
   render();
 }
 
-/* ---------- 結果 ---------- */
+/* ---------- Result ---------- */
 function renderResult(){
   const s = state.session || {startedAt: Date.now(), correct: 0, total: state.filtered.length};
   const finishedAt = new Date();
@@ -394,7 +377,7 @@ function makePositiveAdvice(rate){
   return '最高の出来！自信を持って本番に臨めるレベルです。';
 }
 
-/* ---------- 成績・弱点 ---------- */
+/* ---------- Stats ---------- */
 function openStats(){
   const dlg = $('#statsDlg'); if (!dlg) return;
   const tbody = $('#tagTable tbody'); tbody.innerHTML='';
@@ -433,7 +416,7 @@ function openStats(){
   dlg.showModal();
 }
 
-/* ---------- スコア記録 ---------- */
+/* ---------- Score ---------- */
 function bumpScore(q, ok, selected){
   const id = q.id ?? `idx:${state.idx}`;
   const pq = state.store.perQ?.[id] || {attempts:0, correct:0};
@@ -451,7 +434,7 @@ function bumpScore(q, ok, selected){
   saveStore();
 }
 
-/* ---------- バインド ---------- */
+/* ---------- Bind ---------- */
 function bindUI(){
   $('#homeBtn')?.addEventListener('click', showHome);
   $('#statsBtn')?.addEventListener('click', openStats);
@@ -468,12 +451,11 @@ function bindUI(){
   $('#resultRestart')?.addEventListener('click', () => startFromHome({year: state.yearFilter, tag: state.tagFilter}));
 }
 
-/* ---------- ユーティリティ ---------- */
+/* ---------- Utils ---------- */
 function shuffle(a){ for (let i=a.length-1; i>0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
-function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',\"'\":'&#39;' }[m])); }
+function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
 function escapeAttr(s){ return escapeHTML(String(s)).replace(/"/g,'&quot;'); }
 
-// 採点ヘルパ
 function isCorrectAnswer(userSelectedIndices, answerIndex){
   if (Array.isArray(answerIndex)){
     const correct = [...answerIndex].sort((a,b)=>a-b);
@@ -491,7 +473,6 @@ function isCorrectAnswer(userSelectedIndices, answerIndex){
 function intersectCount(a, b){ let i=0,j=0,c=0; while(i<a.length&&j<b.length){ if(a[i]===b[j]){c++;i++;j++;} else if(a[i]<b[j]) i++; else j++; } return c; }
 function toSet(ans){ return new Set(Array.isArray(ans) ? ans : [ans]); }
 
-// SW
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
