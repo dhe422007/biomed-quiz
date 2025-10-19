@@ -1,11 +1,10 @@
 /* ===============================
-   臨床検査技師 国家試験：医用工学 問題アプリ (v15.3)
-   - Feature: フィルタ後の出題順をランダム化（年度・分野を選んで「解答スタート」時）
-   - Also randomize when in-quiz filters are changed
-   - Keeps GA4 quiz_start event (G-XW1PC70BW4)
+   臨床検査技師 国家試験：医用工学 問題アプリ (v15.0 / GA4 wired)
+   - GA4 Measurement ID: G-XW1PC70BW4
+   - quiz_start イベント送信を追加（年度・分野付き）
 ================================= */
 
-const BUILD = '2025-10-19-12';
+const BUILD = '2025-10-19-9';
 const STORE_KEY = 'medtechQuiz:v1';
 const LOG_KEY = 'medtechQuiz:log';
 const DATE_TARGET = '2026-02-18T00:00:00+09:00'; // 試験日
@@ -158,20 +157,19 @@ function startFromHome({year='', tag=''}={}){
     const selectedYear = year || '';
     const selectedTag  = tag  || '';
     if (typeof gtag === 'function') {
-      gtag('event', 'quiz_start', { year: selectedYear, tag: selectedTag });
-      console.log('[GA] quiz_start sent', { year: selectedYear, tag: selectedTag });
+      gtag('event', 'quiz_start', {
+        year: selectedYear,
+        tag: selectedTag
+      });
     }
-  } catch(e) { console.warn('[GA] quiz_start error', e); }
+  } catch(e) {}
 
   // クイズ用セレクトにも反映
   $('#yearFilter').value = year;
   $('#tagFilter').value = tag;
   state.yearFilter = year;
   state.tagFilter = tag;
-
-  // フィルタ適用 ＋ 出題順をランダム化
-  applyFilters({randomize:true});
-
+  applyFilters();
   state.idx = 0;
   state.session = { startedAt: Date.now(), correct: 0, total: state.filtered.length };
   showQuiz();
@@ -185,24 +183,17 @@ function initFilters(){
   FIXED_YEARS.forEach(y => yearSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
 }
 
-function applyFilters(opts={randomize:false}){
+function applyFilters(){
   const tag = ($('#tagFilter')?.value ?? state.tagFilter) || '';
   const year = ($('#yearFilter')?.value ?? state.yearFilter) || '';
 
-  // 抽出
-  let arr = state.all.filter(q => {
+  state.filtered = state.all.filter(q => {
     const tags = (q.tags||[]).map(String);
     const matchYear = matchYearTag(tags, year);
     const matchTag = !tag || tags.includes(String(tag));
     return matchYear && matchTag;
   });
 
-  // ランダム化（要求ありの場合のみ）
-  if (opts.randomize) {
-    arr = shuffle([...arr]);
-  }
-
-  state.filtered = arr;
   state.idx = 0;
   state.tagFilter = tag;
   state.yearFilter = year;
@@ -262,6 +253,7 @@ function render(){
   }
   const q = state.filtered[state.idx];
   $('#qtext').textContent = q.question || '';
+  // タグは表示しない。代わりにIDのみ表示
   $('#qmeta').textContent = `ID：${getQuestionId(q)}`;
   renderImage(q);
   renderChoices(q);
@@ -465,9 +457,8 @@ function bindUI(){
   $('#resetStats')?.addEventListener('click', resetAllLogs);
   $('#closeStats')?.addEventListener('click', () => $('#statsDlg').close());
 
-  // クイズ画面のフィルタ変更時もランダム化
-  $('#tagFilter')?.addEventListener('change', () => { applyFilters({randomize:true}); render(); });
-  $('#yearFilter')?.addEventListener('change', () => { applyFilters({randomize:true}); render(); });
+  $('#tagFilter')?.addEventListener('change', () => { applyFilters(); render(); });
+  $('#yearFilter')?.addEventListener('change', () => { applyFilters(); render(); });
 
   $('#nextBtn')?.addEventListener('click', next);
   $('#prevBtn')?.addEventListener('click', prev);
@@ -477,18 +468,8 @@ function bindUI(){
 }
 
 /* ---------- Utils ---------- */
-function shuffle(a){
-  for (let i=a.length-1; i>0; i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
-  }
-  return a;
-}
-function escapeHTML(s){
-  return String(s).replace(/[&<>"']/g, function(m){
-    return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[m];
-  });
-}
+function shuffle(a){ for (let i=a.length-1; i>0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
 function escapeAttr(s){ return escapeHTML(String(s)).replace(/"/g,'&quot;'); }
 
 function isCorrectAnswer(userSelectedIndices, answerIndex){
