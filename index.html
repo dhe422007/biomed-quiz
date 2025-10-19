@@ -1,206 +1,125 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>臨床検査技師 国家試験：医用工学 問題アプリ</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#0f172a">
-
-  <!-- Google tag (GA4) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XW1PC70BW4"></script>
-  <script>
-    // GA4 basic setup
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-XW1PC70BW4', { send_page_view: true });
-  </script>
-
-  <!-- Anonymous user id (PII禁止・端末ローカルでUUID生成) -->
-  <script>
-    (function(){
-      try {
-        const KEY = 'quiz_anonymous_uid';
-        let uid = localStorage.getItem(KEY);
-        if (!uid) {
-          uid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-          );
-          localStorage.setItem(KEY, uid);
-        }
-        // Set user_id for GA4 (anonymous)
-        gtag('set', { 'user_id': uid });
-      } catch(e) {}
-    })();
-  </script>
-
-  <style>
-    :root { --fg:#0f172a; --muted:#475569; --bg:#f8fafc; --accent:#2563eb; --ok:#16a34a; --ng:#ef4444; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", Meiryo, "Noto Sans JP", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif; color:var(--fg); background:#fff;}
-    header { position:sticky; top:0; z-index:10; background:rgba(255,255,255,.92); backdrop-filter: blur(6px); border-bottom:1px solid rgba(15,23,42,.08); }
-    .wrap { max-width: 980px; margin:0 auto; padding: 16px; }
-    .bar { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-    h1 { font-size:20px; margin:0 12px 0 0; }
-    .pill { padding:6px 10px; border:1px solid rgba(15,23,42,.12); border-radius:999px; font-size:12px; color:var(--muted); }
-    main { max-width:980px; margin: 20px auto; padding: 0 16px 100px; }
-    .card { border:1px solid rgba(15,23,42,.10); border-radius:16px; padding:20px; box-shadow: 0 2px 16px rgba(15,23,42,.04); }
-    .qtext { font-size:18px; line-height:1.6; margin: 8px 0 12px; white-space: pre-wrap; }
-    .choices { display:grid; gap:10px; }
-    .choice { text-align:left; border:1px solid rgba(15,23,42,.15); border-radius:12px; padding:12px 14px; background:#fff; cursor:pointer; transition:.15s; }
-    .choice:hover { border-color: var(--accent); box-shadow: 0 2px 14px rgba(37, 99, 235, .08); transform: translateY(-1px); }
-    .choice.selected { border-color: var(--accent); outline: 2px solid rgba(37,99,235,.15); background: #2563eb; color: #fff; }
-    .choice.correct { border-color: var(--ok); background: rgba(22,163,74,.12); color:#083311; }
-    .choice.incorrect { border-color: var(--ng); background: rgba(239,68,68,.12); color:#5f1111; }
-    .muted { color: var(--muted); font-size:13px; }
-    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-    select, button, input { font-size:14px; }
-    select, input { padding:8px 10px; border-radius:10px; border:1px solid rgba(15,23,42,.15); background:#fff; }
-    .btn { border:none; background: var(--accent); color:#fff; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600; }
-    .btn.ghost { background:#fff; color:var(--fg); border:1px solid rgba(15,23,42,.15); }
-    .btn.flat { background:transparent; color:var(--muted); }
-    .btn:disabled { opacity:.5; cursor:not-allowed; }
-    .spacer { flex:1; }
-    .explain { margin-top:12px; padding:12px; border-radius:12px; background:#f8fafc; border:1px solid rgba(15,23,42,.10); }
-    .hidden { display:none; }
-    .footer-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(255,255,255,.95); border-top:1px solid rgba(15,23,42,.08); }
-    .foot { max-width:980px; margin:0 auto; padding: 10px 16px; display:flex; gap:10px; align-items:center; }
-    table { width:100%; border-collapse: collapse; }
-    th, td { padding:8px 6px; border-bottom:1px solid rgba(15,23,42,.08); text-align:left; }
-    th { background: #f8fafc; }
-    .tag { display:inline-block; padding:2px 8px; border:1px solid rgba(15,23,42,.12); border-radius:999px; margin-right:6px; margin-bottom:6px; font-size:12px; color:var(--muted); }
-    .grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-    .tile { border:1px solid rgba(15,23,42,.12); border-radius:14px; padding:14px; background:#fff; cursor:pointer; transition:.15s; }
-    .tile:hover { border-color: var(--accent); box-shadow: 0 2px 14px rgba(37, 99, 235, .08); transform: translateY(-1px); }
-    .tile h3 { margin:0 0 6px; font-size:16px; }
-    .tile .muted { font-size:12px; }
-    .section-title { font-weight:700; margin: 6px 0 10px; }
-    .hint { font-size:12px; color:var(--muted); }
-    .selbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; background:#f8fafc; border:1px solid rgba(15,23,42,.1); padding:12px; border-radius:12px; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="./manifest.webmanifest">
+<title>臨床検査技師 医用工学 国試クイズ</title>
+<style>
+:root{
+  --bg:#f8fafc; --card:#ffffff; --text:#0f172a; --muted:#64748b;
+  --accent:#0ea5e9; --ok:#22c55e; --ng:#ef4444; --ring:#e2e8f0;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Hiragino Sans","Noto Sans JP","Yu Gothic","Meiryo",sans-serif}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--ring);z-index:10}
+.container{max-width:900px;margin:0 auto;padding:16px}
+h1{margin:0 0 8px 0;font-size:22px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select,button{border:1px solid var(--ring);background:#fff;border-radius:10px;padding:8px 10px;font-size:14px}
+button{cursor:pointer}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.ghost{background:#fff}
+.card{background:var(--card);border:1px solid var(--ring);border-radius:16px;padding:16px;margin:16px 0;box-shadow:0 2px 8px rgba(15,23,42,.04)}
+.progress{height:8px;background:#e5e7eb;border-radius:999px;overflow:hidden}
+.progress>span{display:block;height:100%;background:var(--accent);width:0%}
+#qImage{max-width:100%;height:auto;border:1px solid var(--ring);border-radius:12px;margin:12px 0}
+.tag{display:inline-block;background:#f1f5f9;border:1px solid var(--ring);color:var(--muted);border-radius:999px;padding:2px 8px;margin-right:6px;font-size:12px}
+.choice{display:block;width:100%;text-align:left;margin:8px 0;padding:12px 14px;border-radius:12px;border:1px solid var(--ring);background:#fff}
+.choice.selected{outline:2px solid var(--accent);background:#f0f9ff}
+.choice.correct{border-color:var(--ok);outline:2px solid var(--ok);background:#ecfdf5}
+.choice.incorrect{border-color:var(--ng);outline:2px solid var(--ng);background:#fef2f2}
+.hidden{display:none}
+footer{color:var(--muted);font-size:12px;text-align:center;padding:24px}
+.stats{display:flex;gap:12px;color:var(--muted);font-size:14px}
+.view{display:none}
+.view.active{display:block}
+.notice{text-align:center;font-size:13px;color:var(--muted);margin:8px 0;}
+</style>
 </head>
 <body>
-  <header>
-    <div class="wrap bar">
-      <h1>臨床検査技師 国家試験：医用工学 問題アプリ</h1>
-      <span id="countdown" class="pill">試験日まで残り … 日</span>
-      <div class="spacer"></div>
-      <button id="homeBtn" class="btn">トップページへ</button>
-      <button id="statsBtn" class="btn">成績・弱点</button>
+<header>
+  <div class="container">
+    <h1>臨床検査技師 医用工学 国試クイズ</h1>
+    <div class="row">
+      <select id="tagFilter" title="分野フィルタ"><option value="">全分野</option></select>
+      <select id="yearFilter" title="年度フィルタ"><option value="">全年度</option></select>
+      <select id="modeSelect" title="モード">
+        <option value="all">全て</option>
+        <option value="wrong">間違えた問題のみ</option>
+        <option value="bookmarked">ブックマークのみ</option>
+      </select>
+      <button id="startBtn" class="primary">この条件で開始</button>
+      <button id="shuffleBtn" class="ghost">並び替え</button>
+      <div class="stats">
+        <span>進捗: <b id="progressNum">0/0</b></span>
+        <span>正答率: <b id="accuracy">0%</b></span>
+        <span>連続正解: <b id="streak">0</b></span>
+      </div>
     </div>
-  </header>
-
-  <main>
-    <section id="homeScreen" class="card">
-      <div class="section-title">出題範囲を選択して「解答スタート」を押してください</div>
-      <div class="selbar" style="margin-bottom:14px;">
-        <div>
-          <label class="muted">年度</label>
-          <select id="homeYearSel">
-            <option value="">（すべての年度）</option>
-          </select>
-        </div>
-        <div>
-          <label class="muted">分野</label>
-          <select id="homeTagSel">
-            <option value="">全ての分野</option>
-          </select>
-        </div>
-        <button id="homeStartBtn" class="btn">解答スタート</button>
-        <span id="homeCount" class="muted hint"></span>
-      </div>
-
-      <div class="row" style="gap:20px; align-items:flex-start;">
-        <div style="flex:1;">
-          <div class="section-title">年度</div>
-          <div id="homeYears" class="grid"></div>
-        </div>
-        <div style="flex:1;">
-          <div class="section-title">分野</div>
-          <div id="homeTags" class="grid"></div>
-        </div>
-      </div>
-      <div class="muted" style="margin-top:12px;">※ 成績は端末ローカルにのみ保存されます。</div>
-    </section>
-
-    <section id="quizScreen" class="card hidden">
-      <div class="row" style="gap:8px; margin-bottom:10px;">
-        <label class="muted">分野</label>
-        <select id="tagFilter">
-          <option value="">すべて</option>
-        </select>
-        <label class="muted">年度</label>
-        <select id="yearFilter">
-          <option value="">すべて</option>
-        </select>
-        <div class="spacer"></div>
-      </div>
-
-      <div id="qmeta" class="muted"></div>
-      <div id="qtext" class="qtext"></div>
-      <div id="qimage" class="hidden"></div>
-      <div id="choices" class="choices"></div>
-      <div id="explain" class="explain hidden"></div>
-    </section>
-
-    <section id="resultScreen" class="card hidden">
-      <div class="section-title">結果</div>
-      <div id="resultSummary" class="qtext"></div>
-      <div id="resultAdvice" class="qtext" style="margin-top:8px;"></div>
-      <div style="margin-top:12px;">
-        <button id="resultToHome" class="btn ghost">トップページへ戻る</button>
-        <button id="resultRestart" class="btn">同じ条件でもう一度</button>
-      </div>
-      <div class="muted" style="margin-top:10px;">※ 成績は端末ローカルにのみ保存されます。</div>
-    </section>
-  </main>
-
-  <div class="footer-bar">
-    <div class="foot">
-      <button id="prevBtn" class="btn ghost">前へ</button>
-      <button id="nextBtn" class="btn">解答する</button>
-      <div class="spacer"></div>
-      <span id="progress" class="muted"></span>
-      <span class="muted">© H.U.</span>
+    <div class="row" id="examCountdownWrap" style="gap:12px; align-items:center;">
+      <span>次回試験日: <b>2026/02/18</b></span>
+      <span id="countdown" style="font-weight:bold;">残り -- 日</span>
     </div>
+    <div class="progress"><span id="progressBar"></span></div>
   </div>
+  <div class="notice">
+    ※ 成績はこの端末の中だけに保存されます（サーバには送信されません）。
+  </div>
+</header>
 
-  <dialog id="statsDlg">
-    <header class="bar">
-      <strong style="padding-left:6px;">成績・弱点レポート</strong>
-      <div class="spacer"></div>
-      <button id="resetStats" class="btn ghost">ログをリセット</button>
-      <button id="closeStats" class="btn flat">閉じる</button>
-    </header>
-    <div class="content">
-      <div class="muted" style="margin-bottom:10px;">※ 成績・ログは端末ローカル（この端末のみ）に保存されます。</div>
-      <section>
-        <h3>分野別 正答率</h3>
-        <table id="tagTable">
-          <thead><tr><th>分野タグ</th><th>正解</th><th>試行</th><th>正答率</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </section>
-      <section style="margin-top:16px;">
-        <h3>弱点（試行5回以上で正答率が低い順）</h3>
-        <table id="weakTable">
-          <thead><tr><th>対象</th><th>正解</th><th>試行</th><th>正答率</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </section>
-      <section style="margin-top:16px;">
-        <h3>最近の学習ログ（新しい順 最大50件）</h3>
-        <div id="logList"></div>
-      </section>
+<main class="container">
+  <!-- Top View -->
+  <section id="viewTop" class="view active">
+    <div class="card">
+      <p>年度・分野で絞り込んで「この条件で開始」を押してください。画像付き・複数正解の問題にも対応しています。</p>
+      <p id="lastAnswered" style="font-size:13px;color:#64748b;margin-top:8px;">（まだ回答履歴はありません）</p>
+      <p id="resumeInfo" class="muted" style="font-size:13px;color:#64748b;margin-top:8px;"></p>
+      <button id="resumeBtn" class="primary hidden" style="margin-top:6px;">前回の続きから</button>
     </div>
-  </dialog>
+  </section>
 
-  <script src="app.js?v=15.0"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(()=>{});
-    }
-  </script>
+  <!-- Quiz View -->
+  <section id="viewQuiz" class="view">
+    <div class="card" id="quizCard">
+      <div class="row" style="justify-content:space-between;margin-bottom:8px;">
+        <div><b id="qid">---</b></div>
+        <button id="bookmarkBtn" class="ghost">☆ ブックマーク</button>
+      </div>
+      <h2 id="questionText" style="margin:6px 0 0 0; font-size:18px;"></h2>
+      <img id="qImage" class="hidden" alt="">
+      <div id="tagsWrap" class="row"></div>
+      <div id="choices" style="margin-top:8px;"></div>
+      <div id="explain" class="hidden" style="margin-top:12px;"></div>
+      <div class="row" style="justify-content:space-between;margin-top:8px;">
+        <button id="prevBtn">◀ 前へ</button>
+        <button id="nextBtn" class="primary">解答する</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- End View -->
+  <section id="viewEnd" class="view">
+    <div class="card" style="text-align:center;">
+      <h2>おつかれさまでした！</h2>
+      <p>今回の正答率は <b id="finalAccuracy">0%</b> でした。</p>
+      <p id="finalDate" style="font-size:13px;color:#64748b;margin-top:8px;"></p>
+      <div class="row" style="justify-content:center;margin-top:8px;">
+        <button id="backHomeBtn" class="primary">トップページに戻る</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>© 2025 H.U.</footer>
+
+<script src="./app.js?v=8"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js');
+    });
+  }
+</script>
 </body>
 </html>
