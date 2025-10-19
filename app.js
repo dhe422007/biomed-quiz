@@ -1,11 +1,8 @@
 /* ===============================
-   臨床検査技師 国家試験：医用工学 問題アプリ (v15.3)
-   - Feature: フィルタ後の出題順をランダム化（年度・分野を選んで「解答スタート」時）
-   - Also randomize when in-quiz filters are changed
-   - Keeps GA4 quiz_start event (G-XW1PC70BW4)
+   臨床検査技師 国家試験：医用工学 問題アプリ (v15.2 / GA4 stable)
 ================================= */
 
-const BUILD = '2025-10-19-12';
+const BUILD = '2025-10-19-11';
 const STORE_KEY = 'medtechQuiz:v1';
 const LOG_KEY = 'medtechQuiz:log';
 const DATE_TARGET = '2026-02-18T00:00:00+09:00'; // 試験日
@@ -159,19 +156,15 @@ function startFromHome({year='', tag=''}={}){
     const selectedTag  = tag  || '';
     if (typeof gtag === 'function') {
       gtag('event', 'quiz_start', { year: selectedYear, tag: selectedTag });
-      console.log('[GA] quiz_start sent', { year: selectedYear, tag: selectedTag });
     }
-  } catch(e) { console.warn('[GA] quiz_start error', e); }
+  } catch(e) {}
 
   // クイズ用セレクトにも反映
   $('#yearFilter').value = year;
   $('#tagFilter').value = tag;
   state.yearFilter = year;
   state.tagFilter = tag;
-
-  // フィルタ適用 ＋ 出題順をランダム化
-  applyFilters({randomize:true});
-
+  applyFilters();
   state.idx = 0;
   state.session = { startedAt: Date.now(), correct: 0, total: state.filtered.length };
   showQuiz();
@@ -185,24 +178,17 @@ function initFilters(){
   FIXED_YEARS.forEach(y => yearSel.insertAdjacentHTML('beforeend', `<option value="${escapeAttr(y)}">${escapeHTML(y)}</option>`));
 }
 
-function applyFilters(opts={randomize:false}){
+function applyFilters(){
   const tag = ($('#tagFilter')?.value ?? state.tagFilter) || '';
   const year = ($('#yearFilter')?.value ?? state.yearFilter) || '';
 
-  // 抽出
-  let arr = state.all.filter(q => {
+  state.filtered = state.all.filter(q => {
     const tags = (q.tags||[]).map(String);
     const matchYear = matchYearTag(tags, year);
     const matchTag = !tag || tags.includes(String(tag));
     return matchYear && matchTag;
   });
 
-  // ランダム化（要求ありの場合のみ）
-  if (opts.randomize) {
-    arr = shuffle([...arr]);
-  }
-
-  state.filtered = arr;
   state.idx = 0;
   state.tagFilter = tag;
   state.yearFilter = year;
@@ -262,6 +248,7 @@ function render(){
   }
   const q = state.filtered[state.idx];
   $('#qtext').textContent = q.question || '';
+  // タグは表示しない。代わりにIDのみ表示
   $('#qmeta').textContent = `ID：${getQuestionId(q)}`;
   renderImage(q);
   renderChoices(q);
@@ -285,66 +272,19 @@ function renderImage(q){
   }
 }
 
-
 function renderChoices(q){
   const wrap = $('#choices'); wrap.innerHTML = '';
   const multi = Array.isArray(q.answerIndex);
-  const choices = Array.isArray(q.choices) ? q.choices : [];
-  const n = choices.length;
+  const n = (q.choices || []).length;
   const order = Array.from({length:n}, (_,i)=>i);
   shuffle(order);
-
-  function choiceToNode(choiceVal){
-    // Accept:
-    //  - string text
-    //  - string image URL or path (.png .jpg .jpeg .gif .webp .svg)
-    //  - object with {image|img|src|url|choiceImage, alt?, text?}
+  order.forEach((origIdx) => {
+    const text = q.choices[origIdx];
     const btn = document.createElement('button');
     btn.className = 'choice';
-    btn.setAttribute('aria-pressed', 'false');
-
-    let imgSrc = '';
-    let labelText = '';
-
-    if (typeof choiceVal === 'string'){
-      const s = choiceVal.trim();
-      const isImgLike = /^https?:\/\/.+\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(s) || /\.(png|jpe?g|gif|webp|svg)(\?.*)?$/i.test(s);
-      if (isImgLike){
-        imgSrc = s;
-      } else {
-        labelText = s;
-      }
-    } else if (choiceVal && typeof choiceVal === 'object'){
-      imgSrc = choiceVal.image || choiceVal.img || choiceVal.src || choiceVal.url || choiceVal.choiceImage || '';
-      labelText = choiceVal.text || choiceVal.label || '';
-    }
-
-    if (imgSrc){
-      const img = document.createElement('img');
-      img.src = imgSrc;
-      img.alt = (labelText || q.imageAlt || '選択肢画像');
-      img.style.maxWidth = '100%';
-      img.style.height = 'auto';
-      img.style.display = 'block';
-      img.style.borderRadius = '10px';
-      img.style.border = '1px solid rgba(15,23,42,.10)';
-      btn.appendChild(img);
-      if (labelText){
-        const cap = document.createElement('div');
-        cap.textContent = labelText;
-        cap.className = 'muted';
-        cap.style.marginTop = '6px';
-        btn.appendChild(cap);
-      }
-    } else {
-      btn.innerHTML = escapeHTML(String(labelText));
-    }
-    return btn;
-  }
-
-  order.forEach((origIdx) => {
-    const btn = choiceToNode(choices[origIdx]);
     btn.setAttribute('data-idx', String(origIdx));
+    btn.setAttribute('aria-pressed', 'false');
+    btn.innerHTML = escapeHTML(String(text));
     btn.addEventListener('click', () => {
       if (multi){
         btn.classList.toggle('selected');
@@ -361,6 +301,18 @@ function renderChoices(q){
   $('#nextBtn').textContent = '解答する';
 }
 
+function updateNextButtonAvailability(q){
+  const selected = $$('#choices .choice.selected');
+  const nextBtn = $('#nextBtn');
+  if (Array.isArray(q.answerIndex)){
+    const need = q.answerIndex.length;
+    nextBtn.disabled = (selected.length !== need);
+    nextBtn.title = selected.length !== need ? `この問題は ${need} 個選んでください` : '';
+  } else {
+    nextBtn.disabled = (selected.length !== 1);
+    nextBtn.title = selected.length !== 1 ? '選択肢を1つ選んでください' : '';
+  }
+}
 
 function grade(){
   const q = state.filtered[state.idx];
@@ -500,9 +452,8 @@ function bindUI(){
   $('#resetStats')?.addEventListener('click', resetAllLogs);
   $('#closeStats')?.addEventListener('click', () => $('#statsDlg').close());
 
-  // クイズ画面のフィルタ変更時もランダム化
-  $('#tagFilter')?.addEventListener('change', () => { applyFilters({randomize:true}); render(); });
-  $('#yearFilter')?.addEventListener('change', () => { applyFilters({randomize:true}); render(); });
+  $('#tagFilter')?.addEventListener('change', () => { applyFilters(); render(); });
+  $('#yearFilter')?.addEventListener('change', () => { applyFilters(); render(); });
 
   $('#nextBtn')?.addEventListener('click', next);
   $('#prevBtn')?.addEventListener('click', prev);
@@ -512,13 +463,7 @@ function bindUI(){
 }
 
 /* ---------- Utils ---------- */
-function shuffle(a){
-  for (let i=a.length-1; i>0; i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
-  }
-  return a;
-}
+function shuffle(a){ for (let i=a.length-1; i>0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function escapeHTML(s){
   return String(s).replace(/[&<>"']/g, function(m){
     return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[m];
