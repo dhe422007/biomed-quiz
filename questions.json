@@ -18,7 +18,7 @@
     "answerIndex": 1,
     "image": "assets/images/2025_AM_95.jpg",
     "imageAlt": "画像あり",
-    "explanation": "要復習"
+    "explanation": "HTTPSはWeb通信のためのアプリケーション層プロトコルで、HTTPに暗号化（SSL/TLS）を加えたもの。EthernetやWi-Fiは物理・データリンク層、IPはネットワーク層、TCPはトランスポート層に属する。"
   },
   {
     "id": "2025-AM-97",
@@ -182,7 +182,7 @@
     "answerIndex": 4,
     "image": "assets/images/2025_PM_98.jpg",
     "imageAlt": "画像あり",
-    "explanation": "要復習"
+    "explanation": "この図で、斜線が引かれていない白い部分はAとBが重なる領域、つまり「A AND B」を示しています。斜線部分は、その「A AND B」以外の全ての領域を指しています。これは「A AND B」の否定なので、NAND (Not AND) となります。"
   },
   {
     "id": "2025-PM-99",
@@ -266,7 +266,7 @@
     "answerIndex": 2,
     "image": "assets/images/2024_AM_96.jpg",
     "imageAlt": "画像あり",
-    "explanation": "要復習"
+    "explanation": "各抵抗の両端に流れる電流を考えると，点Aは各枝の電流がつり合う電位に決まる。電流の分圧計算から，点Aの電位は 5.0 V となる。"
   },
   {
     "id": "2024-AM-97",
@@ -433,7 +433,7 @@
     "answerIndex": 1,
     "image": "assets/images/2024_PM_99.jpg",
     "imageAlt": "画像あり",
-    "explanation": "要復習"
+    "explanation": "1から3までの整数を加算するには，i が 3 以下の間繰り返す必要があります。したがって①に入る記号は 「≦」です。"
   },
   {
     "id": "2023-AM-95",
@@ -1046,7 +1046,7 @@
     "answerIndex": 1,
     "image": "assets/images/2020_AM_96.jpg",
     "imageAlt": "nan",
-    "explanation": "要復習"
+    "explanation": "中央の20 kΩには電流が流れない（ブリッジ平衡）ため、上側10 kΩと30 kΩが直列、下側10 kΩと30 kΩも直列。これら2組（各40 kΩ）が並列になるので、合成抵抗は (40×40)/(40＋40)=20 kΩ。"
   },
   {
     "id": "2020-AM-97",
@@ -1107,7 +1107,7 @@
     "answerIndex": 2,
     "image": "assets/images/2020_AM_99.jpg",
     "imageAlt": "nan",
-    "explanation": "要復習"
+    "explanation": "網掛け部分はAでもBでもない領域、つまり「A ∪ B（A OR B）」の否定を表しています。したがって正解は NOR（NOT OR） です。"
   },
   {
     "id": "2020-PM-95",
@@ -1451,7 +1451,7 @@
     "answerIndex": 1,
     "image": "assets/images/2018_AM_96.jpg",
     "imageAlt": "nan",
-    "explanation": "要復習"
+    "explanation": "入力波形: ある時点で電圧が急に立ち上がり、一定時間後に急にゼロに戻る波形です。出力波形: 入力の立ち上がりに同期して電圧が最大になり、その後時間とともに指数関数的に減衰しています。入力がゼロになると、今度はマイナス側に振れてからゼロに戻ります。この特徴的な波形を作り出すのは微分回路、またはハイパスフィルタと呼ばれる回路です。"
   },
   {
     "id": "2018-AM-97",
@@ -1639,7 +1639,7 @@
     "answerIndex": 4,
     "image": "assets/images/2017_AM_96.jpg",
     "imageAlt": "nan",
-    "explanation": "要復習"
+    "explanation": "この回路はコンデンサCと抵抗Rを直列にした高域通過回路（ハイパスフィルタ）です。"
   },
   {
     "id": "2017-AM-97",
@@ -1743,7 +1743,7 @@
     ],
     "image": "assets/images/2017_PM_96.jpg",
     "imageAlt": "nan",
-    "explanation": "要復習"
+    "explanation": "この図に示されている論理回路は NAND（ナンド）ゲートです。NANDゲートの働き: NANDは「ANDの否定(Not AND)」を意味します。 基本的なANDゲートは、入力AとBの両方が「1」のときだけ出力Yが「1」になります。 NANDゲートはその逆で、入力AとBの両方が「1」のときだけ、出力Yが「0」になります。それ以外の組み合わせでは、出力はすべて「1」になります。"
   },
   {
     "id": "2017-PM-97",
@@ -1764,7 +1764,7 @@
     "answerIndex": 1,
     "image": "assets/images/2017_PM_97.jpg",
     "imageAlt": "nan",
-    "explanation": "要復習"
+    "explanation": "機器の等電位ボンディング端子を示す記号で、他機器や建物の等電位端子と接続して電位差をなくし感電リスクを減らします。"
   },
   {
     "id": "2017-PM-98",
